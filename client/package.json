@@ -2,6 +2,8 @@
   "name": "life-coach",
   "version": "0.1.0",
   "devDependencies": {
+    "enzyme": "^2.9.1",
+    "jest": "^21.1.0",
     "react-scripts": "0.9.0"
   },
   "scripts": {
@@ -9,5 +11,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "js-cookie": "^2.1.4",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   }
 }
