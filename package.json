@@ -22,8 +22,8 @@
     "install": "run-s install:server install:client",
     "install:server": "cd server && npm install",
     "install:client": "cd client && npm install",
-    "test": "run-s test:client test:client",
+    "test": "run-s test:server test:client",
     "test:client": "cd client && npm test",
-    "test:server": "cd server && npm server"
+    "test:server": "cd server && npm test"
   }
 }

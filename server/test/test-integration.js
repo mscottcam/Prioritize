@@ -3,8 +3,8 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
-const {app, runServer, closeServer} = require('../index');
-const {DATABASE} = require('../config');
+// const {app, runServer, closeServer} = require('../index');
+// const {DATABASE} = require('../config');
 
 const should = chai.should();
 
