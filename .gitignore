@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+client/node_modules
+server/node_modules
 
 # testing
 /coverage
@@ -22,3 +24,5 @@ yarn-error.log*
 
 # package-lock.json / Add package-json for client/server side package-json
 package-lock.json
+client/package-lock.json
+server/package-lock.json
