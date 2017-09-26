@@ -26,7 +26,6 @@ function runServer(port=3001) {
   return new Promise((resolve, reject) => {
     server = app.listen(port, () => {
       resolve();
-      console.log(`Your app is listening on port: ${port}`)
     }).on('error', reject);
   });
 }

@@ -15,15 +15,15 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "run-s test:client",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm run build",
     "dev": "run-p dev:server dev:client start",
     "dev:client": "cd client && cross-env BROWSER=none npm start -- --color=always | xp http://localhost:3000/ http://localhost:8080/",
     "dev:server": "cd server && npm start",
     "install": "run-s install:server install:client",
     "install:server": "cd server && npm install",
     "install:client": "cd client && npm install",
+    "test": "run-s test:client test:client",
     "test:client": "cd client && npm test",
-    "test:server": "cd server && npm server",
-    "eject": "react-scripts eject"
+    "test:server": "cd server && npm server"
   }
 }
