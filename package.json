@@ -2,19 +2,28 @@
   "name": "life-coach",
   "version": "0.1.0",
   "private": true,
+  "main": "index.js",
   "dependencies": {
+    "cross-env": "^5.0.5",
     "express": "^4.15.5",
     "http-proxy-middleware": "^0.17.4",
     "npm-run-all": "^4.1.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "^1.0.13"
+    "react-scripts": "^1.0.13",
+    "xp": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "node index.js",
     "test": "run-s test:client",
+    "dev": "run-p dev:server dev:client start",
+    "dev:client": "cd client && cross-env BROWSER=none npm start -- --color=always | xp http://localhost:3000/ http://localhost:8080/",
+    "dev:server": "cd server && npm start",
+    "install": "run-s install:server install:client",
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
     "test:client": "cd client && npm test",
+    "test:server": "cd server && npm server",
     "eject": "react-scripts eject"
   }
 }
