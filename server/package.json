@@ -1,0 +1,27 @@
+{
+  "name": "life-coach",
+  "version": "0.1.0",
+  "description": "life-coach server",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.5",
+    "http-proxy-middleware": "^0.17.4",
+    "mongoose": "^4.11.11",
+    "npm-run-all": "^4.1.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-scripts": "^1.0.13"
+  },
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.5.0",
+    "morgan": "^1.8.2"
+  },
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "mocha",
+    "eject": "react-scripts eject"
+  }
+}
