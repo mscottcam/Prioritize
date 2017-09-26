@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "npm-run-all": "^4.1.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.13"
+    "react-scripts": "^1.0.13"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "run-s test:client",
+    "test:client": "cd client && npm test",
     "eject": "react-scripts eject"
   }
 }
