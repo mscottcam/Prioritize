@@ -22,6 +22,3 @@ yarn-error.log*
 
 # package-lock.json / Add package-json for client/server side package-json
 package-lock.json
-
-# travis
-.travis.yml
