@@ -1,7 +1,6 @@
 {
   "name": "life-coach",
   "version": "0.1.0",
-  "private": true,
   "main": "index.js",
   "dependencies": {
     "cross-env": "^5.0.5",
