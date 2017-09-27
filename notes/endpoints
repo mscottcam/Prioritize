@@ -1,0 +1,14 @@
+
+we have to set up Oauth - login
+                  Oauth - logOut
+
+we have one post request for the Mission of life
+we have update 
+we have one post request for the task
+we have one post to archive tasks
+We have one get to retrieve entire list
+we have one put endpoint to 
+
+We have one get request to get Last Mission, Tasks etc....
+
+flow =>mvp => wireframe => endpoints
