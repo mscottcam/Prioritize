@@ -1,3 +1,12 @@
+notes: https://docs.google.com/document/d/1vMcgdmOYT8cVc4aU4Mtl5CAmM58KsF8UxgpwlCeoZns/edit
+
+wireframes: 
+https://wireframe.cc/FxRkzS
+https://wireframe.cc/KsUF5T
+https://wireframe.cc/leubje
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
