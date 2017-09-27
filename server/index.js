@@ -14,6 +14,12 @@ app.use(bodyParser.json());
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
+// Allow CORS
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 // Unhandled requests which aren't for the API should serve index.html so
 // client-side routing using browserHistory can function
 app.get(/^(?!\/api(\/|$))/, (req, res) => {
@@ -21,6 +27,9 @@ app.get(/^(?!\/api(\/|$))/, (req, res) => {
   res.sendFile(index);
 });
 
+app.get('/api/tasks', (req,res) => {
+  res.send(200).send('SOme text and stuff');
+});
 let server;
 function runServer(port=3001) {
   return new Promise((resolve, reject) => {
