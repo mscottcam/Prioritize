@@ -11,22 +11,24 @@ export const fetchTasks = () => dispatch => {
       Accept: "application/json",
       "Content-Type": "application/json"
     },
-    method: "GET"
+    method: "GET", 
+    url: 'http://www.example.com'
   };
-    dispatch(fetchTasksRequest());
-    return fetch("/api/tasks")
-      .then(res => {
-        console.log('This dont work', res);
-        if (!res.ok) {
-          return Promise.reject(res.statusText);
-        }
-        return res.json();
-      })
-      .then(data => {
-        console.log('Was dis: ', data);
-        return dispatch(fetchTasksSuccess(data));
-      })
-      .catch(err => {
-        console.error('Error ', err);
-      })
+  dispatch(fetchTasksRequest());
+  console.log('getting here ========>')
+  return fetch("http://www.example.com/tasks")
+    .then(res => {
+      console.log('This dont work', res);
+      if (!res.ok) {
+        return Promise.reject(res.statusText);
+      }
+      return res.json();
+    })
+    .then(data => {
+      console.log('Was dis: ', data);
+      return dispatch(fetchTasksSuccess(data));
+    })
+    .catch(err => {
+      console.error('Error ', err);
+    })
 }
