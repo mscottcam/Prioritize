@@ -1,13 +1,14 @@
 
-we have to set up Oauth - login
-                  Oauth - logOut
+we have to set up Oauth - login  [ ]
+                  Oauth - logOut  [ ]
 
-we have one post request for the Mission of life
-we have update 
-we have one post request for the task
-we have one post to archive tasks
-We have one get to retrieve entire list
-we have one put endpoint to 
+we have one post request for the Mission of life [X]
+we have one get to retrieve Missoin [X]
+we have update task endpoint [ ]
+we have one post request for the task  [X]
+we have one post to archive tasks  [ ]
+We have one get to retrieve entire list  [X]
+we have one put endpoint to  [ ]
 
 We have one get request to get Last Mission, Tasks etc....
 
