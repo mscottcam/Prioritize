@@ -54,7 +54,7 @@ describe('async actions', () => {
     ]
     const store = mockStore({tasks: [] })
     return store.dispatch(actions.postTask())
-    // expect(store.getActions()).toEqual(expectedActions)
+    expect(store.getActions()).toEqual(expectedActions)
   })
 
 })
