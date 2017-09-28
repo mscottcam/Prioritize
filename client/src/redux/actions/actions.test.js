@@ -21,13 +21,40 @@ describe('async actions', () => {
       .get('/api/tasks')
       .reply(200, {body: { tasks: ['study hard']}});
   
-  const expectedActions = [
-    { type: actions.FETCH_TASKS_REQUEST },
-    { type: actions.FETCH_TASKS_SUCCESS, body: { tasks: ['study hard']}}
-  ]
-  const store = mockStore({ tasks: [] })
-  return store.dispatch(actions.fetchTasks())
+    const expectedActions = [
+      { type: actions.FETCH_TASKS_REQUEST },
+      { type: actions.FETCH_TASKS_SUCCESS, body: { tasks: ['study hard']}}
+    ]
+    const store = mockStore({ tasks: [] })
+    return store.dispatch(actions.fetchTasks())
     //return async actions
     expect(store.getActions()).toEqual(expectedActions)
   })
+
+  it.only('creates POST_TASK_SUCCESS when posting new task', () => {
+    nock('http://localhost:8080')
+      .post('/api/tasks', {
+        userId: 1234,
+        role: 'dev',
+        goal: 'get a job',
+        project: 'testing research', 
+        task: 'learn nock post',
+        deadline: '',
+        important: true,
+        urgent: false
+      })
+      .reply(201, {
+        ok: true,
+        id: 1234
+        // rev: 
+      })
+    const expectedActions = [
+      { type: actions.POST_TASK_REQUEST },
+      { type: actions.POST_TASK_SUCCESS, body: { ok: true, id: 1234 }}
+    ]
+    const store = mockStore({tasks: [] })
+    return store.dispatch(actions.postTask())
+    // expect(store.getActions()).toEqual(expectedActions)
+  })
+
 })
