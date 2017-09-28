@@ -4,7 +4,7 @@ let request = require("request");
 
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import * as actions from "./actions";
+import * as actions from "../actions";
 import nock from "nock";
 
 const middlewares = [thunk];
