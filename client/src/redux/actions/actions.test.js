@@ -68,7 +68,7 @@ describe("async actions", () => {
     });
   });
 
-  it.only('creates POST_MISSION_SUCCESS when making new mission', () => {
+  it('creates POST_MISSION_SUCCESS when making new mission', () => {
         const userMission = {
         userId: 1234,
         mission: 'lots of thoughts',
@@ -86,5 +86,30 @@ describe("async actions", () => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   })
+
+  it.only('calls PUT_TASK_SUCCESS when updating a task', () => {
+    const taskUpdate = {
+      taskId: 1234, 
+      userId: 1234,
+      role: "dev",
+      goal: "get a job",
+      project: "testing research",
+      task: "learn nock post",
+      deadline: "",
+      important: true,
+      urgent: false
+    }
+    nock('http://localhost:8080')
+      .put('/api/tasks', taskUpdate)
+      .reply(201, {ok: true, id: 1234, taskId: 1234});
+    const expectedActions = [
+      {type: actions.PUT_TASK_REQUEST},
+      {type: actions.PUT_TASK_SUCCESS, task: {ok: true, id: 1234, taskId: 1234}}
+    ]
+    const store = mockStore({});
+    return store.dispatch(actions.updateTask(taskUpdate)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  })  
   
 });
