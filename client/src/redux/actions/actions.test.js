@@ -20,7 +20,6 @@ describe('async actions', () => {
     nock('http://localhost:8080')
       .get('/api/tasks')
       .reply(200, {body: { tasks: ['study hard']}});
-
   
   const expectedActions = [
     { type: actions.FETCH_TASKS_REQUEST },
@@ -29,23 +28,6 @@ describe('async actions', () => {
   const store = mockStore({ tasks: [] })
   return store.dispatch(actions.fetchTasks())
     //return async actions
-    // console.log('store ------>', store)
-    // expect(store.getActions()).toEqual(expectedActions)
+    expect(store.getActions()).toEqual(expectedActions)
   })
 })
-// .reply(200, { body: { tasks: ['study hard'] } });
-
-//    expect(store.getActions()).toEqual(expectedActions)
-
-
-
-    // 24 var options = {
-    //   url: 'http://www.example.com/tasks',
-    //   method: 'GET',
-    // };
-
-    // request(options, function(err, response, body) {
-    //   expect(body).toEqual("true");
-    //   // done();
-    // });
-    // console.log(result);
