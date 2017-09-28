@@ -87,8 +87,8 @@ describe("async actions", () => {
       });
   })
 
-  it.only('calls PUT_TASK_SUCCESS when updating a task', () => {
-    const taskUpdate = {
+  it('calls UPDATE_TASK_SUCCESS when updating a task', () => {
+    const taskToUpdate = {
       taskId: 1234, 
       userId: 1234,
       role: "dev",
@@ -100,14 +100,14 @@ describe("async actions", () => {
       urgent: false
     }
     nock('http://localhost:8080')
-      .put('/api/tasks', taskUpdate)
+      .put('/api/tasks', taskToUpdate)
       .reply(201, {ok: true, id: 1234, taskId: 1234});
     const expectedActions = [
-      {type: actions.PUT_TASK_REQUEST},
-      {type: actions.PUT_TASK_SUCCESS, task: {ok: true, id: 1234, taskId: 1234}}
+      {type: actions.UPDATE_TASK_REQUEST},
+      {type: actions.UPDATE_TASK_SUCCESS, task: {ok: true, id: 1234, taskId: 1234}}
     ]
     const store = mockStore({});
-    return store.dispatch(actions.updateTask(taskUpdate)).then(() => {
+    return store.dispatch(actions.updateTask(taskToUpdate)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   })  
