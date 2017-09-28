@@ -31,8 +31,7 @@ describe("async actions", () => {
   });
 
   it("creates POST_TASK_SUCCESS when posting new task", () => {
-    nock("http://localhost:8080")
-      .post("/api/tasks", {
+    const postBody = {
         userId: 1234,
         role: "dev",
         goal: "get a job",
@@ -41,33 +40,32 @@ describe("async actions", () => {
         deadline: "",
         important: true,
         urgent: false
-      })
-      .reply(201, {
-        ok: true,
-        id: 1234
-        // rev:
-      });
+      }
+    nock("http://localhost:8080")
+      .post("/api/tasks", postBody)
+      .reply(201, {ok: true, id: 1234});
     const expectedActions = [
       { type: actions.POST_TASK_REQUEST },
-      { type: actions.POST_TASK_SUCCESS, body: { ok: true, id: 1234 } }
+      { type: actions.POST_TASK_SUCCESS, task: { ok: true, id: 1234 } }
     ];
     const store = mockStore({ tasks: [] });
-    return store.dispatch(actions.postTask()).then(() => {
+    return store.dispatch(actions.postTask(postBody)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
 
-  it.only("creates FETCH_MISSION_SUCCESS when fetching missions has been done", () => {
+  it("creates FETCH_MISSION_SUCCESS when fetching missions has been done", () => {
     nock("http://localhost:8080")
-      .get("/api/missions")
-      .reply(200, { missions: ["lots of text"] });
+      .get("/api/mission")
+      .reply(200, { mission: ["lots of text"] });
     const expectedActions = [
       { type: actions.FETCH_MISSION_REQUEST },
-      { type: actions.FETCH_MISSION_SUCCESS, missions: { missions: ["lots of text"] } }
+      { type: actions.FETCH_MISSION_SUCCESS, mission: { mission: ["lots of text"] } }
     ];
     const store = mockStore({ text: [] });
-  });
-  return store.dispatch(actions.fetchMissions()).then(() => {
+    return store.dispatch(actions.fetchMission()).then(() => {
     expect(store.getActions()).toEqual(expectedActions);
+    });
   });
+  
 });
