@@ -58,7 +58,7 @@ export const postTask = () => dispatch => {
     },
     method: 'POST'
   };
-  fetch('http://localhost:8080/api/tasks', opts)
+   fetch('http://localhost:8080/api/tasks', opts)
   .then(res =>{
     if(!res.ok) {
       return Promise.reject(res.statusText)

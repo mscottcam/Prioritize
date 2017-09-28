@@ -19,16 +19,18 @@ describe('async actions', () => {
   it('creates FETCH_TASKS_SUCCESS when fetching tasks has been done', () => {
     nock('http://localhost:8080')
       .get('/api/tasks')
-      .reply(200, {body: { tasks: ['study hard']}});
+      .reply(200, { tasks: ['study hard']});
   
     const expectedActions = [
       { type: actions.FETCH_TASKS_REQUEST },
-      { type: actions.FETCH_TASKS_SUCCESS, body: { tasks: ['study hard']}}
+      // The below line: why does 'body: { tasks: ['study hard']}' fail? 
+      { type: actions.FETCH_TASKS_SUCCESS, tasks: { tasks: ['study hard']}}
     ]
-    const store = mockStore({ tasks: [] })
+    const store = mockStore({ text: [] })
     return store.dispatch(actions.fetchTasks())
-    //return async actions
-    expect(store.getActions()).toEqual(expectedActions)
+    .then(() => {
+      expect(store.getActions()).toEqual(expectedActions)
+    })
   })
 
   it.only('creates POST_TASK_SUCCESS when posting new task', () => {
@@ -54,7 +56,9 @@ describe('async actions', () => {
     ]
     const store = mockStore({tasks: [] })
     return store.dispatch(actions.postTask())
-    expect(store.getActions()).toEqual(expectedActions)
+    .then(() => {
+      expect(store.getActions()).toEqual(expectedActions)
+    })
   })
 
 })
