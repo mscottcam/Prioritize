@@ -67,5 +67,24 @@ describe("async actions", () => {
     expect(store.getActions()).toEqual(expectedActions);
     });
   });
+
+  it('creates POST_MISSION_SUCCESS when making new mission', () => {
+        const userMission = {
+        userId: 1234,
+        mission: 'lots of thoughts',
+        role: "dev",
+      }
+    nock('http://localhost:8080')
+      .post('/api/mission', userMission)
+      .reply(201, {ok: true, id: 1234});
+      const expecedActions = [
+        {type: actions.POST_MISSION_REQUEST},
+        {type: actions.POST_MISSION_SUCCESS, mission: { ok: true, id: 1234 }}
+      ]
+      const store = mockStore({text:[] });
+      return store.dispatch(actions.postMission(userMission)).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  })
   
 });

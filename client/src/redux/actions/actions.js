@@ -26,7 +26,6 @@ export const fetchMissionSuccess = mission => ({ type: FETCH_MISSION_SUCCESS, mi
 
 export const FETCH_MISSION_ERROR = 'FETCH_MISSION_ERROR';
 export const fetchMissionError = error => ({type: FETCH_MISSION_ERROR, error})
-
 // --------------------------------------------------------------------------------
 export const fetchTasks = () => dispatch => {
   const opts = {
