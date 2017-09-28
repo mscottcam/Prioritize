@@ -18,7 +18,7 @@ export const postTaskSuccess = task => ({ type: POST_TASK_SUCCESS, task });
 export const POST_TASK_ERROR = 'POST_TASK_ERROR';
 export const postTaskError = error => ({type: POST_TASK_ERROR, error});
 
-export function fetchTasks() {
+export const fetchTasks = () => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -27,11 +27,8 @@ export function fetchTasks() {
     },
     method: 'GET'
   };
-
-  return function (dispatch) {
-      dispatch(fetchTasksRequest());
-
-      return fetch('http://localhost:8080/api/tasks', opts)
+  dispatch(fetchTasksRequest());
+  return fetch('http://localhost:8080/api/tasks', opts)
         .then(res => {
           // console.log('Do we have our res: ', res);
           if (!res.ok) {
@@ -45,11 +42,47 @@ export function fetchTasks() {
         .catch(err => {
           dispatch(fetchTasksError(err));
         })
-  }
 }
+// export function fetchTasks() {
+//   const opts = {
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json'
+//       // 'Access-Control-Allow-Origin': '*'
+//     },
+//     method: 'GET'
+//   };
 
-export const postTask = () => dispatch => {
-  dispatch(postTaskRequest());
+//   return function (dispatch) {
+//       dispatch(fetchTasksRequest());
+
+//       return fetch('http://localhost:8080/api/tasks', opts)
+//         .then(res => {
+//           // console.log('Do we have our res: ', res);
+//           if (!res.ok) {
+//             return Promise.reject(res.statusText);
+//           }
+//           return res.json();
+//         })
+//         .then(data => {
+//           return dispatch(fetchTasksSuccess(data));
+//         })
+//         .catch(err => {
+//           dispatch(fetchTasksError(err));
+//         })
+//   }
+// }
+
+  // let formattedPostRequest = {
+  //   name: sessionName,
+  //   work_duration: workDurationSetting,
+  //   break_duration: breakDurationSetting,
+  //   total_work_time: sessionDuration,
+  //   // total_break_time: breakDuration,
+  //   is_completed: true
+  // };
+
+export const postTask = (data) => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -57,18 +90,26 @@ export const postTask = () => dispatch => {
       // 'Access-Control-Allow-Origin': '*'
     },
     method: 'POST'
+    // body: JSON.stringify(formattedPostRequest)
   };
-   fetch('http://localhost:8080/api/tasks', opts)
+  dispatch(postTaskRequest());
+  console.log('TEH data: ', data)
+
+  return fetch('http://localhost:8080/api/tasks', opts)
   .then(res =>{
+    console.log('In res ', res)
     if(!res.ok) {
+      console.log('Do we have our res: ', res);
       return Promise.reject(res.statusText)
     }
     return res.json();
   })
   .then(data => {
+    console.log('In data' ,data)
     return dispatch(postTaskSuccess(data));
   })
   .catch(err => {
+    console.log('ERROR!#$#!@#')
     dispatch(postTaskError(err));
   })
 }
