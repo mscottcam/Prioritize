@@ -68,7 +68,7 @@ describe("async actions", () => {
     });
   });
 
-  it('creates POST_MISSION_SUCCESS when making new mission', () => {
+  it.only('creates POST_MISSION_SUCCESS when making new mission', () => {
         const userMission = {
         userId: 1234,
         mission: 'lots of thoughts',
@@ -77,7 +77,7 @@ describe("async actions", () => {
     nock('http://localhost:8080')
       .post('/api/mission', userMission)
       .reply(201, {ok: true, id: 1234});
-      const expecedActions = [
+      const expectedActions = [
         {type: actions.POST_MISSION_REQUEST},
         {type: actions.POST_MISSION_SUCCESS, mission: { ok: true, id: 1234 }}
       ]

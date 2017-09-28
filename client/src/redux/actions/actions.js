@@ -27,6 +27,16 @@ export const fetchMissionSuccess = mission => ({ type: FETCH_MISSION_SUCCESS, mi
 export const FETCH_MISSION_ERROR = 'FETCH_MISSION_ERROR';
 export const fetchMissionError = error => ({type: FETCH_MISSION_ERROR, error})
 // --------------------------------------------------------------------------------
+export const POST_MISSION_REQUEST = 'POST_MISSION_REQUEST';
+export const postMissionRequest = () => ({type: POST_MISSION_REQUEST})
+
+export const POST_MISSION_SUCCESS = 'POST_MISSION_SUCCESS';
+export const postMissionSuccess = mission => ({type: POST_MISSION_SUCCESS, mission});
+
+export const POST_MISSION_ERROR = 'POST_MISSION_ERROR';
+export const postMissionError = () => ({type: POST_MISSION_ERROR})
+// --------------------------------------------------------------------------------
+
 export const fetchTasks = () => dispatch => {
   const opts = {
     headers: {
@@ -67,17 +77,14 @@ export const postTask = (data) => dispatch => {
   return fetch('http://localhost:8080/api/tasks', opts)
   .then(res => {
     if(!res.ok) {
-      console.log('Do we have our res: ', res);
       return Promise.reject(res.statusText)
     }
     return res.json();
   })
   .then(data => {
-    console.log('In data', data)
     return dispatch(postTaskSuccess(data));
   })
   .catch(err => {
-    console.log('ERROR!#$#!@#')
     dispatch(postTaskError(err));
   })
 }
@@ -106,3 +113,30 @@ export const fetchMission = () => dispatch => {
       return dispatch(fetchMissionError(error))
     })
 };
+
+export const postMission = (data) => dispatch => {
+  const opts = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+      // 'Access-Control-Allow-Origin': '*'
+    },
+    method: 'POST',
+    body: JSON.stringify(data)
+  };
+
+  dispatch(postMissionRequest());
+  return fetch('http://localhost:8080/api/mission', opts)
+    .then(res => {
+      if(!res.ok) {
+        return Promise.reject(res.statusText)
+      } 
+      return res.json();
+    })
+    .then(data => {
+      return dispatch(postMissionSuccess(data));
+    })
+    .catch(err => {
+      dispatch(postMissionError(err));
+    })
+}
