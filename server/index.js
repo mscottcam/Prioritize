@@ -6,10 +6,19 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
+const {DATABASE, CLIENT_ID, CLIENT_SECRET} = require('../config/secret');
 
 const app = express();
 app.use(morgan('common'));
 app.use(bodyParser.json());
+
+mongoose.connect(DATABASE);
+
+let secret = {
+  CLIENT_ID,
+  CLIENT_SECRET
+};
 
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
@@ -52,7 +61,9 @@ function closeServer() {
 }
 
 if (require.main === module) {
-  runServer();
+  runServer().catch(err => {
+    console.error('Problem starting server: ', err);
+  });
 }
 
 module.exports = {
