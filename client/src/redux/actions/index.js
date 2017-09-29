@@ -1,15 +1,15 @@
 import fetch from 'isomorphic-fetch';
 
-export const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST';
-export const fetchTasksRequest = () => ({ type: FETCH_TASKS_REQUEST });
+export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
+export const fetchUserDataRequest = () => ({ type: FETCH_USER_DATA_REQUEST });
 
-export const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS';
-export const fetchTasksSuccess = tasks => ({ type: FETCH_TASKS_SUCCESS, tasks });
+export const FETCH_USER_DATA_SUCCESS = 'FETCH_USER_DATA_SUCCESS';
+export const fetchUserDataSuccess = userData => ({ type: FETCH_USER_DATA_SUCCESS, userData });
 
-export const FETCH_TASKS_ERROR = 'FETCH_TASKS_ERROR';
-export const fetchTasksError = error => ({type: FETCH_TASKS_ERROR, error});
+export const FETCH_USER_DATA_ERROR = 'FETCH_USER_DATA_ERROR';
+export const fetchUserDataError = error => ({type: FETCH_USER_DATA_ERROR, error});
 
-export const fetchTasks = () => dispatch => {
+export const fetchUserData = () => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -18,8 +18,8 @@ export const fetchTasks = () => dispatch => {
     },
     method: 'GET'
   };
-  dispatch(fetchTasksRequest());
-  return fetch('http://localhost:8080/api/tasks', opts)
+  dispatch(fetchUserDataRequest());
+  return fetch('http://localhost:8080/api/userData', opts)
     .then(res => {
       // console.log('Do we have our res: ', res);
       if (!res.ok) {
@@ -27,11 +27,11 @@ export const fetchTasks = () => dispatch => {
       }
       return res.json();
     })
-    .then(data => {
-      return dispatch(fetchTasksSuccess(data));
+    .then(userData => {
+      return dispatch(fetchUserDataSuccess(userData));
     })
     .catch(err => {
-      return dispatch(fetchTasksError(err));
+      return dispatch(fetchUserDataError(err));
     })
 };
 // --------------------------------------------------------------------------------
