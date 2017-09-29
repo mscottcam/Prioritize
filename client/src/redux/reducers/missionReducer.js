@@ -1,11 +1,30 @@
+import * as actions from '../actions'
+
 const initialState = {
-  currentUser: null,
+  currentUser: null, //name
+  userId: null,
+  currentMission: null,
+  roles:[],
+  goals: [],
+  projects: [],
   tasks: []
 };
 
-const taskReducer = (state=initialState, action) => {
+const missionReducer = (state=initialState, action) => {
+  switch (action.type) {
+    case FETCH_MISSION_REQUEST:
+      return state
+    case FETCH_MISSION_SUCCESS: 
+      return ({
+        ...state,
+        mission: action.mission
+      })
 
-  return state;
+
+    default: return state
+  }
+
+  
 }
 
-export taskReducer
+export default missionReducer

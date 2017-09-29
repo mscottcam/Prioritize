@@ -13,5 +13,16 @@ describe('task reducer', () => {
     let state = {};
     const newState = missionReducer(state, undefined);
     expect(newState).toEqual({});
-  })
+  });
+
+  it('should handle FETCH_MISSION_REQUEST', () => {
+    expect(missionReducer(undefined, actions.fetchMissionRequest()))
+      .toEqual({currentUser: null, tasks: []})
+  });
+
+  it.only('should handle FETCH_MISSION_SUCCESS', () => {
+    expect(missionReducer(undefined, actions.fetchMissionSuccess('My mission is for this test')))
+      .toEqual({currentUser: null, tasks: [], mission: ''})
+  });
+
 });
