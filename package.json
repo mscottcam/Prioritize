@@ -13,8 +13,14 @@
     "react-scripts": "^1.0.13",
     "xp": "^1.0.1"
   },
+  "cacheDirectories": [
+    "node_modules",
+    "server/node_modules",
+    "client/node_modules"
+  ],
   "scripts": {
     "start": "node index.js",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm run build",
     "dev": "run-p dev:server dev:client start",
     "dev:client":
       "cd client && cross-env BROWSER=none npm start -- --color=always | xp http://localhost:3000/ http://localhost:8080/",
