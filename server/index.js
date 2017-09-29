@@ -7,19 +7,23 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const {DATABASE, CLIENT_ID, CLIENT_SECRET} = require('../config/secret');
+const {DATABASE, CLIENT_ID, CLIENT_SECRET} = require('./config/secret');
 
 const app = express();
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
-mongoose.connect(DATABASE);
+mongoose.Promise = global.Promise;
+
+mongoose.connect(DATABASE, {
+  useMongoClient: true,
+  /* other options */
+});
 
 let secret = {
   CLIENT_ID,
   CLIENT_SECRET
 };
-
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
