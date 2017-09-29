@@ -1,38 +1,44 @@
-"use strict";
+'use strict';
 
-require("dotenv").config();
+require('dotenv').config();
 
-const path = require("path");
-const express = require("express");
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const BearerStrategy = require("passport-http-bearer").Strategy;
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-const mongoose = require("mongoose");
-const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require("./config/secret");
-const { User } = require("./models/user");
+const path = require('path');
+const express = require('express');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const BearerStrategy = require('passport-http-bearer').Strategy;
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const keys = require('./config/keys');
+const { User } = require('./models/user');
 
 const app = express();
-app.use(morgan("common"));
+app.use(morgan('common'));
 app.use(bodyParser.json());
 
 // Mongoose default promise library is deprecated - so we use global promises
 mongoose.Promise = global.Promise;
+mongoose.connect(keys.DATABASE);
 
 let secret = {
-  CLIENT_ID,
-  CLIENT_SECRET
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  DATABASE: process.env.DATABASE
 };
+
+if (process.env.NODE_ENV !== 'production') {
+  secret = require('./config/keys');
+}
 // Serve the built client
-app.use(express.static(path.resolve(__dirname, "../client/build")));
+app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // Allow CORS
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Origin', '*');
   res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
   );
   next();
 });
@@ -40,7 +46,7 @@ app.use(function(req, res, next) {
 // Unhandled requests which aren't for the API should serve index.html so
 // client-side routing using browserHistory can function
 app.get(/^(?!\/api(\/|$))/, (req, res) => {
-  const index = path.resolve(__dirname, "../client/build", "index.html");
+  const index = path.resolve(__dirname, '../client/build', 'index.html');
   res.sendFile(index);
 });
 
@@ -119,9 +125,9 @@ app.get('/api/auth/logout', (req, res) => {
 });
 
 // Endpoints that do not have to do with authentication:
-  // usermission
-  // userdata
-  // user?
+// usermission
+// userdata
+// user?
 
 // app.get(/user/data)
 // app.get("/api/tasks", (req, res) => {
@@ -131,8 +137,9 @@ app.get('/api/auth/logout', (req, res) => {
 let server;
 function runServer(port = 3001) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(DATABASE, {useMongoClient: true}, err => {
-      console.log('Starting server')
+    mongoose.connect(secret.DATABASE, {useMongoClient: true}, err => {
+      console.log('Starting server');
+      console.log('What is our database: ', secret.DATABASE)
       if (err) {
         return reject(err);
       }
@@ -141,7 +148,7 @@ function runServer(port = 3001) {
       .listen(port, () => {
         resolve();
       })
-      .on("error", reject);
+      .on('error', reject);
   });
 }
 
@@ -158,7 +165,7 @@ function closeServer() {
 
 if (require.main === module) {
   runServer().catch(err => {
-    console.error("Problem starting server: ", err);
+    console.error('Problem starting server: ', err);
   });
 }
 
