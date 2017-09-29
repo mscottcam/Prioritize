@@ -15,17 +15,17 @@ describe("async actions", () => {
     nock.cleanAll();
   });
 
-  it("creates FETCH_TASKS_SUCCESS when fetching tasks has been done", () => {
+  it("creates FETCH_USER_DATA_SUCCESS when fetching tasks has been done", () => {
     nock("http://localhost:8080")
-      .get("/api/tasks")
+      .get("/api/userData")
       .reply(200, { tasks: ["study hard"] });
     const expectedActions = [
-      { type: actions.FETCH_TASKS_REQUEST },
+      { type: actions.FETCH_USER_DATA_REQUEST },
       // The below line: why does 'body: { tasks: ['study hard']}' fail?
-      { type: actions.FETCH_TASKS_SUCCESS, tasks: { tasks: ["study hard"] } }
+      { type: actions.FETCH_USER_DATA_SUCCESS, userData: { tasks: ["study hard"] } }
     ];
     const store = mockStore({ text: [] });
-    return store.dispatch(actions.fetchTasks()).then(() => {
+    return store.dispatch(actions.fetchUserData()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
