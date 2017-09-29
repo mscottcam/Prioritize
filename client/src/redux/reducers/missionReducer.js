@@ -3,9 +3,9 @@ const initialState = {
   tasks: []
 };
 
-const taskReducer = (state=initialState, action) => {
+const missionReducer = (state=initialState, action) => {
 
   return state;
 }
 
-export taskReducer
+export default missionReducer

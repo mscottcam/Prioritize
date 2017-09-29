@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
-import { taskReducer, missionReducer } from '../reducers'
+import taskReducer from './taskReducer'
+import missionReducer from './missionReducer'
 
 const rootReducer = combineReducers({ taskReducer, missionReducer })
 
