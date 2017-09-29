@@ -12,14 +12,23 @@ const initialState = {
 
 const missionReducer = (state=initialState, action) => {
   switch (action.type) {
-    case FETCH_MISSION_REQUEST:
+    case actions.FETCH_MISSION_REQUEST:
       return state
-    case FETCH_MISSION_SUCCESS: 
+    case actions.FETCH_MISSION_SUCCESS: 
       return ({
         ...state,
-        mission: action.mission
-      })
-
+        currentMission: action.mission
+      });
+    case actions.FETCH_MISSION_ERROR:
+      return state
+    case actions.POST_MISSION_REQUEST: 
+      return state
+    case actions.POST_MISSION_SUCCESS:
+      return ({
+        ...state, 
+        currentMission: action.mission
+      });  
+    case actions.POST_MISSION_ERROR:
 
     default: return state
   }
