@@ -12,6 +12,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const { User } = require('./models/user');
+const { UserData } = require('./models/user-data');
 
 const app = express();
 app.use(morgan('common'));
@@ -129,6 +130,54 @@ app.get('/api/auth/logout', (req, res) => {
 // userdata
 // user?
 
+app.get('/api/users', (req, res) => {
+  User.find()
+    .limit(10)
+    .exec()
+    .then(users => {
+      console.log('Users: ', users);
+      res.json({
+        users: users.map(user => user.apiRepr())
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
+});
+
+app.get('/api/tasks', (req, res) => {
+  UserData.find()
+    .limit(10)
+    .exec()
+    .then(responseData => {
+      console.log('User Data: ', responseData);
+      res.json({
+        userData: responseData.map(userData => userData.apiRepr())
+      })
+        .catch(err => {
+          console.error(err);
+          res.status(500).json({message: 'Internal server error'});
+        });
+    });
+});
+
+app.post('/api/tasks', (req, res) => {
+  UserData.create({
+    user: req.body.user,
+    userData: req.body.userData
+  })
+    .then(userData => {
+      console.log('Does user Data have the goal: ', userData);
+      return res.status(201).json(userData.apiRepr())})
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
+    });
+  // post request contains:
+  // user: { _id: currentUserId (for example: 59cf0143b637d01e78cabd15 )}
+});
+
 // app.get(/user/data)
 // app.get("/api/tasks", (req, res) => {
 //   res.send(200).send("SOme text and stuff");
@@ -139,7 +188,7 @@ function runServer(port = 3001) {
   return new Promise((resolve, reject) => {
     mongoose.connect(secret.DATABASE, {useMongoClient: true}, err => {
       console.log('Starting server');
-      console.log('What is our database: ', secret.DATABASE)
+      console.log('What is our database: ', secret.DATABASE);
       if (err) {
         return reject(err);
       }

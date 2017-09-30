@@ -4,19 +4,23 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+// User Schema.userData: references the _id for userDataSchema
+const UserSchema = new Schema({
   displayName: { type: String },
   googleId: { type: String, required: true },
-  accessToken: { type: String, required: true }
+  accessToken: { type: String, required: true },
+  userData: {type: mongoose.Schema.Types.ObjectId, ref: 'user-data' }
 });
 
-userSchema.methods.apiRepr = function() {
+UserSchema.methods.apiRepr = function() {
   return {
     _id: this._id,
-    googleId: this.googleId
+    displayName: this.displayName,
+    googleId: this.googleId,
+    userData: this.userData || 'No tasks yet'
   };
 };
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('user', UserSchema);
 
 module.exports = { User };
