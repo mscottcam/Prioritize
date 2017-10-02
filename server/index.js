@@ -12,6 +12,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const { User } = require('./models/user');
+const { UserData } = require('./models/user-data');
 
 const app = express();
 app.use(morgan('common'));
@@ -129,17 +130,67 @@ app.get('/api/auth/logout', (req, res) => {
 // userdata
 // user?
 
+app.get('/api/users', (req, res) => {
+  User.find()
+    .limit(10)
+    .exec()
+    .then(users => {
+      // console.log('Users: ', users);
+      res.json({
+        users: users.map(user => user.apiRepr())
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
+    });
+});
+
+app.get('/api/tasks', (req, res) => {
+  UserData.find()
+    .limit(10)
+    .populate('userId')
+    .exec()
+    .then(responseData => {
+      console.log('Userid: ', responseData.userId);
+      console.log('User Data: ', responseData);
+      res.json({
+        userData: responseData.map(userData => userData.apiRepr())
+      })
+        .catch(err => {
+          console.error(err);
+          res.status(500).json({message: 'Internal server error'});
+        });
+    });
+});
+
+app.post('/api/tasks', (req, res) => {
+  UserData.create({
+    userId: req.body.userId,
+    userData: req.body.userData
+  })
+    .then(userData => {
+      console.log('This is what our user data looks like: ', userData);
+      return res.status(201).json(userData.apiRepr());})
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
+    });
+  // post request contains:
+  // user: { _id: currentUserId (for example: 59cf0143b637d01e78cabd15 )}
+});
+
 // app.get(/user/data)
 // app.get("/api/tasks", (req, res) => {
 //   res.send(200).send("SOme text and stuff");
 // });
 
 let server;
-function runServer(port = 3001) {
+function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(secret.DATABASE, {useMongoClient: true}, err => {
+    mongoose.connect(database, {useMongoClient: true}, err => {
       console.log('Starting server');
-      console.log('What is our database: ', secret.DATABASE)
+      console.log('What is our database: ', secret.DATABASE);
       if (err) {
         return reject(err);
       }
@@ -153,12 +204,14 @@ function runServer(port = 3001) {
 }
 
 function closeServer() {
-  return new Promise((resolve, reject) => {
-    server.close(err => {
-      if (err) {
-        return reject(err);
-      }
-      resolve();
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      server.close(err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
     });
   });
 }
