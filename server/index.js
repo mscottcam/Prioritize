@@ -135,7 +135,7 @@ app.get('/api/users', (req, res) => {
     .limit(10)
     .exec()
     .then(users => {
-      console.log('Users: ', users);
+      // console.log('Users: ', users);
       res.json({
         users: users.map(user => user.apiRepr())
       });
@@ -206,7 +206,6 @@ function runServer(port = 3001, database = secret.DATABASE) {
 function closeServer() {
   return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
-      console.log('I dont think the server is closing');
       server.close(err => {
         if (err) {
           return reject(err);

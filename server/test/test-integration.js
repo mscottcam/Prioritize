@@ -40,7 +40,7 @@ const tasksData = {
 };
 
 const seedTasks = tasksData => {
-  console.log('Executed tasks seeding');
+  // console.log('Executed tasks seeding');
   return UserData.create(tasksData);
 };
 
@@ -72,33 +72,27 @@ describe('Life coach', () => {
 
   afterEach(() => {
     // console.log('What does our data look like: ', testUser);
-    User.findOne({ googleId: testUser.googleId }).then(_user => {
-      console.log('User: ', _user);
-    }).then(() => {
-      UserData.find().then(_user => {
-        console.log('User data: ', _user);
-        return tearDownDatabase();
-      });
-    });
-
-
-    // delete whatever seeded data we do not want to persist to the next test
-
+    return tearDownDatabase();
   });
+
+
+  // delete whatever seeded data we do not want to persist to the next test
+
+
 
   describe('Google authentication', () => {
 
-    // Example User Query: 
-    // User.findOne({ googleId: testUser.googleId }).then(_user => {
-    //   console.log('User: ', _user);
-    // });
+  // Example User Query: 
+  // User.findOne({ googleId: testUser.googleId }).then(_user => {
+  //   console.log('User: ', _user);
+  // });
     it('should redirect to google authentication', () => {
       chai.request(app)
         .get('/api/auth/google').redirects(0)
         .set('Authorization', `Bearer ${testUser.accessToken}`)
         .end((err, res) => {
-          // Could maybe refactor this for loop in a fashiong similar to the logout test
-          // where we look for the prescense of the googleUrl terminating in the '?'
+        // Could maybe refactor this for loop in a fashiong similar to the logout test
+        // where we look for the prescense of the googleUrl terminating in the '?'
           let googleUrl =''; 
           let currentChar;
           for (let i = 0; i < res.headers['location'].length; i++) {
@@ -125,10 +119,32 @@ describe('Life coach', () => {
     });
   });
 
-  // describe('GET requests', () => {});
+  describe('GET requests', () => {
+    
+    it('should return all users', function() {
+      let res;
+      return chai.request(app)
+        .get('/api/users')
+        .then(_res => {
+          res= _res;
+          res.should.have.status(200);
+        });
+    });
 
-  // describe('POST requests', () => {});
+    it('should return all tasks', function() {
+      let resTasks;
+      return chai.request(app)
+        .get('/api/tasks')
+        .then(res => {
+          resTasks = res;
+          res.should.have.status(200);
 
-  // describe('PUT requests', () => {});
+        })
+    });
+  });
+
+// describe('POST requests', () => {});
+
+// describe('PUT requests', () => {});
 
 });
