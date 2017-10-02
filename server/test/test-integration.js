@@ -70,7 +70,7 @@ describe('Life coach', () => {
     // Use Promise all if we need to seed more data
     // return Promise.all([seedUserData(), seedOtherData()]);
 
-    return Promise.all([seedUserData(testUser), seedTasks(tasksData)]);
+    return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
 
   });
 
@@ -135,13 +135,14 @@ describe('Life coach', () => {
         });
     });
 
-    it('should return all tasks', function() {
+    it.only('should return all tasks', function() {
       let resTasks;
       return chai.request(app)
         .get('/api/tasks')
         .then(res => {
-          resTasks = res;
           res.should.have.status(200);
+          res.should.be.json;
+          console.log('What is res: ', res.body);
         });
     });
   });
