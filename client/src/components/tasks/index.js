@@ -29,29 +29,12 @@ class Tasks extends React.Component {
     let form = document.getElementById("form");
     form.reset();
   };
-  
-  mapTasks() {
-    if (this.state.tasks.length === 0) {
-      <p>No current tasks</p>
-    } else {
-      this.state.tasks.map(task => {
-        <li>{task}</li>
-      });
-    }
-  }
-      
-  
-  
-  
+   
   render() {
     return (
       <div>
         <ul>
-          {
-            this.state.tasks.map(task => {
-              return <li>{task}</li>
-            })
-          }
+          {this.state.tasks.map(task => <li>{task}</li>)}
         </ul>
         <form id="form" onSubmit={event => this.submitTask(event)}>
           <input 
