@@ -8,9 +8,4 @@ describe('<AddForm />', () => {
         shallow(<Header />);
     });
 
-    it('Renders the add button initially', () => {
-        const wrapper = shallow(<Header />);
-        expect(wrapper.hasClass('submit-task')).toEqual(true);
-    });
-    
 });
