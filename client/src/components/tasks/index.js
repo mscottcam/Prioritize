@@ -5,23 +5,21 @@ class Tasks extends React.Component {
     super(props);
     this.state = {
       tasks: [], 
-      taskInputValue: null
+      taskInputValue: null,
+
     };
   };
 
   componentDidMount() {
-    console.log('on mount tasks -->', this.state.tasks)
   }
 
   onChange(event) {
-    console.log(event.target.value)
     this.setState({
       taskInputValue: event.target.value
     });
   };
   
   submitTask(event) {
-    console.log('at submit input val -->', this.state.taskInputValue)
     event.preventDefault();
     this.setState({
       tasks: [...this.state.tasks, this.state.taskInputValue]
@@ -29,12 +27,31 @@ class Tasks extends React.Component {
     let form = document.getElementById("form");
     form.reset();
   };
+
+  deleteTask(event) {
+    console.log('delete button event -->', event.currentTarget)
+  }
+
+  mapTasksToList() {
+    return this.state.tasks.map(task => {
+      return (
+        <div  className="task">
+          <li onClick={event => this.deleteTask(event)} >
+            {task}
+            <button type="button">Delete Task</button>
+          </li>
+          
+        </div>
+      )
+    });
+  };
    
   render() {
+    // this.state.tasks.map(task => <li>{task}</li>)
     return (
       <div>
         <ul>
-          {this.state.tasks.map(task => <li>{task}</li>)}
+          {this.mapTasksToList()}
         </ul>
         <form id="form" onSubmit={event => this.submitTask(event)}>
           <input 
