@@ -135,7 +135,7 @@ app.get('/api/users', (req, res) => {
     .limit(10)
     .exec()
     .then(users => {
-      console.log('Users: ', users);
+      // console.log('Users: ', users);
       res.json({
         users: users.map(user => user.apiRepr())
       });
@@ -149,8 +149,10 @@ app.get('/api/users', (req, res) => {
 app.get('/api/tasks', (req, res) => {
   UserData.find()
     .limit(10)
+    .populate('userId')
     .exec()
     .then(responseData => {
+      console.log('Userid: ', responseData.userId);
       console.log('User Data: ', responseData);
       res.json({
         userData: responseData.map(userData => userData.apiRepr())
@@ -168,8 +170,8 @@ app.post('/api/tasks', (req, res) => {
     userData: req.body.userData
   })
     .then(userData => {
-      console.log('Does user Data have the goal: ', userData);
-      return res.status(201).json(userData.apiRepr())})
+      console.log('This is what our user data looks like: ', userData);
+      return res.status(201).json(userData.apiRepr());})
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
@@ -202,12 +204,14 @@ function runServer(port = 3001, database = secret.DATABASE) {
 }
 
 function closeServer() {
-  return new Promise((resolve, reject) => {
-    server.close(err => {
-      if (err) {
-        return reject(err);
-      }
-      resolve();
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      server.close(err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
     });
   });
 }

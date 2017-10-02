@@ -4,6 +4,7 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
 const { app, runServer, closeServer } = require('../index');
+
 // const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('../config/secret');
 const keys = require('../config/keys');
 const { User } = require('../models/user');
@@ -31,7 +32,7 @@ const testUser = {
   userData: this.userData
 };
 
-const seedUserData = user => {
+const seedFakeUser = user => {
   return User.create(user);
 };
 
@@ -65,29 +66,37 @@ describe('Life coach', () => {
   after(() => closeServer());
 
   beforeEach(() => {
+
     // Use Promise all if we need to seed more data
     // return Promise.all([seedUserData(), seedOtherData()]);
+
     return Promise.all([seedUserData(testUser), seedTasks(tasksData)]);
+
   });
 
   afterEach(() => {
-    // delete whatever seeded data we do not want to persist to the next test
+    // console.log('What does our data look like: ', testUser);
     return tearDownDatabase();
   });
 
+
+  // delete whatever seeded data we do not want to persist to the next test
+
+
+
   describe('Google authentication', () => {
 
-    // Example User Query: 
-    // User.findOne({ googleId: testUser.googleId }).then(_user => {
-    //   console.log('User: ', _user);
-    // });
+  // Example User Query: 
+  // User.findOne({ googleId: testUser.googleId }).then(_user => {
+  //   console.log('User: ', _user);
+  // });
     it('should redirect to google authentication', () => {
       chai.request(app)
         .get('/api/auth/google').redirects(0)
         .set('Authorization', `Bearer ${testUser.accessToken}`)
         .end((err, res) => {
-          // Could maybe refactor this for loop in a fashiong similar to the logout test
-          // where we look for the prescense of the googleUrl terminating in the '?'
+        // Could maybe refactor this for loop in a fashiong similar to the logout test
+        // where we look for the prescense of the googleUrl terminating in the '?'
           let googleUrl =''; 
           let currentChar;
           for (let i = 0; i < res.headers['location'].length; i++) {
@@ -133,13 +142,12 @@ describe('Life coach', () => {
         .then(res => {
           resTasks = res;
           res.should.have.status(200);
-
         });
     });
   });
 
-  describe('POST requests', () => {});
+// describe('POST requests', () => {});
 
-  describe('PUT requests', () => {});
+// describe('PUT requests', () => {});
 
 });
