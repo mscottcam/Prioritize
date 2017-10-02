@@ -149,8 +149,10 @@ app.get('/api/users', (req, res) => {
 app.get('/api/tasks', (req, res) => {
   UserData.find()
     .limit(10)
+    .populate('userId')
     .exec()
     .then(responseData => {
+      console.log('Userid: ', responseData.userId)
       console.log('User Data: ', responseData);
       res.json({
         userData: responseData.map(userData => userData.apiRepr())
@@ -164,11 +166,11 @@ app.get('/api/tasks', (req, res) => {
 
 app.post('/api/tasks', (req, res) => {
   UserData.create({
-    user: req.body.user,
+    userId: req.body.userId,
     userData: req.body.userData
   })
     .then(userData => {
-      console.log('Does user Data have the goal: ', userData);
+      console.log('This is what our user data looks like: ', userData);
       return res.status(201).json(userData.apiRepr())})
     .catch(err => {
       console.error(err);
@@ -184,9 +186,9 @@ app.post('/api/tasks', (req, res) => {
 // });
 
 let server;
-function runServer(port = 3001) {
+function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(secret.DATABASE, {useMongoClient: true}, err => {
+    mongoose.connect(database, {useMongoClient: true}, err => {
       console.log('Starting server');
       console.log('What is our database: ', secret.DATABASE);
       if (err) {

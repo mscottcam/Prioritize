@@ -4,8 +4,19 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
 const { app, runServer, closeServer } = require('../index');
-const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('../config/secret');
+const keys = require('../config/keys');
 const { User } = require('../models/user');
+
+let secret = {
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  DATABASE: process.env.DATABASE,
+  TEST_DATABASE: process.env.TEST_DATABASE
+};
+
+if (process.env.NODE_ENV !== 'production') {
+  secret = require('../config/keys');
+}
 
 const should = chai.should();
 chai.use(chaiHttp);
@@ -35,11 +46,12 @@ const tearDownDatabase = () => {
 
 describe('Life coach', () => {
   // Testing life cycle methods
-  before(() => runServer());
+  before(() => runServer(3001, secret.TEST_DATABASE));
 
   after(() => closeServer());
 
   beforeEach(() => {
+    console.log('Hit this database: ', secret.TEST_DATABASE);
     // Use Promise all if we need to seed more data
     // return Promise.all([seedUserData(), seedOtherData()]);
     return seedUserData(testUser);
