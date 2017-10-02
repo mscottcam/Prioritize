@@ -4,9 +4,14 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
 const { app, runServer, closeServer } = require('../index');
+
+// const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('../config/secret');
 const keys = require('../config/keys');
 const { User } = require('../models/user');
 const { UserData } = require('../models/user-data');
+
+const should = chai.should();
+chai.use(chaiHttp);
 
 let secret = {
   CLIENT_ID: process.env.CLIENT_ID,
@@ -18,9 +23,6 @@ let secret = {
 if (process.env.NODE_ENV !== 'production') {
   secret = require('../config/keys');
 }
-
-const should = chai.should();
-chai.use(chaiHttp);
 
 const testUser = {
   displayName: 'Evan Harris',
@@ -67,7 +69,9 @@ describe('Life coach', () => {
 
     // Use Promise all if we need to seed more data
     // return Promise.all([seedUserData(), seedOtherData()]);
-    return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
+
+    return Promise.all([seedUserData(testUser), seedTasks(tasksData)]);
+
   });
 
   afterEach(() => {
@@ -138,8 +142,7 @@ describe('Life coach', () => {
         .then(res => {
           resTasks = res;
           res.should.have.status(200);
-
-        })
+        });
     });
   });
 
