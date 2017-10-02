@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { app, runServer, closeServer } = require('../index');
 const keys = require('../config/keys');
 const { User } = require('../models/user');
+const { UserData } = require('../models/user-data');
 
 let secret = {
   CLIENT_ID: process.env.CLIENT_ID,
@@ -25,12 +26,24 @@ const testUser = {
   displayName: 'Evan Harris',
   googleId: '113991032114835833364',
   accessToken:
-    'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z'
+    'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
+  userData: this.userData
 };
 
-const seedUserData = user => {
+const seedFakeUser = user => {
   return User.create(user);
 };
+
+const tasksData = {
+  userId: this.userId,
+  userData: 'A bunch of stuff'
+};
+
+const seedTasks = tasksData => {
+  console.log('Executed tasks seeding');
+  return UserData.create(tasksData);
+};
+
 const tearDownDatabase = () => {
   return new Promise((resolve, reject) => {
     mongoose.connection
@@ -51,15 +64,26 @@ describe('Life coach', () => {
   after(() => closeServer());
 
   beforeEach(() => {
-    console.log('Hit this database: ', secret.TEST_DATABASE);
+
     // Use Promise all if we need to seed more data
     // return Promise.all([seedUserData(), seedOtherData()]);
-    return seedUserData(testUser);
+    return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
   });
 
   afterEach(() => {
+    // console.log('What does our data look like: ', testUser);
+    User.findOne({ googleId: testUser.googleId }).then(_user => {
+      console.log('User: ', _user);
+    }).then(() => {
+      UserData.find().then(_user => {
+        console.log('User data: ', _user);
+        return tearDownDatabase();
+      });
+    });
+
+
     // delete whatever seeded data we do not want to persist to the next test
-    return tearDownDatabase();
+
   });
 
   describe('Google authentication', () => {
@@ -101,10 +125,10 @@ describe('Life coach', () => {
     });
   });
 
-  describe('GET requests', () => {});
+  // describe('GET requests', () => {});
 
-  describe('POST requests', () => {});
+  // describe('POST requests', () => {});
 
-  describe('PUT requests', () => {});
+  // describe('PUT requests', () => {});
 
 });
