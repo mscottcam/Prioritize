@@ -4,11 +4,23 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
 const { app, runServer, closeServer } = require('../index');
-const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('../config/secret');
+// const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('../config/secret');
+const keys = require('../config/keys');
 const { User } = require('../models/user');
+const { UserData } = require('../models/user-data');
 
 const should = chai.should();
 chai.use(chaiHttp);
+
+let secret = {
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  DATABASE: process.env.DATABASE
+};
+
+if (process.env.NODE_ENV !== 'production') {
+  secret = require('../config/keys');
+}
 
 const testUser = {
   displayName: 'Evan Harris',
@@ -35,7 +47,7 @@ const tearDownDatabase = () => {
 
 describe('Life coach', () => {
   // Testing life cycle methods
-  before(() => runServer());
+  before(() => runServer(3001, secret.DATABASE));
 
   after(() => closeServer());
 

@@ -164,7 +164,7 @@ app.get('/api/tasks', (req, res) => {
 
 app.post('/api/tasks', (req, res) => {
   UserData.create({
-    user: req.body.user,
+    userId: req.body.userId,
     userData: req.body.userData
   })
     .then(userData => {
@@ -184,9 +184,9 @@ app.post('/api/tasks', (req, res) => {
 // });
 
 let server;
-function runServer(port = 3001) {
+function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(secret.DATABASE, {useMongoClient: true}, err => {
+    mongoose.connect(database, {useMongoClient: true}, err => {
       console.log('Starting server');
       console.log('What is our database: ', secret.DATABASE);
       if (err) {
