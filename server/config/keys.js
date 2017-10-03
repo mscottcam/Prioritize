@@ -1,5 +1,4 @@
 'use strict';
-require('dotenv').config();
 
 if (process.env.NODE_ENV === 'production') {
   console.log('hi friends. this is the production node', process.env.NODE_ENV);
