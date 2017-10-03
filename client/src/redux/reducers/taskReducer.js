@@ -7,7 +7,8 @@ const initialState = {
   roles:[],
   goals: [],
   projects: [],
-  tasks: []
+  tasks: [],
+  userData: null
 };
 
 const taskReducer = (state=initialState, action) => {
@@ -15,11 +16,12 @@ const taskReducer = (state=initialState, action) => {
     case actions.FETCH_USER_DATA_SUCCESS: {
       return {
         ...state,
-        currentUser: action.userData.currentUser,
-        roles: action.userData.roles,
-        goals: action.userData.goals,
-        projects: action.userData.projects,
-        tasks: action.userData.tasks
+        // currentUser: action.userData.currentUser,
+        // roles: action.userData.roles,
+        // goals: action.userData.goals,
+        // projects: action.userData.projects,
+        // tasks: action.userData.tasks
+        userData: action.userData
       }
     }
     case actions.POST_TASK_SUCCESS: {

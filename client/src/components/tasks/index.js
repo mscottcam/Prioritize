@@ -1,17 +1,19 @@
 import React from 'react';
+import * as actions from '../../redux/actions';
 
-class Tasks extends React.Component {
+import {connect} from 'react-redux';
+
+export class Tasks extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      tasks: [], 
-      taskInputValue: null,
-
+      taskInputValue: null
     };
   };
 
-  componentDidMount() {
-  }
+  componentWillMount() {
+    this.props.dispatch(actions.fetchUserData());
+  };
 
   onChange(event) {
     this.setState({
@@ -21,9 +23,13 @@ class Tasks extends React.Component {
   
   submitTask(event) {
     event.preventDefault();
-    this.setState({
-      tasks: [...this.state.tasks, this.state.taskInputValue]
-    });
+    console.log('submitting task -->')
+    this.props.dispatch(actions.postTask({
+      userId: this.props.currentUser._id,
+      userData: {
+        task: this.state.taskInputValue
+      }
+    }))
     let form = document.getElementById("form");
     form.reset();
   };
@@ -33,21 +39,22 @@ class Tasks extends React.Component {
   }
 
   mapTasksToList() {
-    return this.state.tasks.map(task => {
-      return (
-        <div  className="task">
-          <li onClick={event => this.deleteTask(event)} >
-            {task}
-            <button type="button">Delete Task</button>
-          </li>
-          
-        </div>
-      )
-    });
+    if (this.props.tasks !== null) {
+      console.log('got here', this.props.tasks.userdata)
+      return this.props.tasks.userData.map(taskObj => {
+        return (
+            <li>{taskObj._id}</li>
+        )
+      });
+    } else {
+      return <li>no task</li>
+    }
   };
    
   render() {
     // this.state.tasks.map(task => <li>{task}</li>)
+              // {this.mapTasksToList()}
+    console.log('HERE ARE THE INCOMING TASKS --> ', this.props.tasks)
     return (
       <div>
         <ul>
@@ -66,4 +73,8 @@ class Tasks extends React.Component {
   };
 };
 
-export default Tasks;
+const mapStateToProps = (state, props) => ({
+  currentUser: state.authReducer.currentUser,
+  tasks: state.taskReducer.userData
+});
+export default connect(mapStateToProps)(Tasks);

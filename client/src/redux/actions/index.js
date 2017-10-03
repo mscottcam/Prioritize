@@ -29,6 +29,7 @@ export const fetchUserData = () => dispatch => {
       return res.json();
     })
     .then(userData => {
+      console.log('USER-DATA ACTION-->', userData)
       return dispatch(fetchUserDataSuccess(userData));
     })
     .catch(err => {
