@@ -4,12 +4,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test":
-      "react-scripts test --env=jsdom --coverage --setupTestFrameworkScriptFile=raf/polyfill",
+    "test": "react-scripts test --env=jsdom --coverage --setupTestFrameworkScriptFile=raf/polyfill",
     "eject": "react-scripts eject"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
+    "js-cookie": "^2.1.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",

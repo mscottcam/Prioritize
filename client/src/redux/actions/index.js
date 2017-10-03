@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import * as Cookies from 'js-cookie';
 
 export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
 export const fetchUserDataRequest = () => ({ type: FETCH_USER_DATA_REQUEST });
@@ -178,7 +179,43 @@ export const updateTask = data => dispatch => {
 };
 // --------------------------------------------------------------------------------
 
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const authSuccess = currentUser => ({
+  type: AUTH_SUCCESS,
+  currentUser
+});
 
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const authError = message => ({
+  type: AUTH_ERROR,
+  message
+});
+
+export const authenticate = () => dispatch => {
+  const accessToken = Cookies.get('accessToken');
+  // console.log(accessToken);
+  if (accessToken) {
+    fetch('/api/me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) {
+          if (res.status !== 401) {
+            // Unauthorized, clear the cookie and go to the login page
+            Cookies.remove('accessToken');
+            return;
+          }
+          throw new Error(res.statusText);
+        }
+        return res.json();
+      })
+      .then(currentUser => {
+        return dispatch(authSuccess(currentUser)); 
+      });
+  }
+};
 
 
 

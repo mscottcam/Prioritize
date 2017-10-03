@@ -1,11 +1,16 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import * as actions from './redux/actions'
+import {connect} from 'react-redux';
 
-import Header from './components/header'
-import Tasks from './components/tasks'
+import Header from './components/header';
+import Tasks from './components/tasks';
 
-class App extends Component {
+export class App extends React.Component {
+  componentDidMount() {
+    this.props.dispatch(actions.authenticate())
+  };
+
   render() {
     return (
       <div className="App">
@@ -20,7 +25,12 @@ class App extends Component {
         <Tasks />
       </div>
     );
-  }
-}
+  };
+};
 
-export default App;
+const mapStateToProps = (state, props) => ({
+  currentUser: state.authReducer.currentUser
+});
+export default connect(mapStateToProps)(App);
+
+
