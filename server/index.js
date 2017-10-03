@@ -125,6 +125,19 @@ app.get('/api/auth/logout', (req, res) => {
   res.redirect('/');
 });
 
+app.get('/api/me', passport.authenticate('bearer', { session: false }),
+  (req, res) => {
+    User.findOne({ accessToken: req.user.accessToken})
+      .then(user => {
+        res.status(200).send(user);
+      })
+      .catch(err => {
+        console.err(err);
+        res.status(204).send(err);
+      });
+  }
+);
+
 // Endpoints that do not have to do with authentication:
 // usermission
 // userdata
