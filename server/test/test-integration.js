@@ -139,7 +139,7 @@ describe('Life coach', () => {
     it.only('should return all tasks', function() {
       let resTasks;
       return chai.request(app)
-        .get('/api/tasks')
+        .get('/api/userData')
         .then(res => {
           res.should.have.status(200);
           res.should.be.json;

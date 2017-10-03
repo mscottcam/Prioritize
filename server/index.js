@@ -146,7 +146,7 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-app.get('/api/tasks', (req, res) => {
+app.get('/api/userData', (req, res) => {
   UserData.find()
     .limit(10)
     .populate('userId')
