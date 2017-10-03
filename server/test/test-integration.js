@@ -12,13 +12,14 @@ const { UserData } = require('../models/user-data');
 
 const should = chai.should();
 chai.use(chaiHttp);
-
+console.log("Before secret", process.env.CLIENT_ID)
 let secret = {
   CLIENT_ID: process.env.CLIENT_ID,
   CLIENT_SECRET: process.env.CLIENT_SECRET,
   DATABASE: process.env.DATABASE,
   TEST_DATABASE: process.env.TEST_DATABASE
 };
+console.log("After secret", process.env.CLIENT_ID)
 
 if (process.env.NODE_ENV !== 'production') {
   secret = require('../config/keys');
