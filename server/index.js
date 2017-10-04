@@ -1,7 +1,5 @@
 'use strict';
 
-require('dotenv').config();
-
 const path = require('path');
 const express = require('express');
 const passport = require('passport');
@@ -10,27 +8,24 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const keys = require('./config/keys');
 const { User } = require('./models/user');
 const { UserData } = require('./models/user-data');
+const { CLIENT_ID, CLIENT_SECRET, DATABASE } = require('./config');
 
 const app = express();
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
-// Mongoose default promise library is deprecated - so we use global promises
-mongoose.Promise = global.Promise;
-mongoose.connect(keys.DATABASE);
-
 let secret = {
-  CLIENT_ID: process.env.CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET,
-  DATABASE: process.env.DATABASE
+  CLIENT_ID,
+  CLIENT_SECRET,
+  DATABASE
 };
 
-if (process.env.NODE_ENV !== 'production') {
-  secret = require('./config/keys');
-}
+// Mongoose default promise library is deprecated - so we use global promises
+mongoose.Promise = global.Promise;
+mongoose.connect(secret.DATABASE);
+
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
