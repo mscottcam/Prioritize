@@ -3,17 +3,17 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
-const { app, runServer, closeServer } = require('../index');
+// const { app, runServer, closeServer } = require('../index');
 const { CLIENT_ID, CLIENT_SECRET, TEST_DATABASE } = require('../config');
-const { User } = require('../models/user');
-const { UserData } = require('../models/user-data');
+// const { User } = require('../models/user');
+// const { UserData } = require('../models/user-data');
 
 const should = chai.should();
 chai.use(chaiHttp);
 
-    it.only('Should be true', function() {
-      true.should.be.true;
-    });
+    // it.only('Should be true', function() {
+    //   true.should.be.true;
+    // });
 let secret = {
   TEST_DATABASE: process.env.TEST_DATABASE,
   CLIENT_ID: process.env.CLIENT_ID,
@@ -28,52 +28,52 @@ const testUser = {
   userData: this.userData
 };
 
-const seedFakeUser = user => {
-  return User.create(user);
-};
+// const seedFakeUser = user => {
+//   return User.create(user);
+// };
 
-const tasksData = {
-  userId: this.userId,
-  userData: 'A bunch of stuff'
-};
+// const tasksData = {
+//   userId: this.userId,
+//   userData: 'A bunch of stuff'
+// };
 
-const seedTasks = tasksData => {
-  // console.log('Executed tasks seeding');
-  return UserData.create(tasksData);
-};
+// const seedTasks = tasksData => {
+//   // console.log('Executed tasks seeding');
+//   return UserData.create(tasksData);
+// };
 
-const tearDownDatabase = () => {
-  return new Promise((resolve, reject) => {
-    mongoose.connection
-      .dropDatabase()
-      .then(result => {
-        return resolve(result);
-      })
-      .catch(err => {
-        return reject(err);
-      });
-  });
-};
+// const tearDownDatabase = () => {
+//   return new Promise((resolve, reject) => {
+//     mongoose.connection
+//       .dropDatabase()
+//       .then(result => {
+//         return resolve(result);
+//       })
+//       .catch(err => {
+//         return reject(err);
+//       });
+//   });
+// };
 
 describe('Life coach', () => {
 //   // Testing life cycle methods
-  before(() => runServer(3001, secret.TEST_DATABASE));
+  // before(() => runServer(3001, secret.TEST_DATABASE));
 
-  after(() => closeServer());
+  // after(() => closeServer());
 
-  beforeEach(() => {
+  // beforeEach(() => {
 
-    // Use Promise all if we need to seed more data
-    // return Promise.all([seedUserData(), seedOtherData()]);
+  //   // Use Promise all if we need to seed more data
+  //   // return Promise.all([seedUserData(), seedOtherData()]);
 
-    return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
+  //   return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
 
-  });
+  // });
 
-  afterEach(() => {
-    // console.log('What does our data look like: ', testUser);
-    return tearDownDatabase();
-  });
+  // afterEach(() => {
+  //   // console.log('What does our data look like: ', testUser);
+  //   return tearDownDatabase();
+  // });
 
 
 //   // delete whatever seeded data we do not want to persist to the next test
