@@ -128,7 +128,7 @@ describe('Life coach', () => {
         });
     });
 
-    it.only('should return all tasks', function() {
+    it('should return all tasks', function() {
       let resTasks;
       return chai.request(app)
         .get('/api/userData')
@@ -137,6 +137,10 @@ describe('Life coach', () => {
           res.should.be.json;
           console.log('What is res: ', res.body);
         });
+    });
+
+    it.only('Should be true', function() {
+      true.should.be.true;
     });
   });
 
