@@ -16,7 +16,7 @@ let secret = {
   CLIENT_ID,
   CLIENT_SECRET
 };
-
+console.log('Lets make sure we have everything we need from secret here:', secret);
 const testUser = {
   displayName: 'Evan Harris',
   googleId: '113991032114835833364',
@@ -128,7 +128,7 @@ describe('Life coach', () => {
         });
     });
 
-    it('should return all tasks', function() {
+    it.only('should return all tasks', function() {
       let resTasks;
       return chai.request(app)
         .get('/api/userData')
