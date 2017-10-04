@@ -5,25 +5,19 @@ const mongoose = require('mongoose');
 
 const { app, runServer, closeServer } = require('../index');
 
-// const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('../config/secret');
-const keys = require('../config/keys');
+const { DATABASE, CLIENT_ID, CLIENT_SECRET, TEST_DATABASE } = require('../config');
 const { User } = require('../models/user');
 const { UserData } = require('../models/user-data');
 
 const should = chai.should();
 chai.use(chaiHttp);
-console.log("Before secret", process.env.CLIENT_ID)
-let secret = {
-  CLIENT_ID: process.env.CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET,
-  DATABASE: process.env.DATABASE,
-  TEST_DATABASE: process.env.TEST_DATABASE
-};
-console.log("After secret", process.env.CLIENT_ID)
 
-if (process.env.NODE_ENV !== 'production') {
-  secret = require('../config/keys');
-}
+let secret = {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  DATABASE,
+  TEST_DATABASE
+};
 
 const testUser = {
   displayName: 'Evan Harris',
@@ -136,7 +130,7 @@ describe('Life coach', () => {
         });
     });
 
-    it.only('should return all tasks', function() {
+    it('should return all tasks', function() {
       let resTasks;
       return chai.request(app)
         .get('/api/userData')
