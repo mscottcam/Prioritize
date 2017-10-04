@@ -34,23 +34,23 @@ const tasksData = {
   userData: 'A bunch of stuff'
 };
 
-const seedTasks = tasksData => {
-  // console.log('Executed tasks seeding');
-  return UserData.create(tasksData);
-};
+// const seedTasks = tasksData => {
+//   // console.log('Executed tasks seeding');
+//   return UserData.create(tasksData);
+// };
 
-const tearDownDatabase = () => {
-  return new Promise((resolve, reject) => {
-    mongoose.connection
-      .dropDatabase()
-      .then(result => {
-        return resolve(result);
-      })
-      .catch(err => {
-        return reject(err);
-      });
-  });
-};
+// const tearDownDatabase = () => {
+//   return new Promise((resolve, reject) => {
+//     mongoose.connection
+//       .dropDatabase()
+//       .then(result => {
+//         return resolve(result);
+//       })
+//       .catch(err => {
+//         return reject(err);
+//       });
+//   });
+// };
 
 describe('Life coach', () => {
   // Testing life cycle methods
@@ -77,69 +77,69 @@ describe('Life coach', () => {
 
 
 
-  describe('Google authentication', () => {
-
   // Example User Query: 
   // User.findOne({ googleId: testUser.googleId }).then(_user => {
   //   console.log('User: ', _user);
   // });
-    it('should redirect to google authentication', () => {
-      chai.request(app)
-        .get('/api/auth/google').redirects(0)
-        .set('Authorization', `Bearer ${testUser.accessToken}`)
-        .end((err, res) => {
-        // Could maybe refactor this for loop in a fashiong similar to the logout test
-        // where we look for the prescense of the googleUrl terminating in the '?'
-          let googleUrl =''; 
-          let currentChar;
-          for (let i = 0; i < res.headers['location'].length; i++) {
-            currentChar = res.headers['location'][i];
-            if (currentChar !== '?') {
-              googleUrl += currentChar;
-            } else if (currentChar === '?') {
-              break;
-            }
-          }
-          res.should.have.status(302);
-          googleUrl.should.equal('https://accounts.google.com/o/oauth2/v2/auth');
-        });
-    });
+  describe('Google authentication', () => {
 
-    it('should logout the user', () => {
-      chai.request(app)
-        .get('/api/auth/logout').redirects(0)
-        .end((err, res) => {
-          res.should.have.status(302);
-          res.headers['location'].should.be.equal('/');
-          res.headers['set-cookie'][0].should.contain('accessToken=;');
-        });
-    });
+    // it('should redirect to google authentication', () => {
+    //   chai.request(app)
+    //     .get('/api/auth/google').redirects(0)
+    //     .set('Authorization', `Bearer ${testUser.accessToken}`)
+    //     .end((err, res) => {
+    //     // Could maybe refactor this for loop in a fashiong similar to the logout test
+    //     // where we look for the prescense of the googleUrl terminating in the '?'
+    //       let googleUrl =''; 
+    //       let currentChar;
+    //       for (let i = 0; i < res.headers['location'].length; i++) {
+    //         currentChar = res.headers['location'][i];
+    //         if (currentChar !== '?') {
+    //           googleUrl += currentChar;
+    //         } else if (currentChar === '?') {
+    //           break;
+    //         }
+    //       }
+    //       res.should.have.status(302);
+    //       googleUrl.should.equal('https://accounts.google.com/o/oauth2/v2/auth');
+    //     });
+    // });
+
+    // it('should logout the user', () => {
+    //   chai.request(app)
+    //     .get('/api/auth/logout').redirects(0)
+    //     .end((err, res) => {
+    //       res.should.have.status(302);
+    //       res.headers['location'].should.be.equal('/');
+    //       res.headers['set-cookie'][0].should.contain('accessToken=;');
+    //     });
+    // });
   });
 
   describe('GET requests', () => {
     
-    it('should return all users', function() {
-      let res;
-      return chai.request(app)
-        .get('/api/users')
-        .then(_res => {
-          res= _res;
-          res.should.have.status(200);
-        });
-    });
+    // it('should return all users', function() {
+    //   let res;
+    //   return chai.request(app)
+    //     .get('/api/users')
+    //     .then(_res => {
+    //       res= _res;
+    //       res.should.have.status(200);
+    //     });
+    // });
 
-    it('should return all tasks', function() {
-      let resTasks;
-      return chai.request(app)
-        .get('/api/userData')
-        .then(res => {
-          res.should.have.status(200);
-          res.should.be.json;
-          console.log('What is res: ', res.body);
-        });
-    });
+    // it('should return all tasks', function() {
+    //   let resTasks;
+    //   return chai.request(app)
+    //     .get('/api/userData')
+    //     .then(res => {
+    //       res.should.have.status(200);
+    //       res.should.be.json;
+    //       console.log('What is res: ', res.body);
+    //     });
+    // });
   });
-  it.only('Should be true', function() {
+  it('Should be true', function() {
     true.should.be.true;
   });
 // describe('POST requests', () => {});
