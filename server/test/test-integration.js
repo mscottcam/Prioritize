@@ -3,17 +3,14 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
-// const { app, runServer, closeServer } = require('../index');
+const { app, runServer, closeServer } = require('../index');
 const { CLIENT_ID, CLIENT_SECRET, TEST_DATABASE } = require('../config');
-// const { User } = require('../models/user');
-// const { UserData } = require('../models/user-data');
+const { User } = require('../models/user');
+const { UserData } = require('../models/user-data');
 
 const should = chai.should();
 chai.use(chaiHttp);
 
-    // it.only('Should be true', function() {
-    //   true.should.be.true;
-    // });
 let secret = {
   TEST_DATABASE: process.env.TEST_DATABASE,
   CLIENT_ID: process.env.CLIENT_ID,
@@ -28,127 +25,126 @@ const testUser = {
   userData: this.userData
 };
 
-// const seedFakeUser = user => {
-//   return User.create(user);
-// };
+const seedFakeUser = user => {
+  return User.create(user);
+};
 
-// const tasksData = {
-//   userId: this.userId,
-//   userData: 'A bunch of stuff'
-// };
+const tasksData = {
+  userId: this.userId,
+  userData: 'A bunch of stuff'
+};
 
-// const seedTasks = tasksData => {
-//   // console.log('Executed tasks seeding');
-//   return UserData.create(tasksData);
-// };
+const seedTasks = tasksData => {
+  // console.log('Executed tasks seeding');
+  return UserData.create(tasksData);
+};
 
-// const tearDownDatabase = () => {
-//   return new Promise((resolve, reject) => {
-//     mongoose.connection
-//       .dropDatabase()
-//       .then(result => {
-//         return resolve(result);
-//       })
-//       .catch(err => {
-//         return reject(err);
-//       });
-//   });
-// };
+const tearDownDatabase = () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connection
+      .dropDatabase()
+      .then(result => {
+        return resolve(result);
+      })
+      .catch(err => {
+        return reject(err);
+      });
+  });
+};
 
 describe('Life coach', () => {
-//   // Testing life cycle methods
-  // before(() => runServer(3001, secret.TEST_DATABASE));
+  // Testing life cycle methods
+  before(() => runServer(3001, secret.TEST_DATABASE));
 
-  // after(() => closeServer());
+  after(() => closeServer());
 
-  // beforeEach(() => {
+  beforeEach(() => {
 
-  //   // Use Promise all if we need to seed more data
-  //   // return Promise.all([seedUserData(), seedOtherData()]);
+    // Use Promise all if we need to seed more data
+    // return Promise.all([seedUserData(), seedOtherData()]);
 
-  //   return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
+    return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
 
+  });
+
+  afterEach(() => {
+    // console.log('What does our data look like: ', testUser);
+    return tearDownDatabase();
+  });
+
+
+  // delete whatever seeded data we do not want to persist to the next test
+
+
+
+  describe('Google authentication', () => {
+
+  // Example User Query: 
+  // User.findOne({ googleId: testUser.googleId }).then(_user => {
+  //   console.log('User: ', _user);
   // });
+    it('should redirect to google authentication', () => {
+      chai.request(app)
+        .get('/api/auth/google').redirects(0)
+        .set('Authorization', `Bearer ${testUser.accessToken}`)
+        .end((err, res) => {
+        // Could maybe refactor this for loop in a fashiong similar to the logout test
+        // where we look for the prescense of the googleUrl terminating in the '?'
+          let googleUrl =''; 
+          let currentChar;
+          for (let i = 0; i < res.headers['location'].length; i++) {
+            currentChar = res.headers['location'][i];
+            if (currentChar !== '?') {
+              googleUrl += currentChar;
+            } else if (currentChar === '?') {
+              break;
+            }
+          }
+          res.should.have.status(302);
+          googleUrl.should.equal('https://accounts.google.com/o/oauth2/v2/auth');
+        });
+    });
 
-  // afterEach(() => {
-  //   // console.log('What does our data look like: ', testUser);
-  //   return tearDownDatabase();
-  // });
+    it('should logout the user', () => {
+      chai.request(app)
+        .get('/api/auth/logout').redirects(0)
+        .end((err, res) => {
+          res.should.have.status(302);
+          res.headers['location'].should.be.equal('/');
+          res.headers['set-cookie'][0].should.contain('accessToken=;');
+        });
+    });
+  });
 
-
-//   // delete whatever seeded data we do not want to persist to the next test
-
-
-
-//   describe('Google authentication', () => {
-
-//   // Example User Query: 
-//   // User.findOne({ googleId: testUser.googleId }).then(_user => {
-//   //   console.log('User: ', _user);
-//   // });
-//     it('should redirect to google authentication', () => {
-//       chai.request(app)
-//         .get('/api/auth/google').redirects(0)
-//         .set('Authorization', `Bearer ${testUser.accessToken}`)
-//         .end((err, res) => {
-//         // Could maybe refactor this for loop in a fashiong similar to the logout test
-//         // where we look for the prescense of the googleUrl terminating in the '?'
-//           let googleUrl =''; 
-//           let currentChar;
-//           for (let i = 0; i < res.headers['location'].length; i++) {
-//             currentChar = res.headers['location'][i];
-//             if (currentChar !== '?') {
-//               googleUrl += currentChar;
-//             } else if (currentChar === '?') {
-//               break;
-//             }
-//           }
-//           res.should.have.status(302);
-//           googleUrl.should.equal('https://accounts.google.com/o/oauth2/v2/auth');
-//         });
-//     });
-
-//     it('should logout the user', () => {
-//       chai.request(app)
-//         .get('/api/auth/logout').redirects(0)
-//         .end((err, res) => {
-//           res.should.have.status(302);
-//           res.headers['location'].should.be.equal('/');
-//           res.headers['set-cookie'][0].should.contain('accessToken=;');
-//         });
-//     });
-//   });
-
-//   describe('GET requests', () => {
+  describe('GET requests', () => {
     
-//     it('should return all users', function() {
-//       let res;
-//       return chai.request(app)
-//         .get('/api/users')
-//         .then(_res => {
-//           res= _res;
-//           res.should.have.status(200);
-//         });
-//     });
+    it('should return all users', function() {
+      let res;
+      return chai.request(app)
+        .get('/api/users')
+        .then(_res => {
+          res= _res;
+          res.should.have.status(200);
+        });
+    });
 
-//     it('should return all tasks', function() {
-//       let resTasks;
-//       return chai.request(app)
-//         .get('/api/userData')
-//         .then(res => {
-//           res.should.have.status(200);
-//           res.should.be.json;
-//           console.log('What is res: ', res.body);
-//         });
-//     });
+    it('should return all tasks', function() {
+      let resTasks;
+      return chai.request(app)
+        .get('/api/userData')
+        .then(res => {
+          res.should.have.status(200);
+          res.should.be.json;
+          console.log('What is res: ', res.body);
+        });
+    });
+    it.only('Should be true', function() {
+      true.should.be.true;
+    });
+  });
 
-//     it.only('Should be true', function() {
-//       true.should.be.true;
-//     });
-//   });
+// describe('POST requests', () => {});
 
-// // describe('POST requests', () => {});
-
-// // describe('PUT requests', () => {});
+// describe('PUT requests', () => {});
 
 });
