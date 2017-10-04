@@ -24,7 +24,7 @@ let secret = {
   CLIENT_SECRET: process.env.CLIENT_SECRET,
   DATABASE: process.env.DATABASE
 };
-
+console.log('Travis is a blast=========================================', secret);
 // Mongoose default promise library is deprecated - so we use global promises
 mongoose.Promise = global.Promise;
 mongoose.connect(secret.DATABASE);
