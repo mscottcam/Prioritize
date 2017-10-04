@@ -56,21 +56,21 @@ describe('Life coach', () => {
   // Testing life cycle methods
   before(() => runServer(3001, secret.TEST_DATABASE));
 
-  after(() => closeServer());
+  // after(() => closeServer());
 
-  beforeEach(() => {
+  // beforeEach(() => {
 
-    // Use Promise all if we need to seed more data
-    // return Promise.all([seedUserData(), seedOtherData()]);
+  //   // Use Promise all if we need to seed more data
+  //   // return Promise.all([seedUserData(), seedOtherData()]);
 
-    return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
+  //   return Promise.all([seedFakeUser(testUser), seedTasks(tasksData)]);
 
-  });
+  // });
 
-  afterEach(() => {
-    // console.log('What does our data look like: ', testUser);
-    return tearDownDatabase();
-  });
+  // afterEach(() => {
+  //   // console.log('What does our data look like: ', testUser);
+  //   return tearDownDatabase();
+  // });
 
 
   // delete whatever seeded data we do not want to persist to the next test
