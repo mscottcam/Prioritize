@@ -4,13 +4,13 @@ const path = require('path');
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const { CLIENT_ID, CLIENT_SECRET, DATABASE } = require('./config');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const { User } = require('./models/user');
 const { UserData } = require('./models/user-data');
-const { CLIENT_ID, CLIENT_SECRET, DATABASE } = require('./config');
 
 const app = express();
 app.use(morgan('common'));

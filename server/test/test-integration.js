@@ -12,9 +12,9 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 let secret = {
-  TEST_DATABASE,
-  CLIENT_ID,
-  CLIENT_SECRET
+  TEST_DATABASE: process.env.TEST_DATABASE,
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET
 };
 console.log('Lets make sure we have everything we need from secret here:', secret);
 const testUser = {
