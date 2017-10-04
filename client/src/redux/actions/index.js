@@ -22,14 +22,13 @@ export const fetchUserData = () => dispatch => {
   dispatch(fetchUserDataRequest());
   return fetch('http://localhost:8080/api/userData', opts)
     .then(res => {
-      // console.log('Do we have our res: ', res);
       if (!res.ok) {
         return Promise.reject(res.statusText);
       }
       return res.json();
     })
     .then(userData => {
-      console.log('USER-DATA ACTION-->', userData)
+      // console.log('USER-DATA ACTION-->', userData)
       return dispatch(fetchUserDataSuccess(userData));
     })
     .catch(err => {
@@ -194,7 +193,6 @@ export const authError = message => ({
 
 export const authenticate = () => dispatch => {
   const accessToken = Cookies.get('accessToken');
-  // console.log(accessToken);
   if (accessToken) {
     fetch('/api/me', {
       headers: {
