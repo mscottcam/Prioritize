@@ -10,7 +10,18 @@ const UserSchema = new Schema({
   displayName: { type: String },
   googleId: { type: String, required: true },
   accessToken: { type: String, required: true },
-  userData: {type: mongoose.Schema.Types.ObjectId, ref: 'user-data' }
+  mission: {type: String, required: true},
+  roles: [
+    {
+      role: {type: String, required: true},
+      goals: [
+        {
+          goal: {type: String, required: true},
+          tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'user-data'}]
+        }
+      ]
+    }
+  ]
 });
 
 UserSchema.methods.apiRepr = function() {
@@ -25,3 +36,5 @@ UserSchema.methods.apiRepr = function() {
 const User = mongoose.model('user', UserSchema);
 
 module.exports = { User };
+
+//  userData: {type: mongoose.Schema.Types.ObjectId, ref: 'user-data' }

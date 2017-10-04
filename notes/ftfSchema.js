@@ -22,7 +22,8 @@ const state = {
     {
       projectName: 'Learn Design',
       projectId: 5678,
-      tasks: []
+      tasks: [], 
+      role: ''
     }
   ],
   projects: [
@@ -50,7 +51,7 @@ const userSchema = {
       projects:[],
       tasks:[],
     },
-  ]
+  ],
   goals: [
     {
       goal: '',

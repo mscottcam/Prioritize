@@ -2,19 +2,17 @@
 let user = {
   roles: {
     husband: {
-      goals: {
-        'be good': {
-          projects: {
-            'project1': {
-              tasks: 'userData ref'
-            }
-          }
+      goals: [
+        {
+          description: 'be good',
+          tasks: []
         }
-      }
-    },
+      ]
+    }
+  }
+},
     father: {},
     developer: {}
-  } 
 }
 
 let task = {
@@ -25,3 +23,22 @@ let task = {
   urgent: {type: Boolean}
   // add role, goal, project?
 }
+
+const UserSchema = new Schema({
+  displayName: { type: String },
+  googleId: { type: String, required: true },
+  accessToken: { type: String, required: true },
+  mission: {type: String, required: true},
+  roles: {
+    roleName: {type: String, required: true},
+    roleData: {
+      mission: {type: String},
+      goals: {
+        goal: {type: String, required: true},
+        goalData: {
+          tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'user-data'}]
+        }
+      }
+    }
+  }
+});
