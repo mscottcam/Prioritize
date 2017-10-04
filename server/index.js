@@ -52,7 +52,7 @@ app.get(/^(?!\/api(\/|$))/, (req, res) => {
 });
 
 // Passport Strategies
-app.use(passport.initialize());
+// app.use(passport.initialize());
 passport.use(
   new GoogleStrategy({
     clientID: secret.CLIENT_ID,
