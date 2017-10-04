@@ -5,4 +5,4 @@ exports.CLIENT_SECRET = process.env.CLIENT_SECRET || global.CLIENT_SECRET;
 exports.DATABASE = process.env.DATABASE || global.DATABASE;
 exports.TEST_DATABASE = process.env.TEST_DATABASE || global.TEST_DATABASE;
 
-// console.log('Process.env: ', process.env);
+console.log('What does process.env look like in travis mate?: ', process.env);

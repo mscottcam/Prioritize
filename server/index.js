@@ -1,7 +1,5 @@
 'use strict';
 
-require('dotenv').config();
-
 const path = require('path');
 const express = require('express');
 const passport = require('passport');
@@ -10,7 +8,7 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-// const keys = require('./config/keys');
+const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('./config');
 const { User } = require('./models/user');
 const { UserData } = require('./models/user-data');
 
@@ -20,9 +18,9 @@ app.use(bodyParser.json());
 
 
 let secret = {
-  CLIENT_ID: process.env.CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET,
-  DATABASE: process.env.DATABASE
+  CLIENT_ID,
+  CLIENT_SECRET,
+  DATABASE
 };
 console.log('Travis is a blast=========================================', secret);
 // Mongoose default promise library is deprecated - so we use global promises
