@@ -5,28 +5,20 @@ const mongoose = require('mongoose');
 
 const { app, runServer, closeServer } = require('../index');
 
-// const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('../config/secret');
+const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('../config');
 // const keys = require('../config/keys');
 const { User } = require('../models/user');
 const { UserData } = require('../models/user-data');
 
-const { CLIENT_ID, CLIENT_SECRET, TEST_DATABASE } = require('../config');
-
-let secret = {
-  TEST_DATABASE: process.env.TEST_DATABASE,
-  CLIENT_ID: process.env.CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET
-};
-
 const should = chai.should();
 chai.use(chaiHttp);
 
-// let secret = {
-//   CLIENT_ID: process.env.CLIENT_ID,
-//   CLIENT_SECRET: process.env.CLIENT_SECRET,
-//   DATABASE: process.env.DATABASE,
-//   TEST_DATABASE: process.env.TEST_DATABASE
-// };
+let secret = {
+  CLIENT_ID: process.env.CLIENT_ID,
+  CLIENT_SECRET: process.env.CLIENT_SECRET,
+  DATABASE: process.env.DATABASE,
+  TEST_DATABASE: process.env.TEST_DATABASE
+};
 
 // if (process.env.NODE_ENV !== 'production') {
 //   secret = require('../config/keys');
@@ -146,7 +138,7 @@ describe('Life coach', () => {
     it.only('should return all tasks', function() {
       let resTasks;
       return chai.request(app)
-        .get('/api/userData')
+        .get('/api/tasks')
         .then(res => {
           res.should.have.status(200);
           res.should.be.json;
@@ -160,7 +152,6 @@ describe('Life coach', () => {
 // describe('PUT requests', () => {});
 
 });
-
 // Most recent version is below:
 
 // 'use strict';
