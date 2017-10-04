@@ -54,7 +54,7 @@ const tearDownDatabase = () => {
 
 describe('Life coach', () => {
   // Testing life cycle methods
-  before(() => runServer(3001, secret.TEST_DATABASE));
+  // before(() => runServer(3001, secret.TEST_DATABASE));
 
   // after(() => closeServer());
 
@@ -138,11 +138,10 @@ describe('Life coach', () => {
           console.log('What is res: ', res.body);
         });
     });
-    it.only('Should be true', function() {
-      true.should.be.true;
-    });
   });
-
+  it.only('Should be true', function() {
+    true.should.be.true;
+  });
 // describe('POST requests', () => {});
 
 // describe('PUT requests', () => {});
