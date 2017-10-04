@@ -4,7 +4,7 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
 const { app, runServer, closeServer } = require('../index');
-const { TEST_DATABASE } = require('../config');
+const { CLIENT_ID, CLIENT_SECRET, TEST_DATABASE } = require('../config');
 const { User } = require('../models/user');
 const { UserData } = require('../models/user-data');
 
@@ -12,7 +12,9 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 let secret = {
-  TEST_DATABASE
+  TEST_DATABASE,
+  CLIENT_ID,
+  CLIENT_SECRET
 };
 
 const testUser = {
