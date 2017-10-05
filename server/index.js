@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 // Mongoose default promise library is deprecated - so we use global promises
 mongoose.Promise = global.Promise;
-mongoose.connect(keys.DATABASE);
+// mongoose.connect(keys.DATABASE);
 
 let secret = {
   CLIENT_ID: process.env.CLIENT_ID,

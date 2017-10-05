@@ -15,10 +15,10 @@ const UserSchema = new Schema({
   mission: {type: String},
   roles: [
     {
-      role: {type: String},
+      role: {type: String, default: 'no assigned role'},
       goals: [
         {
-          goal: {type: String},
+          goal: {type: String, default: 'no assigned goal' },
           tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'task'}]
         }
       ]
@@ -30,6 +30,7 @@ UserSchema.methods.apiRepr = function() {
   return {
     _id: this._id,
     displayName: this.displayName,
+    mission: this.mission,
     googleId: this.googleId,
     roles: this.roles
   };

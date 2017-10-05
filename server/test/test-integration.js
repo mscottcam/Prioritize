@@ -28,10 +28,11 @@ let secret = {
 
 // Update test user with real tasks _id reference after creating tasks post
 const testUser = {
-  displayName: 'Evon Harris',
+  displayName: 'Evan Harris',
   googleId: '113991032114835833364',
   accessToken:
     'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
+  mission: 'have a live working usable app soon!',
   roles: [
     {
       role: 'Dad',
@@ -87,12 +88,9 @@ const tearDownDatabase = () => {
 describe('Life coach', () => {
   // Testing life cycle methods
   before(function() {
-    console.log('hello');
-    let server = runServer(3001, secret.DATABASE);
-    console.log('Da server: ', server);
+    let server = runServer(3001, secret.TEST_DATABASE);
     return server;
   });
-
 
   beforeEach(function() {
     // Use Promise all if we need to seed more data
@@ -110,17 +108,13 @@ describe('Life coach', () => {
     return closeServer();
   });
 
-  // delete whatever seeded data we do not want to persist to the next test
-
   it('is a sandbox', function() {
     // seedSingleUser(singleTestUser)
-   
     seedFakeUser(testUser)
       .then(user => {
       // console.log('Something: ------> ', user);
-      return user
-    });
-    
+        return user;
+      });
 
     let resUser;
     return chai
@@ -176,22 +170,6 @@ describe('Life coach', () => {
           res.headers['set-cookie'][0].should.contain('accessToken=;');
         });
     });
-    it('should return the current user', () => {
-      return chai.request(app)
-        .get('/api/me')
-        .set('Authorization', `Bearer ${testUser.accessToken}`)
-        .send()
-        .then(res => {
-          console.log('Ok');
-          let user = res.body;
-          res.should.have.status(200);
-          res.should.be.json;
-          user.id.should.be.a('number');
-          user.user_id.should.be.equal('43214');
-          user.first_name.should.be.equal('Jimmy');
-          user.last_name.should.be.equal('BlueJeans');
-        });
-    });
   });
 
   describe('GET requests', () => {
@@ -205,13 +183,54 @@ describe('Life coach', () => {
           res.should.have.status(200);
         });
     });
+    
+    it.only('should return the current user', () => {
+      // seedFakeUser(testUser)
+      //   .then(user => {
+      //     return user;
+      //   });
+      let resUser;  
+      return chai.request(app)
+        .get('/api/me')
+        .set('Authorization', `Bearer ${testUser.accessToken}`)
+        .send()
+        .then(res => {
+          let user = res.body;
+          res.should.have.status(200);
+          res.should.be.json;
+          user._id.should.be.a('string');
+          user.should.include.keys('displayName','googleId', 'accessToken', 'mission', 'roles');
+          user.roles.should.be.a('array');
+          user.roles.forEach(function(role) {
+            role.should.be.a('object');
+            role.should.include.keys('role','goals');
+            role.goals.should.be.a('array');
+            role.goals.forEach(function(goal) {
+              goal.should.be.a('object');
+              goal.should.include.keys('goal', 'tasks');
+              goal.tasks.should.be.a('array');
+              //test for the ref to tasks
+            });
+          });
+          resUser = user;
+          return User.findById(resUser._id);
+        })
+        .then(user => {
+          console.log('user ========>',user);
+          console.log('resUser=========>', resUser);
+          resUser.displayName.should.equal(user.displayName);
+          resUser.mission.should.equal(user.mission);
+          resUser.googleId.should.equal(user.googleId);
+          // resUser.roles.should.deepEqual(user.roles);
+          resUser._id.should.equal(user._id.toString());
+        });
+    });
 
     it('should return all tasks', function() {
-
       seedTaskData()
         .then(data => {
-        console.log('Something: ------> ', data);
-        return data
+          console.log('Something: ------> ', data);
+          return data;
         });
       let resTask;
       return chai
@@ -231,11 +250,53 @@ describe('Life coach', () => {
           resTask.body.tasks.should.have.lengthOf(count);
         });
     });
-
-    it.only()
+    let resTask;
+    it('should return tasks with right fields', function() {
+      return chai
+        .request(app)
+        .get('/api/userData')
+        .then(res => {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.tasks.should.be.a('array');
+          res.body.tasks.should.have.length.of.at.least(1);
+          res.body.tasks.forEach(function(task) {
+            task.should.be.a('object');
+            task.should.include.keys('_id','userId','taskName','urgent', 'important', 'deadline');
+          });
+          resTask = res.body.tasks[0];
+          return Task.findById(resTask.id);
+        })
+        .then(task => {
+          resTask.userId.should.equal(task.userId);
+          resTask.deadline.should.equal(task.deadline);
+          resTask.important.should.equal(task.important);
+          resTask.urgent.should.equal(task.urgent);
+          resTask.taskName.should.equal(task.taskName);
+        });
+    });
   });
 
-  // describe('POST requests', () => {});
+  describe('POST requests', () => {
+    it('should add task to collection', function() {
+      // const newTask = {
+      //   userId
+      // }
+    });
+    it('it should add reference to task in tasks array in userdb', function(){
+
+    });
+    it('should add new role if new role in req.body', function (){
+
+    });
+    it('should add new goal if new goal in req.body', function() {
+
+    });
+    it('should add mission to db', function() {
+
+    });
+
+  });
 
   // describe('PUT requests', () => {});
 });

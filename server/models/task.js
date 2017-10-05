@@ -16,6 +16,7 @@ const TaskSchema = new Schema({
 TaskSchema.methods.apiRepr = function() {
   return {
     _id: this._id,
+    taskName: this.taskName,
     userId: this.userId || 'No user id',
     deadline: this.deadline,
     important: this.important,
