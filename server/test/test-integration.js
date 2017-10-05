@@ -28,7 +28,7 @@ let secret = {
 
 // Update test user with real tasks _id reference after creating tasks post
 const testUser = {
-  displayName: 'Evan Harris',
+  displayName: 'Evon Harris',
   googleId: '113991032114835833364',
   accessToken:
     'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
@@ -63,7 +63,7 @@ const generateTaskData = () => {
 const seedTaskData = () => {
   const seedData = [];
 
-  for (let i =1; i <= 5; i++ ) {
+  for (let i =0; i <= 5; i++ ) {
     // console.log('generate task data', generateTaskData());
     seedData.push(generateTaskData());
   }
@@ -88,7 +88,7 @@ describe('Life coach', () => {
   // Testing life cycle methods
   before(function() {
     console.log('hello');
-    let server = runServer(3001, secret.TEST_DATABASE);
+    let server = runServer(3001, secret.DATABASE);
     console.log('Da server: ', server);
     return server;
   });
@@ -97,14 +97,14 @@ describe('Life coach', () => {
   beforeEach(function() {
     // Use Promise all if we need to seed more data
     // return Promise.all([seedUserData(), seedOtherData()]);
-    console.log('do i work');
-    return seedFakeUser(testUser);
+    // console.log('do i work');
+    // return seedFakeUser(testUser);
     // return Promise.all([seedFakeUser(testUser), seedTaskData()]);
   });
 
   afterEach(function() {
     // console.log('What does our data look like: ');
-    return tearDownDatabase();
+    // return tearDownDatabase();
   });
   after(function() {
     return closeServer();
@@ -113,31 +113,15 @@ describe('Life coach', () => {
   // delete whatever seeded data we do not want to persist to the next test
 
   it('is a sandbox', function() {
-    // const singleTestUser = {
-    //   displayName: 'Evan Harris',
-    //   googleId: '113991032114835833364',
-    //   accessToken:
-    // 'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
-    //   roles: [
-    //     {
-    //       role: 'Dad',
-    //       goals: [
-    //         {
-    //           goal: 'Make delicious breakfast',
-    //           tasks: this.tasks 
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // };
-
-    // const seedSingleUser = user => {
-    //   return User.create(user);
-    // };
     // seedSingleUser(singleTestUser)
-    // .then(res => {
-    //   console.log('Something: ', res);
-    // })
+   
+    seedFakeUser(testUser)
+      .then(user => {
+      // console.log('Something: ------> ', user);
+      return user
+    });
+    
+
     let resUser;
     return chai
       .request(app)
@@ -223,6 +207,12 @@ describe('Life coach', () => {
     });
 
     it('should return all tasks', function() {
+
+      seedTaskData()
+        .then(data => {
+        console.log('Something: ------> ', data);
+        return data
+        });
       let resTask;
       return chai
         .request(app)
@@ -231,15 +221,18 @@ describe('Life coach', () => {
           resTask = res;
           res.should.have.status(200);
           res.should.be.json;
-          console.log('What is res: ', res.body);
+          // console.log('What is res: ', res.body);
           return Task.count();
         })
         .then(count => {
+          console.log('RES TASK BODY TASKS ----->', resTask.body.tasks)
           // console.log('This should be the number of tasks in the db: ', count)
           // console.log('Response test side', resTask.body);
-          resTask.body.tasks.should.have.length.of(count);
+          resTask.body.tasks.should.have.lengthOf(count);
         });
     });
+
+    it.only()
   });
 
   // describe('POST requests', () => {});

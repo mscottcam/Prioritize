@@ -166,7 +166,7 @@ app.get('/api/userData', (req, res) => {
     .populate('userId')
     .exec()
     .then(tasks => {
-      console.log('Response tasks data: ', tasks);
+      // console.log('Response tasks data: ', tasks);
       res.json({
         tasks: tasks.map(task => task.apiRepr())
       });
@@ -197,7 +197,7 @@ app.post('/api/tasks', (req, res) => {
     userId: req.body.userId,
     task: req.body.task
   }).then(task => {
-    console.log('this is our task from the req.body', task);
+    // console.log('this is our task from the req.body', task);
   });
 
   // UserData.create({
@@ -223,7 +223,7 @@ app.post('/api/tasks', (req, res) => {
 let server;
 function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(database, err => {
+    mongoose.connect(database, {useMongoClient: true}, err => {
       console.log('Starting server');
       console.log('What is our database: ', secret.DATABASE);
       if (err) {
@@ -235,14 +235,12 @@ function runServer(port = 3001, database = secret.DATABASE) {
         resolve();
       })
       .on('error', err => {
-        mongoose.disconnect();
         reject(err);
       });
   });
 }
 
 function closeServer() {
-  return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
       console.log('Closing server');
       server.close(err => {
@@ -252,7 +250,6 @@ function closeServer() {
         resolve();
       });
     });
-  });
 }
 if (require.main === module) {
   runServer().catch(err => {
