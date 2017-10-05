@@ -3,21 +3,23 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const { UserData } = require('./user-data');
+const { Task } = require('./task');
 
-// User Schema.userData: references the _id for userDataSchema
+// Reintroduce role, goal as being required after completing initial  setup
+// this will populate the initial UI with dummy data
+
 const UserSchema = new Schema({
   displayName: { type: String },
   googleId: { type: String, required: true },
   accessToken: { type: String, required: true },
-  mission: {type: String, required: true},
+  mission: {type: String},
   roles: [
     {
-      role: {type: String, required: true},
+      role: {type: String},
       goals: [
         {
-          goal: {type: String, required: true},
-          tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'user-data'}]
+          goal: {type: String},
+          tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'task'}]
         }
       ]
     }
@@ -29,12 +31,10 @@ UserSchema.methods.apiRepr = function() {
     _id: this._id,
     displayName: this.displayName,
     googleId: this.googleId,
-    userData: this.userData || 'No tasks yet'
+    roles: this.roles
   };
 };
 
 const User = mongoose.model('user', UserSchema);
 
 module.exports = { User };
-
-//  userData: {type: mongoose.Schema.Types.ObjectId, ref: 'user-data' }

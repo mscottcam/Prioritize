@@ -12,7 +12,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const { User } = require('./models/user');
-const { UserData } = require('./models/user-data');
+const { Task } = require('./models/task');
 
 const app = express();
 app.use(morgan('common'));
@@ -54,61 +54,61 @@ app.get(/^(?!\/api(\/|$))/, (req, res) => {
 // Passport Strategies
 app.use(passport.initialize());
 passport.use(
-  new GoogleStrategy({
-    clientID: secret.CLIENT_ID,
-    clientSecret: secret.CLIENT_SECRET,
-    callbackURL: '/api/auth/google/callback'
-  },
-  (accessToken, refreshToken, profile, cb) => {
-    User
-      .findOne({ googleId: profile.id })
-      .then(user => {
+  new GoogleStrategy(
+    {
+      clientID: secret.CLIENT_ID,
+      clientSecret: secret.CLIENT_SECRET,
+      callbackURL: '/api/auth/google/callback'
+    },
+    (accessToken, refreshToken, profile, cb) => {
+      User.findOne({ googleId: profile.id }).then(user => {
         if (user) {
           user.accessToken = accessToken;
           return user.save();
         } else {
-          User
-            .create({
-              displayName: profile.displayName,
-              googleId: profile.id,
-              accessToken
-            })
+          User.create({
+            displayName: profile.displayName,
+            googleId: profile.id,
+            accessToken
+          })
             .then(console.log('this worked!'))
             .catch(err => {
               console.error(err);
             });
         }
       });
-    const user = {
-      googleId: profile.id,
-      accessToken: accessToken
-    };
-    return cb(null, user);
-  }
-  ));
-
-passport.use(
-  new BearerStrategy(
-    (token, done) => {
-      User
-        .findOne({accessToken: token})
-        .then(user => {
-          if (!user) {
-            return done(null, false);
-          } else {
-            return done(null, user);}
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      const user = {
+        googleId: profile.id,
+        accessToken: accessToken
+      };
+      return cb(null, user);
     }
   )
 );
 
-app.get('/api/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
+passport.use(
+  new BearerStrategy((token, done) => {
+    User.findOne({ accessToken: token })
+      .then(user => {
+        if (!user) {
+          return done(null, false);
+        } else {
+          return done(null, user);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  })
+);
 
-app.get('/api/auth/google/callback',
+app.get(
+  '/api/auth/google',
+  passport.authenticate('google', { scope: ['profile'] })
+);
+
+app.get(
+  '/api/auth/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/',
     session: false
@@ -125,9 +125,11 @@ app.get('/api/auth/logout', (req, res) => {
   res.redirect('/');
 });
 
-app.get('/api/me', passport.authenticate('bearer', { session: false }),
+app.get(
+  '/api/me',
+  passport.authenticate('bearer', { session: false }),
   (req, res) => {
-    User.findOne({ accessToken: req.user.accessToken})
+    User.findOne({ accessToken: req.user.accessToken })
       .then(user => {
         res.status(200).send(user);
       })
@@ -155,40 +157,60 @@ app.get('/api/users', (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({message: 'Internal server error'});
+      res.status(500).json({ message: 'Internal server error' });
     });
 });
 
 app.get('/api/userData', (req, res) => {
-  UserData.find()
-    // .limit(10)
+  Task.find()
     .populate('userId')
     .exec()
-    .then(responseData => {
-      console.log('Userid: ', responseData.userId);
-      console.log('User Data: ', responseData);
+    .then(tasks => {
+      console.log('Response tasks data: ', tasks);
       res.json({
-        userData: responseData.map(userData => userData.apiRepr())
-      })
-        .catch(err => {
-          console.error(err);
-          res.status(500).json({message: 'Internal server error'});
-        });
+        tasks: tasks.map(task => task.apiRepr())
+      });
+    })
+    .catch(err => {
+      console.error(err);
     });
+
+  // UserData.find()
+  //   // .limit(10)
+  //   .populate('userId')
+  //   .exec()
+  //   .then(responseData => {
+  //     console.log('Userid: ', responseData.userId);
+  //     console.log('User Data: ', responseData);
+  //     res.json({
+  //       userData: responseData.map(userData => userData.apiRepr())
+  //     })
+  //       .catch(err => {
+  //         console.error(err);
+  //         res.status(500).json({message: 'Internal server error'});
+  //       });
+  //   });
 });
 
 app.post('/api/tasks', (req, res) => {
-  UserData.create({
+  Task.create({
     userId: req.body.userId,
-    userData: req.body.userData
-  })
-    .then(userData => {
-      console.log('This is what our user data looks like: ', userData);
-      return res.status(201).json(userData.apiRepr());})
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
-    });
+    task: req.body.task
+  }).then(task => {
+    console.log('this is our task from the req.body', task);
+  });
+
+  // UserData.create({
+  //   userId: req.body.userId,
+  //   userData: req.body.userData
+  // })
+  //   .then(userData => {
+  //     console.log('This is what our user data looks like: ', userData);
+  //     return res.status(201).json(userData.apiRepr());})
+  //   .catch(err => {
+  //     console.error(err);
+  //     res.status(500).json({ message: 'Internal server error' });
+  //   });
   // post request contains:
   // user: { _id: currentUserId (for example: 59cf0143b637d01e78cabd15 )}
 });
@@ -201,7 +223,7 @@ app.post('/api/tasks', (req, res) => {
 let server;
 function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(database, {useMongoClient: true}, err => {
+    mongoose.connect(database, err => {
       console.log('Starting server');
       console.log('What is our database: ', secret.DATABASE);
       if (err) {
@@ -212,13 +234,17 @@ function runServer(port = 3001, database = secret.DATABASE) {
       .listen(port, () => {
         resolve();
       })
-      .on('error', reject);
+      .on('error', err => {
+        mongoose.disconnect();
+        reject(err);
+      });
   });
 }
 
 function closeServer() {
   return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
+      console.log('Closing server');
       server.close(err => {
         if (err) {
           return reject(err);
@@ -228,7 +254,6 @@ function closeServer() {
     });
   });
 }
-
 if (require.main === module) {
   runServer().catch(err => {
     console.error('Problem starting server: ', err);
