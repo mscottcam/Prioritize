@@ -192,7 +192,7 @@ app.get('/api/userData', (req, res) => {
   //   });
 });
 
-app.post('/api/userData', (req, res) => {
+app.post('/api/userTask', (req, res) => {
   Task.create({
     userId: req.body.userId,
     taskName: req.body.taskName,
@@ -200,35 +200,20 @@ app.post('/api/userData', (req, res) => {
     important: req.body.important,
     urgent: req.body.urgent
   })
-    // .then(r => {
-    //   console.log('this is our task from the req.body', task);
-    // })
     .then(task => res.status(201).json(task.apiRepr()))
     .catch(err => {
       console.error(err);
       res.status(500).json({error: 'something went wrong'})
     });
-
-  // UserData.create({
-  //   userId: req.body.userId,
-  //   userData: req.body.userData
-  // })
-  //   .then(userData => {
-  //     console.log('This is what our user data looks like: ', userData);
-  //     return res.status(201).json(userData.apiRepr());})
-  //   .catch(err => {
-  //     console.error(err);
-  //     res.status(500).json({ message: 'Internal server error' });
-  //   });
-  // post request contains:
-  // user: { _id: currentUserId (for example: 59cf0143b637d01e78cabd15 )}
 });
-
-// app.get(/user/data)
-// app.get("/api/tasks", (req, res) => {
-//   res.send(200).send("SOme text and stuff");
-// });
-
+app.put('/api/userMission', (req, res) => {
+  User.findOne({googelId: req.body.userId})
+    .then(user => res.status(204).json(user.apiRepr()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'something went wrong'})
+    });
+});
 let server;
 function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {

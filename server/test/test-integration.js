@@ -278,7 +278,7 @@ describe('Life coach', () => {
   });
 
   describe('POST requests', () => {
-    it.only('should add task to task collection', function() {
+    it('should add task to task collection', function() {
       const newTask = {
         userId: '59d64ed9c996510584f2fc32',
         taskName: 'graduate from Thinkful',
@@ -324,12 +324,35 @@ describe('Life coach', () => {
     // it('should add new goal if new goal in req.body', function() {
 
     // });
-    // it('should add mission to db', function() {
-
-    // });
-
   });
 
-  // describe('PUT requests', () => {});
+
+  describe('PUT requests', () => {
+    it.only('should add mission to db', function() {
+      const newMission = {
+        userId: '59d64ed9c996510584f2fc32', 
+        mission: 'Enjoy life, be productive, build community'
+      };
+
+      return chai
+        .request(app)
+        .put('/api/userMission')
+        .send(newMission)
+        .then(function(res) {
+          res.should.have.status(204);
+          res.should.be.json;
+          return User.findById(newMission.userId);
+        })
+        .then(user => {
+          user.mission.should.equal(newMission.mission);
+        });
+
+    });
+
+  });
   // it('should allow user to edit task)
 });
+
+
+
+
