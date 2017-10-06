@@ -203,22 +203,34 @@ app.post('/api/userTask', (req, res) => {
     .then(task => res.status(201).json(task.apiRepr()))
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'something went wrong'})
+      res.status(500).json({error: 'something went wrong'});
+    });
+});
+
+app.put('/api/userData', (req, res) => {
+  User.findByIdAndUpdate(req.body._id, {$push: {roles: {role: req.body.role}}}, {new: true})
+    .exec()
+    .then(user => {
+      res.status(204).json(user.apiRepr());
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'something went wrong'});
     });
 });
 
 app.put('/api/userMission', (req, res) => {
   User.findByIdAndUpdate(req.body.userId, {$set: {mission: req.body.mission}}, {new: true})
     .then(user => {
-      res.status(204).json(user.apiRepr())
+      res.status(204).json(user.apiRepr());
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'something went wrong'})
+      res.status(500).json({error: 'something went wrong'});
     });
 });
 
-app.put('/api/userTask/', (req, res) => {
+app.put('/api/userTask', (req, res) => {
   Task.findByIdAndUpdate(req.body._id, {$set: {
     taskName: req.body.taskName,
     deadline: req.body.deadline,
@@ -226,12 +238,12 @@ app.put('/api/userTask/', (req, res) => {
     urgent: req.body.urgent
   }}, {new: true})
     .then(task => {
-      console.log('GOT HERE ---->', task)
-      res.status(204).json(task.apiRepr())
+      console.log('GOT HERE ---->', task);
+      res.status(204).json(task.apiRepr());
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'something went wrong'})
+      res.status(500).json({error: 'something went wrong'});
     });
 });
 

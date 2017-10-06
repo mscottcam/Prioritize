@@ -88,8 +88,8 @@ const tearDownDatabase = () => {
 describe('Life coach', () => {
   // Testing life cycle methods
   before(function() {
-    let server = runServer(3001, secret.DATABASE);
-    return server;
+    // let server = runServer(3001, secret.DATABASE);
+    // return server;
   });
 
   beforeEach(function() {
@@ -105,7 +105,7 @@ describe('Life coach', () => {
     // return tearDownDatabase();
   });
   after(function() {
-    return closeServer();
+    // return closeServer();
   });
 
   it('is a sandbox', function() {
@@ -140,8 +140,6 @@ describe('Life coach', () => {
         .redirects(0)
         .set('Authorization', `Bearer ${testUser.accessToken}`)
         .end((err, res) => {
-          // Could maybe refactor this for loop in a fashiong similar to the logout test
-          // where we look for the prescense of the googleUrl terminating in the '?'
           let googleUrl = '';
           let currentChar;
           for (let i = 0; i < res.headers['location'].length; i++) {
@@ -244,7 +242,7 @@ describe('Life coach', () => {
           return Task.count();
         })
         .then(count => {
-          console.log('RES TASK BODY TASKS ----->', resTask.body.tasks)
+          console.log('RES TASK BODY TASKS ----->', resTask.body.tasks);
           // console.log('This should be the number of tasks in the db: ', count)
           // console.log('Response test side', resTask.body);
           resTask.body.tasks.should.have.lengthOf(count);
@@ -318,12 +316,6 @@ describe('Life coach', () => {
     // it('it should add reference to task in tasks array in userdb', function(){
 
     // });
-    // it('should add new role if new role in req.body', function (){
-
-    // });
-    // it('should add new goal if new goal in req.body', function() {
-
-    // });
   });
 
 
@@ -336,11 +328,11 @@ describe('Life coach', () => {
       return User
         .findOne()
         .then(user => {
-          newMission.userId = user._id
+          newMission.userId = user._id;
           return chai
             .request(app)
             .put('/api/userMission')
-            .send(newMission)
+            .send(newMission);
         })
         .then(function(res) {
           res.should.have.status(204);
@@ -353,24 +345,23 @@ describe('Life coach', () => {
 
     });
 
-  });
-    it.only('should allow user to edit task name, deadline, importance, urgency', function() {
+    it('should allow user to edit task name, deadline, importance, urgency', function() {
       const taskUpdate = {
         taskName: 'test task',
         deadline: 'NOW',
         important: true,
         urgent: true
-      }
+      };
 
       return Task
         .findOne()
         .then(task => {
-          console.log('TASK? --->', task)
-          taskUpdate._id = task._id
+          console.log('TASK? --->', task);
+          taskUpdate._id = task._id;
           return chai
             .request(app)
             .put('/api/userTask')
-            .send(taskUpdate)
+            .send(taskUpdate);
         })
         .then(function(res) {
           res.should.have.status(204);
@@ -382,8 +373,40 @@ describe('Life coach', () => {
           task.deadline.should.equal(taskUpdate.deadline);
           task.important.should.equal(taskUpdate.important);
           task.urgent.should.equal(taskUpdate.urgent);
+        });
+    });
+
+    it('should add new role if new role in req.body', function (){
+      const newRole = {
+        role: 'Developer'
+      };
+      return User
+        .findOne()
+        .then(user => {
+          newRole._id = user._id;
+          return chai
+            .request(app)
+            .put('/api/userData')
+            .send(newRole);
         })
-    })
+        .then(function(res) {
+          res.should.have.status(204);
+          res.body.should.be.a('object');
+          return User.findById(newRole._id);
+        })
+        .then(function(user) {
+          let roleMatch = user.roles.find(function(role) {
+            return role.role === newRole.role;
+          });
+          roleMatch.role.should.equal(newRole.role);
+        });
+    });
+    // it.only('should add new goal if new goal in req.body', function() {
+    //   runServer(3001, secret.DATABASE).then(() => closeServer()).then(() => console.log('lol'));
+      // caveat to take into consideration for this test:
+        // the goals being added that do not have a role declared, will be given the default role
+    // });
+  });
 });
 
 
