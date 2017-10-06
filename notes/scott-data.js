@@ -8,12 +8,11 @@ let user = {
           tasks: []
         }
       ]
-    }
+    },
+    father: "",
+    developer: ""
   }
-},
-    father: {},
-    developer: {}
-}
+};
 
 let task = {
   taskName: {type: String, required: true},

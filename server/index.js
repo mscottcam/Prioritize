@@ -206,20 +206,41 @@ app.post('/api/userTask', (req, res) => {
       res.status(500).json({error: 'something went wrong'})
     });
 });
+
 app.put('/api/userMission', (req, res) => {
-  User.findOne({googelId: req.body.userId})
-    .then(user => res.status(204).json(user.apiRepr()))
+  User.findByIdAndUpdate(req.body.userId, {$set: {mission: req.body.mission}}, {new: true})
+    .then(user => {
+      res.status(204).json(user.apiRepr())
+    })
     .catch(err => {
       console.error(err);
       res.status(500).json({error: 'something went wrong'})
     });
 });
+
+app.put('/api/userTask/', (req, res) => {
+  Task.findByIdAndUpdate(req.body._id, {$set: {
+    taskName: req.body.taskName,
+    deadline: req.body.deadline,
+    important: req.body.important,
+    urgent: req.body.urgent
+  }}, {new: true})
+    .then(task => {
+      console.log('GOT HERE ---->', task)
+      res.status(204).json(task.apiRepr())
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'something went wrong'})
+    });
+});
+
 let server;
 function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
     mongoose.connect(database, {useMongoClient: true}, err => {
       console.log('Starting server');
-      console.log('What is our database: ', secret.DATABASE);
+      console.log('What is our database: ', database);
       if (err) {
         return reject(err);
       }

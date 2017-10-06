@@ -88,7 +88,7 @@ const tearDownDatabase = () => {
 describe('Life coach', () => {
   // Testing life cycle methods
   before(function() {
-    let server = runServer(3001, secret.TEST_DATABASE);
+    let server = runServer(3001, secret.DATABASE);
     return server;
   });
 
@@ -288,7 +288,7 @@ describe('Life coach', () => {
       };
       return chai
         .request(app)
-        .post('/api/userData')
+        .post('/api/userTask')
         .send(newTask)
         .then(function(res) {
           res.should.have.status(201);
@@ -328,29 +328,62 @@ describe('Life coach', () => {
 
 
   describe('PUT requests', () => {
-    it.only('should add mission to db', function() {
+    it('should add mission to db', function() {
       const newMission = {
-        userId: '59d64ed9c996510584f2fc32', 
         mission: 'Enjoy life, be productive, build community'
       };
 
-      return chai
-        .request(app)
-        .put('/api/userMission')
-        .send(newMission)
+      return User
+        .findOne()
+        .then(user => {
+          newMission.userId = user._id
+          return chai
+            .request(app)
+            .put('/api/userMission')
+            .send(newMission)
+        })
         .then(function(res) {
           res.should.have.status(204);
-          res.should.be.json;
+          res.body.should.be.a('object');
           return User.findById(newMission.userId);
         })
-        .then(user => {
+        .then(function(user) {
           user.mission.should.equal(newMission.mission);
         });
 
     });
 
   });
-  // it('should allow user to edit task)
+    it.only('should allow user to edit task name, deadline, importance, urgency', function() {
+      const taskUpdate = {
+        taskName: 'test task',
+        deadline: 'NOW',
+        important: true,
+        urgent: true
+      }
+
+      return Task
+        .findOne()
+        .then(task => {
+          console.log('TASK? --->', task)
+          taskUpdate._id = task._id
+          return chai
+            .request(app)
+            .put('/api/userTask')
+            .send(taskUpdate)
+        })
+        .then(function(res) {
+          res.should.have.status(204);
+          res.body.should.be.a('object');
+          return Task.findById(taskUpdate._id);
+        })
+        .then(function(task) {
+          task.taskName.should.equal(taskUpdate.taskName);
+          task.deadline.should.equal(taskUpdate.deadline);
+          task.important.should.equal(taskUpdate.important);
+          task.urgent.should.equal(taskUpdate.urgent);
+        })
+    })
 });
 
 
