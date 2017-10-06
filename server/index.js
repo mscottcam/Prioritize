@@ -192,13 +192,22 @@ app.get('/api/userData', (req, res) => {
   //   });
 });
 
-app.post('/api/tasks', (req, res) => {
+app.post('/api/userData', (req, res) => {
   Task.create({
     userId: req.body.userId,
-    task: req.body.task
-  }).then(task => {
-    // console.log('this is our task from the req.body', task);
-  });
+    taskName: req.body.taskName,
+    deadline: req.body.deadline,
+    important: req.body.important,
+    urgent: req.body.urgent
+  })
+    // .then(r => {
+    //   console.log('this is our task from the req.body', task);
+    // })
+    .then(task => res.status(201).json(task.apiRepr()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'something went wrong'})
+    });
 
   // UserData.create({
   //   userId: req.body.userId,
@@ -241,15 +250,15 @@ function runServer(port = 3001, database = secret.DATABASE) {
 }
 
 function closeServer() {
-    return new Promise((resolve, reject) => {
-      console.log('Closing server');
-      server.close(err => {
-        if (err) {
-          return reject(err);
-        }
-        resolve();
-      });
+  return new Promise((resolve, reject) => {
+    console.log('Closing server');
+    server.close(err => {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
     });
+  });
 }
 if (require.main === module) {
   runServer().catch(err => {

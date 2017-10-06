@@ -29,4 +29,3 @@ client/package-lock.json
 server/package-lock.json
 
 # config
-server/config/secret.js

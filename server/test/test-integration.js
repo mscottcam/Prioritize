@@ -184,7 +184,7 @@ describe('Life coach', () => {
         });
     });
     
-    it.only('should return the current user', () => {
+    it('should return the current user', () => {
       // seedFakeUser(testUser)
       //   .then(user => {
       //     return user;
@@ -216,13 +216,13 @@ describe('Life coach', () => {
           return User.findById(resUser._id);
         })
         .then(user => {
-          console.log('user ========>',user);
-          console.log('resUser=========>', resUser);
+          console.log('user ========>',user.roles);
+          console.log('resUser=========>', resUser.roles);
           resUser.displayName.should.equal(user.displayName);
           resUser.mission.should.equal(user.mission);
           resUser.googleId.should.equal(user.googleId);
-          // resUser.roles.should.deepEqual(user.roles);
           resUser._id.should.equal(user._id.toString());
+          // resUser.roles.should.deep.equal(user.roles); <===== deconstruct this
         });
     });
 
@@ -278,25 +278,58 @@ describe('Life coach', () => {
   });
 
   describe('POST requests', () => {
-    it('should add task to collection', function() {
-      // const newTask = {
-      //   userId
-      // }
+    it.only('should add task to task collection', function() {
+      const newTask = {
+        userId: '59d64ed9c996510584f2fc32',
+        taskName: 'graduate from Thinkful',
+        deadline: '2017/11/29',
+        important: true,
+        urgent: true,
+      };
+      return chai
+        .request(app)
+        .post('/api/userData')
+        .send(newTask)
+        .then(function(res) {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.include.keys(
+            'userId', 'taskName', 'deadline','important','urgent'
+          );
+          res.body.userId.should.equal(newTask.userId.toString());
+          res.body.taskName.should.equal(newTask.taskName);
+          res.body.deadline.should.equal(newTask.deadline);
+          res.body.important.should.equal(newTask.important);
+          res.body.urgent.should.equal(newTask.urgent);
+          return Task.findById(res.body._id);
+        })
+        .then(function(task){
+          let taskUserId =task.userId.toString();
+          console.log('what is TAsk =======>',typeof(task.userId));
+          console.log('what is TAsk =======>',typeof(newTask.userId));
+          taskUserId.should.equal(newTask.userId);
+          task.taskName.should.equal(newTask.taskName);
+          task.deadline.should.equal(newTask.deadline);
+          task.important.should.equal(newTask.important);
+          task.urgent.should.equal(newTask.urgent); 
+        });
     });
-    it('it should add reference to task in tasks array in userdb', function(){
+    // it('it should add reference to task in tasks array in userdb', function(){
 
-    });
-    it('should add new role if new role in req.body', function (){
+    // });
+    // it('should add new role if new role in req.body', function (){
 
-    });
-    it('should add new goal if new goal in req.body', function() {
+    // });
+    // it('should add new goal if new goal in req.body', function() {
 
-    });
-    it('should add mission to db', function() {
+    // });
+    // it('should add mission to db', function() {
 
-    });
+    // });
 
   });
 
   // describe('PUT requests', () => {});
+  // it('should allow user to edit task)
 });
