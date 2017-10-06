@@ -251,19 +251,21 @@ let server;
 function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
     mongoose.connect(database, {useMongoClient: true}, err => {
-      console.log('Starting server');
       console.log('What is our database: ', database);
       if (err) {
         return reject(err);
       }
+      server = app
+        .listen(port, () => {
+          console.log(`Your app is listening on port ${port}`);
+          resolve();
+        })
+        .on('error', err => {
+          console.error('An error happened');
+          mongoose.disconnect();
+          reject(err);
+        });
     });
-    server = app
-      .listen(port, () => {
-        resolve();
-      })
-      .on('error', err => {
-        reject(err);
-      });
   });
 }
 

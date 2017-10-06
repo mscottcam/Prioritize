@@ -65,12 +65,10 @@ const seedTaskData = () => {
   const seedData = [];
 
   for (let i =0; i <= 5; i++ ) {
-    // console.log('generate task data', generateTaskData());
     seedData.push(generateTaskData());
   }
   return Task.insertMany(seedData);
 };
-// console.log("Data", seedTaskData());
 
 const tearDownDatabase = () => {
   return new Promise((resolve, reject) => {
@@ -88,51 +86,25 @@ const tearDownDatabase = () => {
 describe('Life coach', () => {
   // Testing life cycle methods
   before(function() {
-    // let server = runServer(3001, secret.DATABASE);
-    // return server;
+    return runServer(3001, secret.TEST_DATABASE);
   });
 
   beforeEach(function() {
-    // Use Promise all if we need to seed more data
-    // return Promise.all([seedUserData(), seedOtherData()]);
-    // console.log('do i work');
-    // return seedFakeUser(testUser);
-    // return Promise.all([seedFakeUser(testUser), seedTaskData()]);
+    return Promise.all([seedFakeUser(testUser), seedTaskData()]);
   });
 
   afterEach(function() {
-    // console.log('What does our data look like: ');
-    // return tearDownDatabase();
+    return tearDownDatabase();
   });
   after(function() {
-    // return closeServer();
+    return closeServer();
   });
 
   it('is a sandbox', function() {
-    // seedSingleUser(singleTestUser)
-    seedFakeUser(testUser)
-      .then(user => {
-      // console.log('Something: ------> ', user);
-        return user;
-      });
-
-    let resUser;
-    return chai
-      .request(app)
-      .get('/api/users')
-      .then(res => {
-        resUser = res;
-        res.should.have.status(200);
-        console.log('Res: ', res.body);
-      });
-
+    true.should.be.true;
   });
 
   describe('Google authentication', () => {
-    // Example User Query:
-    // User.findOne({ googleId: testUser.googleId }).then(_user => {
-    //   console.log('User: ', _user);
-    // });
     it('should redirect to google authentication', () => {
       chai
         .request(app)
@@ -214,8 +186,6 @@ describe('Life coach', () => {
           return User.findById(resUser._id);
         })
         .then(user => {
-          console.log('user ========>',user.roles);
-          console.log('resUser=========>', resUser.roles);
           resUser.displayName.should.equal(user.displayName);
           resUser.mission.should.equal(user.mission);
           resUser.googleId.should.equal(user.googleId);
@@ -225,11 +195,6 @@ describe('Life coach', () => {
     });
 
     it('should return all tasks', function() {
-      seedTaskData()
-        .then(data => {
-          console.log('Something: ------> ', data);
-          return data;
-        });
       let resTask;
       return chai
         .request(app)
@@ -238,13 +203,9 @@ describe('Life coach', () => {
           resTask = res;
           res.should.have.status(200);
           res.should.be.json;
-          // console.log('What is res: ', res.body);
           return Task.count();
         })
         .then(count => {
-          console.log('RES TASK BODY TASKS ----->', resTask.body.tasks);
-          // console.log('This should be the number of tasks in the db: ', count)
-          // console.log('Response test side', resTask.body);
           resTask.body.tasks.should.have.lengthOf(count);
         });
     });
@@ -304,8 +265,6 @@ describe('Life coach', () => {
         })
         .then(function(task){
           let taskUserId =task.userId.toString();
-          console.log('what is TAsk =======>',typeof(task.userId));
-          console.log('what is TAsk =======>',typeof(newTask.userId));
           taskUserId.should.equal(newTask.userId);
           task.taskName.should.equal(newTask.taskName);
           task.deadline.should.equal(newTask.deadline);
@@ -356,7 +315,6 @@ describe('Life coach', () => {
       return Task
         .findOne()
         .then(task => {
-          console.log('TASK? --->', task);
           taskUpdate._id = task._id;
           return chai
             .request(app)
@@ -403,8 +361,8 @@ describe('Life coach', () => {
     });
     // it.only('should add new goal if new goal in req.body', function() {
     //   runServer(3001, secret.DATABASE).then(() => closeServer()).then(() => console.log('lol'));
-      // caveat to take into consideration for this test:
-        // the goals being added that do not have a role declared, will be given the default role
+    // caveat to take into consideration for this test:
+    // the goals being added that do not have a role declared, will be given the default role
     // });
   });
 });
