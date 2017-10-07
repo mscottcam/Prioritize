@@ -1,4 +1,4 @@
-import * as actions from '../actions'
+import * as actions from '../actions';
 
 const initialState = {
   currentUser: null, //name
@@ -29,11 +29,9 @@ const missionReducer = (state=initialState, action) => {
         currentMission: action.mission
       });  
     case actions.POST_MISSION_ERROR:
-
+      return state
     default: return state
-  }
-
-  
-}
+  };
+};
 
 export default missionReducer
