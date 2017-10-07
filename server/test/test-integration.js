@@ -3,16 +3,8 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const faker = require('faker');
-
+const { DATABASE, CLIENT_ID, CLIENT_SECRET, TEST_DATABASE } = require('../config');
 const { app, runServer, closeServer } = require('../index');
-
-const {
-  DATABASE,
-  CLIENT_ID,
-  CLIENT_SECRET,
-  TEST_DATABASE
-} = require('../config/keys');
-
 const { User } = require('../models/user');
 const { Task } = require('../models/task');
 

@@ -41,11 +41,13 @@ export class Tasks extends React.Component {
   mapTasksToList() {
     if (this.props.tasks !== null) {
       console.log('got here', this.props.tasks.userdata)
-      return this.props.tasks.userData.map(taskObj => {
-        return (
-            <li>{taskObj._id}</li>
-        )
-      });
+      // Commented this out to test heroku deployment, but we will have to modify this map function
+      
+      // return this.props.tasks.userData.map(taskObj => {
+      //   return (
+      //       <li>{taskObj._id}</li>
+      //   )
+      // });
     } else {
       return <li>no task</li>
     }

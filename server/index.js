@@ -1,7 +1,5 @@
 'use strict';
 
-require('dotenv').config();
-
 const path = require('path');
 const express = require('express');
 const passport = require('passport');
@@ -10,7 +8,7 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const keys = require('./config/keys');
+const { DATABASE, CLIENT_ID, CLIENT_SECRET} = require('./config');
 const { User } = require('./models/user');
 const { Task } = require('./models/task');
 
@@ -18,19 +16,15 @@ const app = express();
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
-// Mongoose default promise library is deprecated - so we use global promises
-mongoose.Promise = global.Promise;
-// mongoose.connect(keys.DATABASE);
-
 let secret = {
-  CLIENT_ID: process.env.CLIENT_ID,
-  CLIENT_SECRET: process.env.CLIENT_SECRET,
-  DATABASE: process.env.DATABASE
+  CLIENT_ID,
+  CLIENT_SECRET,
+  DATABASE
 };
 
-if (process.env.NODE_ENV !== 'production') {
-  secret = require('./config/keys');
-}
+// Mongoose default promise library is deprecated - so we use global promises
+mongoose.Promise = global.Promise;
+
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
@@ -226,7 +220,6 @@ let server;
 function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
     mongoose.connect(database, {useMongoClient: true}, err => {
-      console.log('What is our database: ', database);
       if (err) {
         return reject(err);
       }
@@ -235,7 +228,6 @@ function runServer(port = 3001, database = secret.DATABASE) {
           resolve();
         })
         .on('error', err => {
-          console.error('An error happened');
           mongoose.disconnect();
           reject(err);
         });
