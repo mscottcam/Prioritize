@@ -8,6 +8,7 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+
 const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('./config');
 const { User } = require('./models/user');
 const { UserData } = require('./models/user-data');
@@ -16,19 +17,15 @@ const app = express();
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
-
 let secret = {
   CLIENT_ID,
   CLIENT_SECRET,
   DATABASE
 };
-console.log('Travis is a blast=========================================', secret);
+
 // Mongoose default promise library is deprecated - so we use global promises
 mongoose.Promise = global.Promise;
-mongoose.connect(secret.DATABASE);
-// if (process.env.NODE_ENV !== 'production') {
-//   secret = require('./config/keys');
-// }
+
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 

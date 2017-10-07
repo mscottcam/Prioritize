@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const { app, runServer, closeServer } = require('../index');
 
 const { DATABASE, CLIENT_ID, CLIENT_SECRET, TEST_DATABASE } = require('../config');
-// const keys = require('../config/keys');
+
 const { User } = require('../models/user');
 const { UserData } = require('../models/user-data');
 
@@ -19,10 +19,6 @@ let secret = {
   DATABASE,
   TEST_DATABASE
 };
-
-// if (process.env.NODE_ENV !== 'production') {
-//   secret = require('../config/keys');
-// }
 
 const testUser = {
   displayName: 'Evan Harris',
@@ -135,7 +131,7 @@ describe('Life coach', () => {
         });
     });
 
-    it.only('should return all tasks', function() {
+    it('should return all tasks', function() {
       let resTasks;
       return chai.request(app)
         .get('/api/tasks')
