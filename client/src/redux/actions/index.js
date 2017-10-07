@@ -1,15 +1,16 @@
 import fetch from 'isomorphic-fetch';
+import * as Cookies from 'js-cookie';
 
-export const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST';
-export const fetchTasksRequest = () => ({ type: FETCH_TASKS_REQUEST });
+export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
+export const fetchUserDataRequest = () => ({ type: FETCH_USER_DATA_REQUEST });
 
-export const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS';
-export const fetchTasksSuccess = tasks => ({ type: FETCH_TASKS_SUCCESS, tasks });
+export const FETCH_USER_DATA_SUCCESS = 'FETCH_USER_DATA_SUCCESS';
+export const fetchUserDataSuccess = userData => ({ type: FETCH_USER_DATA_SUCCESS, userData });
 
-export const FETCH_TASKS_ERROR = 'FETCH_TASKS_ERROR';
-export const fetchTasksError = error => ({type: FETCH_TASKS_ERROR, error});
+export const FETCH_USER_DATA_ERROR = 'FETCH_USER_DATA_ERROR';
+export const fetchUserDataError = error => ({type: FETCH_USER_DATA_ERROR, error});
 
-export const fetchTasks = () => dispatch => {
+export const fetchUserData = () => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -18,20 +19,20 @@ export const fetchTasks = () => dispatch => {
     },
     method: 'GET'
   };
-  dispatch(fetchTasksRequest());
-  return fetch('http://localhost:8080/api/tasks', opts)
+  dispatch(fetchUserDataRequest());
+  return fetch('http://localhost:8080/api/userData', opts)
     .then(res => {
-      // console.log('Do we have our res: ', res);
       if (!res.ok) {
         return Promise.reject(res.statusText);
       }
       return res.json();
     })
-    .then(data => {
-      return dispatch(fetchTasksSuccess(data));
+    .then(userData => {
+      // console.log('USER-DATA ACTION-->', userData)
+      return dispatch(fetchUserDataSuccess(userData));
     })
     .catch(err => {
-      return dispatch(fetchTasksError(err));
+      return dispatch(fetchUserDataError(err));
     })
 };
 // --------------------------------------------------------------------------------
@@ -178,7 +179,42 @@ export const updateTask = data => dispatch => {
 };
 // --------------------------------------------------------------------------------
 
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const authSuccess = currentUser => ({
+  type: AUTH_SUCCESS,
+  currentUser
+});
 
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const authError = message => ({
+  type: AUTH_ERROR,
+  message
+});
+
+export const authenticate = () => dispatch => {
+  const accessToken = Cookies.get('accessToken');
+  if (accessToken) {
+    fetch('/api/me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) {
+          if (res.status !== 401) {
+            // Unauthorized, clear the cookie and go to the login page
+            Cookies.remove('accessToken');
+            return;
+          }
+          throw new Error(res.statusText);
+        }
+        return res.json();
+      })
+      .then(currentUser => {
+        return dispatch(authSuccess(currentUser)); 
+      });
+  }
+};
 
 
 
