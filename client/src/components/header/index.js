@@ -1,5 +1,5 @@
 import React from 'react';
-import LogIn from '../logIn'
+import LogIn from '../LogIn'
 // import UserInfo from '.userInfo';
 // header should have the name of our App
 // Header should have the userInfo component which has the username and logout buttons
