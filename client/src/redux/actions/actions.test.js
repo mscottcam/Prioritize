@@ -112,4 +112,19 @@ describe("async actions", () => {
     });
   })  
   
+  // it('authenticates user when Authenticate is called', () =>{
+  //   nock('http://localhost:8080')
+  //     .get('/api/me',
+  //     // {currentUser: 'Lewi Gilamichael'} 
+  //     )
+  //   const expectedActions = [
+  //     { type: actions.AUTH_SUCCESS, currentUser: { currentUser: 'Lewi Gilamichael'} },
+  //     // { type: actions.FETCH_MISSION_SUCCESS, mission: { mission: ["lots of text"] } }
+  //   ];
+  //   const store = mockStore ({});
+  //   return store.dispatch(actions.authenticate()).then(() => {
+  //     expect(store.getActions()).toEqual(expectedActions);
+  //   })
+  // })
+  
 });

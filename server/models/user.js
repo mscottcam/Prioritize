@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
+const { UserData } = require('./user-data');
 
 // User Schema.userData: references the _id for userDataSchema
 const UserSchema = new Schema({
