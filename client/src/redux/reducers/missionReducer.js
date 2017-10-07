@@ -31,9 +31,7 @@ const missionReducer = (state=initialState, action) => {
     case actions.POST_MISSION_ERROR:
       return state
     default: return state
-  }
-
-  
-}
+  };
+};
 
 export default missionReducer
