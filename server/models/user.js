@@ -5,9 +5,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { Task } = require('./task');
 
-// Reintroduce role, goal as being required after completing initial  setup
-// this will populate the initial UI with dummy data
-
 const UserSchema = new Schema({
   displayName: { type: String },
   googleId: { type: String, required: true },

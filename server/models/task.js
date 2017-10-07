@@ -27,9 +27,3 @@ TaskSchema.methods.apiRepr = function() {
 const Task = mongoose.model('task', TaskSchema);
 
 module.exports = { Task };
-
-// JSON for Postman Testing:
-// {
-//   "taskName": "Do work!",
-//   "userId": "59cf0143b637d01e78cabd15"
-// }

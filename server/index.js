@@ -71,7 +71,6 @@ passport.use(
             googleId: profile.id,
             accessToken
           })
-            .then(console.log('this worked!'))
             .catch(err => {
               console.error(err);
             });
@@ -140,17 +139,11 @@ app.get(
   }
 );
 
-// Endpoints that do not have to do with authentication:
-// usermission
-// userdata
-// user?
-
 app.get('/api/users', (req, res) => {
   User.find()
     .limit(10)
     .exec()
     .then(users => {
-      // console.log('Users: ', users);
       res.json({
         users: users.map(user => user.apiRepr())
       });
@@ -166,7 +159,6 @@ app.get('/api/userData', (req, res) => {
     .populate('userId')
     .exec()
     .then(tasks => {
-      // console.log('Response tasks data: ', tasks);
       res.json({
         tasks: tasks.map(task => task.apiRepr())
       });
@@ -174,22 +166,6 @@ app.get('/api/userData', (req, res) => {
     .catch(err => {
       console.error(err);
     });
-
-  // UserData.find()
-  //   // .limit(10)
-  //   .populate('userId')
-  //   .exec()
-  //   .then(responseData => {
-  //     console.log('Userid: ', responseData.userId);
-  //     console.log('User Data: ', responseData);
-  //     res.json({
-  //       userData: responseData.map(userData => userData.apiRepr())
-  //     })
-  //       .catch(err => {
-  //         console.error(err);
-  //         res.status(500).json({message: 'Internal server error'});
-  //       });
-  //   });
 });
 
 app.post('/api/userTask', (req, res) => {
@@ -238,7 +214,6 @@ app.put('/api/userTask', (req, res) => {
     urgent: req.body.urgent
   }}, {new: true})
     .then(task => {
-      console.log('GOT HERE ---->', task);
       res.status(204).json(task.apiRepr());
     })
     .catch(err => {
@@ -257,7 +232,6 @@ function runServer(port = 3001, database = secret.DATABASE) {
       }
       server = app
         .listen(port, () => {
-          console.log(`Your app is listening on port ${port}`);
           resolve();
         })
         .on('error', err => {

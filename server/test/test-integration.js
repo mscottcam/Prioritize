@@ -26,7 +26,6 @@ let secret = {
   TEST_DATABASE
 };
 
-// Update test user with real tasks _id reference after creating tasks post
 const testUser = {
   displayName: 'Evan Harris',
   googleId: '113991032114835833364',
@@ -51,7 +50,6 @@ const seedFakeUser = user => {
 };
 
 const generateTaskData = () => {
-  console.log('Generating task data');
   return {
     taskName: faker.lorem.word(),
     userId: '59d64ed9c996510584f2fc32',
@@ -84,7 +82,6 @@ const tearDownDatabase = () => {
 };
 
 describe('Life coach', () => {
-  // Testing life cycle methods
   before(function() {
     return runServer(3001, secret.TEST_DATABASE);
   });
@@ -96,6 +93,7 @@ describe('Life coach', () => {
   afterEach(function() {
     return tearDownDatabase();
   });
+
   after(function() {
     return closeServer();
   });
@@ -155,10 +153,6 @@ describe('Life coach', () => {
     });
     
     it('should return the current user', () => {
-      // seedFakeUser(testUser)
-      //   .then(user => {
-      //     return user;
-      //   });
       let resUser;  
       return chai.request(app)
         .get('/api/me')
@@ -209,8 +203,9 @@ describe('Life coach', () => {
           resTask.body.tasks.should.have.lengthOf(count);
         });
     });
-    let resTask;
+
     it('should return tasks with right fields', function() {
+      let resTask;
       return chai
         .request(app)
         .get('/api/userData')
@@ -224,10 +219,10 @@ describe('Life coach', () => {
             task.should.include.keys('_id','userId','taskName','urgent', 'important', 'deadline');
           });
           resTask = res.body.tasks[0];
-          return Task.findById(resTask.id);
+          return Task.findById(resTask._id);
         })
         .then(task => {
-          resTask.userId.should.equal(task.userId);
+          resTask._id.should.equal(task._id.toString());
           resTask.deadline.should.equal(task.deadline);
           resTask.important.should.equal(task.important);
           resTask.urgent.should.equal(task.urgent);
@@ -338,6 +333,7 @@ describe('Life coach', () => {
       const newRole = {
         role: 'Developer'
       };
+
       return User
         .findOne()
         .then(user => {
@@ -366,7 +362,3 @@ describe('Life coach', () => {
     // });
   });
 });
-
-
-
-
