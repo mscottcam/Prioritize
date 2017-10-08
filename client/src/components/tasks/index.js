@@ -40,14 +40,14 @@ export class Tasks extends React.Component {
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
-      console.log('got here', this.props.tasks.userdata)
+      console.log('got here', this.props.tasks)
       // Commented this out to test heroku deployment, but we will have to modify this map function
       
-      // return this.props.tasks.userData.map(taskObj => {
-      //   return (
-      //       <li>{taskObj._id}</li>
-      //   )
-      // });
+      return this.props.tasks.tasks.map(taskObj => {
+        return (
+            <li>{taskObj.taskName}</li>
+        )
+      });
     } else {
       return <li>no task</li>
     }
@@ -59,9 +59,6 @@ export class Tasks extends React.Component {
     console.log('HERE ARE THE INCOMING TASKS --> ', this.props.tasks)
     return (
       <div>
-        <ul>
-          {this.mapTasksToList()}
-        </ul>
         <form id="form" onSubmit={event => this.submitTask(event)}>
           <input 
             type='text' 
@@ -70,6 +67,9 @@ export class Tasks extends React.Component {
           />
           <button type="submit">Submit Task</button>
         </form>
+        <ul>
+          {this.mapTasksToList()}
+        </ul>
       </div>   
     )
   };
