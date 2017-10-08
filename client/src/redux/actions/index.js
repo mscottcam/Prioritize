@@ -81,14 +81,15 @@ export const fetchMissionSuccess = mission => ({ type: FETCH_MISSION_SUCCESS, mi
 export const FETCH_MISSION_ERROR = 'FETCH_MISSION_ERROR';
 export const fetchMissionError = error => ({type: FETCH_MISSION_ERROR, error});
 
-export const fetchMission = () => dispatch => {
+export const fetchMission = user => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
       // 'Access-Control-Allow-Origin': '*'
     },
-    method: 'GET'
+    method: 'GET', 
+    body: JSON.stringify(user)
   };
   dispatch(fetchMissionRequest());
   return fetch('http://localhost:8080/api/mission', opts)
@@ -116,7 +117,7 @@ export const postMissionSuccess = mission => ({type: POST_MISSION_SUCCESS, missi
 export const POST_MISSION_ERROR = 'POST_MISSION_ERROR';
 export const postMissionError = () => ({type: POST_MISSION_ERROR});
 
-export const postMission = data => dispatch => {
+export const postMission = newMission => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -124,11 +125,11 @@ export const postMission = data => dispatch => {
       // 'Access-Control-Allow-Origin': '*'
     },
     method: 'POST',
-    body: JSON.stringify(data)
+    body: JSON.stringify(newMission)
   };
 
   dispatch(postMissionRequest());
-  return fetch('http://localhost:8080/api/mission', opts)
+  return fetch('http://localhost:8080/api/createMission', opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)

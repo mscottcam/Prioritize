@@ -13,7 +13,8 @@ export class Mission extends React.Component {
   }
   
   componentWillMount() {
-    this.props.dispatch(actions.fetchMission());
+    console.log('current user', this.props.currentUser)
+    // this.props.dispatch(actions.fetchMission({currentUser: this.props.currentUser}));
   };
 
   toggleMissionChange() {
@@ -30,7 +31,10 @@ export class Mission extends React.Component {
 
   submitMissionChange(event){
     event.preventDefault();
-    // this.state.newMissionInputValue
+    this.props.dispatch(actions.postMission({
+      currentUser: this.props.currentUser,
+      newMission: this.state.newMissionInputValue
+    }));
     this.setState({
       changeMissionToggle: false
     });
@@ -56,7 +60,7 @@ export class Mission extends React.Component {
       return (
         <div>
           <p>{this.props.mission}</p>
-          <button onClick={() => this.toggleMissionChange()} >Change mission</button>
+          <button onClick={() => this.toggleMissionChange()}>Change mission</button>
         </div>
       )
     };
@@ -65,7 +69,7 @@ export class Mission extends React.Component {
 
 
 const mapStateToProps = (state, props) => ({
-  currentUser: state.authReducer.currentUser,
-  mission: state.missionReducer.currentMission,
+  currentUser: state.authReducer.currentUser.googleId,
+  mission: state.missionReducer.currentMission
 });
 export default connect(mapStateToProps)(Mission);

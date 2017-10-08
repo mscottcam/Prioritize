@@ -163,14 +163,25 @@ app.get('/api/userData', (req, res) => {
 });
 
 app.get('/api/mission', (req, res) => {
-  User.findOne()
+  User.findOne({googleId: req.body.currentUser})
     .then( user => {
+      console.log('USERRRRRRRRR', user.mission)
       res.json(user.mission)
     })
     .catch(err => {
       console.error(err);
     });
 });
+
+app.post('/api/createMission', (req, res) => {
+  User.find({googleId: req.body.currentUser})
+    .then(user => {
+      console.log('this is the current user db -___----__-__-->', JSON.stringify(user))
+    })
+    .catch(err => {
+      console.error(err);
+    });
+})
 
 app.post('/api/userTask', (req, res) => {
   Task.create({
