@@ -162,6 +162,16 @@ app.get('/api/userData', (req, res) => {
     });
 });
 
+app.get('/api/mission', (req, res) => {
+  User.findOne()
+    .then( user => {
+      res.json(user.mission)
+    })
+    .catch(err => {
+      console.error(err);
+    });
+});
+
 app.post('/api/userTask', (req, res) => {
   Task.create({
     userId: req.body.userId,

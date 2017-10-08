@@ -56,7 +56,6 @@ export class Tasks extends React.Component {
   render() {
     // this.state.tasks.map(task => <li>{task}</li>)
               // {this.mapTasksToList()}
-    console.log('HERE ARE THE INCOMING TASKS --> ', this.props.tasks)
     return (
       <div>
         <form id="form" onSubmit={event => this.submitTask(event)}>

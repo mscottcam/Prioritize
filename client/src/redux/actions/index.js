@@ -98,8 +98,9 @@ export const fetchMission = () => dispatch => {
       }
       return res.json()
     })
-    .then(data => {
-      return dispatch(fetchMissionSuccess(data))
+    .then(mission => {
+      // console.log('HERE IS THE MISSION! ---------->', mission)
+      return dispatch(fetchMissionSuccess(mission))
     })
     .catch(error => {
       return dispatch(fetchMissionError(error))

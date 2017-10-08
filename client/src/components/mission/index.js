@@ -4,30 +4,68 @@ import * as actions from '../../redux/actions';
 import {connect} from 'react-redux';
 
 export class Mission extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      changeMissionToggle: false,
+      newMissionInputValue: ''
+    }
+  }
   
   componentWillMount() {
     this.props.dispatch(actions.fetchMission());
   };
 
-  onClick(event){
-    //allow user to be able to edit mission
+  toggleMissionChange() {
+    this.setState({
+      changeMissionToggle: true
+    })
   }
 
+  changeMissionInput(input) {
+    this.setState({
+      newMissionInputValue: input.target.value
+    });
+  };
+
+  submitMissionChange(event){
+    event.preventDefault();
+    // this.state.newMissionInputValue
+    this.setState({
+      changeMissionToggle: false
+    });
+  };
+
   render() {
-    console.log('Missions will be here once db is populated --->', this.props.mission)
-    return (
-      <div>
-        <p> Mission will go here</p>
-      </div>
-    )
+    if(this.state.changeMissionToggle === true) {
+      return (
+        <div className="change-mission-form" >
+          <p>Current Mission: {this.props.mission}</p>
+          <form id="form" onSubmit={event => this.submitMissionChange(event)}>
+            <input 
+              type='text' 
+              placeholder="New Mission Here" 
+              onChange={event => this.changeMissionInput(event)} 
+            />
+            <button type="submit">Submit New Mission</button>
+          </form>
+        </div>
+      )
+    }
+    if(this.state.changeMissionToggle === false) {
+      return (
+        <div>
+          <p>{this.props.mission}</p>
+          <button onClick={() => this.toggleMissionChange()} >Change mission</button>
+        </div>
+      )
+    };
   };
 }
 
 
 const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser,
-  mission: state.authReducer.currentUser.mission,
-  // the above will pull mission once we have one in the db
-  tasks: state.taskReducer.userData
+  mission: state.missionReducer.currentMission,
 });
 export default connect(mapStateToProps)(Mission);
