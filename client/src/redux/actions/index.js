@@ -28,7 +28,6 @@ export const fetchUserData = () => dispatch => {
       return res.json();
     })
     .then(userData => {
-      // console.log('USER-DATA ACTION-->', userData)
       return dispatch(fetchUserDataSuccess(userData));
     })
     .catch(err => {
@@ -56,15 +55,15 @@ export const postTask = data => dispatch => {
     body: JSON.stringify(data)
   };
   dispatch(postTaskRequest());
-  return fetch('http://localhost:8080/api/tasks', opts)
+  return fetch('http://localhost:8080/api/userTask', opts)
   .then(res => {
     if(!res.ok) {
       return Promise.reject(res.statusText)
     }
     return res.json();
   })
-  .then(data => {
-    return dispatch(postTaskSuccess(data));
+  .then(taskData => {
+    return dispatch(postTaskSuccess(taskData));
   })
   .catch(err => {
     dispatch(postTaskError(err));

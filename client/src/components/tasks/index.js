@@ -12,6 +12,7 @@ export class Tasks extends React.Component {
   };
 
   componentWillMount() {
+    console.log('went here')
     this.props.dispatch(actions.fetchUserData());
   };
 
@@ -26,9 +27,10 @@ export class Tasks extends React.Component {
     console.log('submitting task -->')
     this.props.dispatch(actions.postTask({
       userId: this.props.currentUser._id,
-      userData: {
-        task: this.state.taskInputValue
-      }
+      taskName: this.state.taskInputValue,
+      deadline: 'two-three weeks',
+      important: true,
+      urgent: false
     }))
     let form = document.getElementById("form");
     form.reset();
@@ -40,12 +42,9 @@ export class Tasks extends React.Component {
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
-      console.log('got here', this.props.tasks)
-      // Commented this out to test heroku deployment, but we will have to modify this map function
-      
-      return this.props.tasks.tasks.map(taskObj => {
+      return this.props.tasks.map((taskObj, index) => {
         return (
-            <li>{taskObj.taskName}</li>
+            <li key={index}>{taskObj.taskName}</li>
         )
       });
     } else {
@@ -54,8 +53,6 @@ export class Tasks extends React.Component {
   };
    
   render() {
-    // this.state.tasks.map(task => <li>{task}</li>)
-              // {this.mapTasksToList()}
     return (
       <div>
         <form id="form" onSubmit={event => this.submitTask(event)}>
@@ -76,6 +73,6 @@ export class Tasks extends React.Component {
 
 const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser,
-  tasks: state.taskReducer.userData
+  tasks: state.taskReducer.tasks
 });
 export default connect(mapStateToProps)(Tasks);

@@ -14,14 +14,15 @@ const initialState = {
 const taskReducer = (state=initialState, action) => {
   switch (action.type) {
     case actions.FETCH_USER_DATA_SUCCESS: {
+      console.log('action user data', action.userData.tasks)
       return {
         ...state,
         // currentUser: action.userData.currentUser,
         // roles: action.userData.roles,
         // goals: action.userData.goals,
         // projects: action.userData.projects,
-        // tasks: action.userData.tasks
-        userData: action.userData
+        tasks: action.userData.tasks
+        // userData: action.userData
       }
     }
     case actions.POST_TASK_SUCCESS: {
