@@ -126,7 +126,6 @@ export const postMission = newMission => dispatch => {
     method: 'PUT',
     body: JSON.stringify(newMission)
   };
-  // console.log('What is being passed to this action: ', newMission);
   dispatch(postMissionRequest());
   return fetch('http://localhost:8080/api/userMission', opts)
     .then(res => {
