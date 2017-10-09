@@ -174,16 +174,6 @@ app.get('/api/mission', (req, res) => {
     });
 });
 
-// app.post('/api/createMission', (req, res) => {
-//   User.findOne({googleId: req.body.currentUser})
-//     .then(user => {
-//       console.log('this is the current user db -___----__-__-->', JSON.stringify(user, null, 2))
-//     })
-//     .catch(err => {
-//       console.error(err);
-//     });
-// })
-
 app.post('/api/userTask', (req, res) => {
   Task.create({
     userId: req.body.userId,
@@ -214,6 +204,7 @@ app.put('/api/userData', (req, res) => {
 app.put('/api/userMission', (req, res) => {
   User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
     .then(user => {
+      // res.status(204).json(user.apiRepr());
       res.json(user.apiRepr()).status(204);
     })
     .catch(err => {

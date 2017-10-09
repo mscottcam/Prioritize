@@ -13,14 +13,25 @@ export class Mission extends React.Component {
   }
 
   componentWillReceiveProps() {
+    // if (this.props.currentUser) {
+    //   // Create functionality so that on initial login, the user sees their mission - fetchMission actions / endpoint not working as expected
+    //   this.props.dispatch(
+    //     actions.fetchMission({ currentUser: this.props.currentUser.googleId })
+    //   );
+    
+    // }
+  }
+
+  componentDidMount() {
     if (this.props.currentUser) {
-      this.toggleMissionChange();
       // Create functionality so that on initial login, the user sees their mission - fetchMission actions / endpoint not working as expected
       this.props.dispatch(
         actions.fetchMission({ currentUser: this.props.currentUser.googleId })
       );
-      }
+    
+    }
   }
+
   componentWillMount() {
     if (this.props.currentUser) {
       this.toggleMissionChange();
@@ -83,6 +94,6 @@ export class Mission extends React.Component {
 
 const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser,
-  mission: state.missionReducer.currentMission
+  mission: state.missionReducer.currentMission  /*state.authReducer.currentUser.mission ||   */
 });
 export default connect(mapStateToProps)(Mission);
