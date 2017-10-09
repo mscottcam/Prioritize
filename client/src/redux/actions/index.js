@@ -100,7 +100,7 @@ export const fetchMission = user => dispatch => {
       return res.json()
     })
     .then(mission => {
-      // console.log('HERE IS THE MISSION! ---------->', mission)
+      console.log('HERE IS THE MISSION! ---------->', mission)
       return dispatch(fetchMissionSuccess(mission))
     })
     .catch(error => {
@@ -124,12 +124,12 @@ export const postMission = newMission => dispatch => {
       'Content-Type': 'application/json'
       // 'Access-Control-Allow-Origin': '*'
     },
-    method: 'POST',
+    method: 'PUT',
     body: JSON.stringify(newMission)
   };
-
+  // console.log('What is being passed to this action: ', newMission);
   dispatch(postMissionRequest());
-  return fetch('http://localhost:8080/api/createMission', opts)
+  return fetch('http://localhost:8080/api/userMission', opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -137,7 +137,7 @@ export const postMission = newMission => dispatch => {
       return res.json();
     })
     .then(data => {
-      return dispatch(postMissionSuccess(data));
+      return dispatch(postMissionSuccess(data.mission));
     })
     .catch(err => {
       dispatch(postMissionError(err));
@@ -213,12 +213,9 @@ export const authenticate = () => dispatch => {
         return res.json();
       })
       .then(currentUser => {
+        console.log("You are currently logged in as: ", currentUser)
         return dispatch(authSuccess(currentUser)); 
       });
-  }
+  } 
+    console.log('You are currently not logged in as a user.')
 };
-
-
-
-
-

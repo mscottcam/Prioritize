@@ -165,23 +165,23 @@ app.get('/api/userData', (req, res) => {
 app.get('/api/mission', (req, res) => {
   User.findOne({googleId: req.body.currentUser})
     .then( user => {
-      console.log('USERRRRRRRRR', user.mission)
-      res.json(user.mission)
+      console.log('USERRRRRRRRR', user.mission);
+      res.json(user.mission);
     })
     .catch(err => {
       console.error(err);
     });
 });
 
-app.post('/api/createMission', (req, res) => {
-  User.find({googleId: req.body.currentUser})
-    .then(user => {
-      console.log('this is the current user db -___----__-__-->', JSON.stringify(user))
-    })
-    .catch(err => {
-      console.error(err);
-    });
-})
+// app.post('/api/createMission', (req, res) => {
+//   User.findOne({googleId: req.body.currentUser})
+//     .then(user => {
+//       console.log('this is the current user db -___----__-__-->', JSON.stringify(user, null, 2))
+//     })
+//     .catch(err => {
+//       console.error(err);
+//     });
+// })
 
 app.post('/api/userTask', (req, res) => {
   Task.create({
@@ -211,9 +211,10 @@ app.put('/api/userData', (req, res) => {
 });
 
 app.put('/api/userMission', (req, res) => {
-  User.findByIdAndUpdate(req.body.userId, {$set: {mission: req.body.mission}}, {new: true})
+  User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
     .then(user => {
-      res.status(204).json(user.apiRepr());
+      console.log('what: ', user)
+      res.json(user.apiRepr()).status(204);
     })
     .catch(err => {
       console.error(err);

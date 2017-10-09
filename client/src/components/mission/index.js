@@ -12,8 +12,13 @@ export class Mission extends React.Component {
     }
   }
   
+  componentWillReceiveProps() {
+    // console.log('Stuff')
+    // console.log('This.props in mission component', this.props)
+  }
   componentWillMount() {
-    console.log('current user', this.props.currentUser)
+    // console.log('The props: ', this.props)
+    // I am 
     // this.props.dispatch(actions.fetchMission({currentUser: this.props.currentUser}));
   };
 
@@ -31,6 +36,7 @@ export class Mission extends React.Component {
 
   submitMissionChange(event){
     event.preventDefault();
+    console.log('Missoin props prior to postMission dispatch: ', this.props)
     this.props.dispatch(actions.postMission({
       currentUser: this.props.currentUser,
       newMission: this.state.newMissionInputValue
@@ -69,7 +75,7 @@ export class Mission extends React.Component {
 
 
 const mapStateToProps = (state, props) => ({
-  currentUser: state.authReducer.currentUser.googleId,
+  currentUser: state.authReducer.currentUser,
   mission: state.missionReducer.currentMission
 });
 export default connect(mapStateToProps)(Mission);
