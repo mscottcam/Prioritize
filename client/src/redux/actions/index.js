@@ -18,12 +18,12 @@ export const fetchUserData = currentUserId => dispatch => {
       'Content-Type': 'application/json'
       // 'Access-Control-Allow-Origin': '*'
     },
-    method: 'GET',
-    body: JSON.stringify(currentUserId)
+    method: 'GET'
   };
-  console.log("The options? :", opts)
+  // dispatch some action that: looks @ our authreducer.currentUser => send that id for the fetch/api/userData
   dispatch(fetchUserDataRequest());
-  return fetch('http://localhost:8080/api/userData', opts)
+  // state.authReducer.XX
+  return fetch(`http://localhost:8080/api/userData/${currentUserId.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -34,6 +34,7 @@ export const fetchUserData = currentUserId => dispatch => {
       return dispatch(fetchUserDataSuccess(userData));
     })
     .catch(err => {
+      console.error(err)
       return dispatch(fetchUserDataError(err));
     })
 };

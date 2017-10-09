@@ -148,9 +148,12 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-app.get('/api/userData', (req, res) => {
-  console.log('What is my request body: ', req.body);
-  Task.find()
+app.get('/api/userData/:id', (req, res) => {
+  const idToCast = req.params.id;
+  const ObjectId = require('mongoose').Types.ObjectId;
+  const userMongoId = new ObjectId(idToCast);
+
+  Task.find({userId: userMongoId})
     .populate('userId')
     .exec()
     .then(tasks => {
@@ -164,10 +167,10 @@ app.get('/api/userData', (req, res) => {
 });
 
 app.get('/api/mission', (req, res) => {
-  console.log('we are not hittin da endpoint')
+  console.log('we are not hittin da endpoint');
   User.findOne({googleId: req.body.currentUser})
     .then( user => {
-      console.log('Sending over the user mission from the backend: ', user.mission)
+      console.log('Sending over the user mission from the backend: ', user.mission);
       res.json(user.mission);
     })
     .catch(err => {
@@ -176,6 +179,7 @@ app.get('/api/mission', (req, res) => {
 });
 
 app.post('/api/userTask', (req, res) => {
+  console.log('What is hitting here: ', req.body)
   Task.create({
     userId: req.body.userId,
     taskName: req.body.taskName,
