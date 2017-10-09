@@ -162,6 +162,18 @@ app.get('/api/userData', (req, res) => {
     });
 });
 
+app.get('/api/mission', (req, res) => {
+  console.log('we are not hittin da endpoint')
+  User.findOne({googleId: req.body.currentUser})
+    .then( user => {
+      console.log('Sending over the user mission from the backend: ', user.mission)
+      res.json(user.mission);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+});
+
 app.post('/api/userTask', (req, res) => {
   Task.create({
     userId: req.body.userId,
@@ -190,9 +202,10 @@ app.put('/api/userData', (req, res) => {
 });
 
 app.put('/api/userMission', (req, res) => {
-  User.findByIdAndUpdate(req.body.userId, {$set: {mission: req.body.mission}}, {new: true})
+  User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
     .then(user => {
-      res.status(204).json(user.apiRepr());
+      // res.status(204).json(user.apiRepr());
+      res.json(user.apiRepr()).status(204);
     })
     .catch(err => {
       console.error(err);

@@ -1,33 +1,99 @@
-import React from 'react';
-import * as actions from '../../redux/actions';
+import React from "react";
+import * as actions from "../../redux/actions";
 
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 
 export class Mission extends React.Component {
-  
-  componentWillMount() {
-    this.props.dispatch(actions.fetchMission());
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      changeMissionToggle: false,
+      newMissionInputValue: ""
+    };
+  }
 
-  onClick(event){
-    //allow user to be able to edit mission
+  componentWillReceiveProps() {
+    // if (this.props.currentUser) {
+    //   // Create functionality so that on initial login, the user sees their mission - fetchMission actions / endpoint not working as expected
+    //   this.props.dispatch(
+    //     actions.fetchMission({ currentUser: this.props.currentUser.googleId })
+    //   );
+    
+    // }
+  }
+
+  componentDidMount() {
+    if (this.props.currentUser) {
+      // Create functionality so that on initial login, the user sees their mission - fetchMission actions / endpoint not working as expected
+      this.props.dispatch(
+        actions.fetchMission({ currentUser: this.props.currentUser.googleId })
+      );
+    
+    }
+  }
+
+  componentWillMount() {
+    if (this.props.currentUser) {
+      this.toggleMissionChange();
+    }
+  }
+
+  toggleMissionChange() {
+    this.setState({
+      changeMissionToggle: true
+    });
+  }
+
+  changeMissionInput(input) {
+    this.setState({
+      newMissionInputValue: input.target.value
+    });
+  }
+
+  submitMissionChange(event) {
+    event.preventDefault();
+    this.props.dispatch(
+      actions.postMission({
+        currentUser: this.props.currentUser,
+        newMission: this.state.newMissionInputValue
+      })
+    );
+    this.setState({
+      changeMissionToggle: false
+    });
   }
 
   render() {
-    console.log('Missions will be here once db is populated --->', this.props.mission)
-    return (
-      <div>
-        <p> Mission will go here</p>
-      </div>
-    )
-  };
+    if (this.state.changeMissionToggle === true) {
+      return (
+        <div className="change-mission-form">
+          <p>Current Mission: {this.props.mission}</p>
+          <form id="form" onSubmit={event => this.submitMissionChange(event)}>
+            <input
+              type="text"
+              placeholder="New Mission Here"
+              onChange={event => this.changeMissionInput(event)}
+            />
+            <button type="submit">Submit New Mission</button>
+          </form>
+        </div>
+      );
+    }
+    if (this.state.changeMissionToggle === false) {
+      return (
+        <div>
+          <p>{this.props.mission}</p>
+          <button onClick={() => this.toggleMissionChange()}>
+            Change mission
+          </button>
+        </div>
+      );
+    }
+  }
 }
-
 
 const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser,
-  mission: state.authReducer.currentUser.mission,
-  // the above will pull mission once we have one in the db
-  tasks: state.taskReducer.userData
+  mission: state.missionReducer.currentMission  /*state.authReducer.currentUser.mission ||   */
 });
 export default connect(mapStateToProps)(Mission);
