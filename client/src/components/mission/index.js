@@ -14,7 +14,8 @@ export class Mission extends React.Component {
   }
 
   render() {
-    console.log('Missions will be here once db is populated --->', this.props.mission)
+    console.log('This is props====>',this.props)
+    // console.log('Missions will be here once db is populated --->', this.props.mission)
     return (
       <div>
         <p> Mission will go here</p>
