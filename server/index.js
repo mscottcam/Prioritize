@@ -149,6 +149,7 @@ app.get('/api/users', (req, res) => {
 });
 
 app.get('/api/userData', (req, res) => {
+  console.log('What is my request body: ', req.body);
   Task.find()
     .populate('userId')
     .exec()

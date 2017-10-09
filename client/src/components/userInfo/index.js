@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 // should have the userName and a logOut button
 export class UserInfo extends React.Component {
   componentDidMount() {
-    this.props.dispatch(actions.authenticate())
+    // this.props.dispatch(actions.authenticate())
   };
 
   render() {

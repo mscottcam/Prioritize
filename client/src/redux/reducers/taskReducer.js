@@ -14,7 +14,6 @@ const initialState = {
 const taskReducer = (state=initialState, action) => {
   switch (action.type) {
     case actions.FETCH_USER_DATA_SUCCESS: {
-      console.log('action user data', action.userData.tasks)
       return {
         ...state,
         // currentUser: action.userData.currentUser,

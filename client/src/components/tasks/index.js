@@ -11,10 +11,9 @@ export class Tasks extends React.Component {
     };
   };
 
-  componentWillMount() {
-    console.log('went here')
-    this.props.dispatch(actions.fetchUserData());
-  };
+  componentDidUpdate() {
+    this.props.dispatch(actions.fetchUserData({currentUserId: this.props.currentUser}))
+  }
 
   onChange(event) {
     this.setState({
@@ -25,6 +24,7 @@ export class Tasks extends React.Component {
   submitTask(event) {
     event.preventDefault();
     console.log('submitting task -->')
+    console.log('On submit, props are: ', this.props)
     this.props.dispatch(actions.postTask({
       userId: this.props.currentUser._id,
       taskName: this.state.taskInputValue,
@@ -72,7 +72,7 @@ export class Tasks extends React.Component {
 };
 
 const mapStateToProps = (state, props) => ({
-  currentUser: state.authReducer.currentUser,
+  currentUser: state.authReducer.currentUser._id,
   tasks: state.taskReducer.tasks
 });
 export default connect(mapStateToProps)(Tasks);

@@ -10,15 +10,18 @@ export const fetchUserDataSuccess = userData => ({ type: FETCH_USER_DATA_SUCCESS
 export const FETCH_USER_DATA_ERROR = 'FETCH_USER_DATA_ERROR';
 export const fetchUserDataError = error => ({type: FETCH_USER_DATA_ERROR, error});
 
-export const fetchUserData = () => dispatch => {
+export const fetchUserData = currentUserId => dispatch => {
+  console.log('What is our id: ',currentUserId)
   const opts = {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
       // 'Access-Control-Allow-Origin': '*'
     },
-    method: 'GET'
+    method: 'GET',
+    body: JSON.stringify(currentUserId)
   };
+  console.log("The options? :", opts)
   dispatch(fetchUserDataRequest());
   return fetch('http://localhost:8080/api/userData', opts)
     .then(res => {
