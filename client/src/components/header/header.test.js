@@ -3,7 +3,7 @@ import {shallow, mount} from 'enzyme';
 
 import Header from './index';
 
-xdescribe('<AddForm />', () => {
+describe('<Header />', () => {
     it('Renders without crashing', () => {
         shallow(<Header />);
     });
