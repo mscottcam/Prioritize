@@ -163,9 +163,10 @@ app.get('/api/userData', (req, res) => {
 });
 
 app.get('/api/mission', (req, res) => {
+  console.log('we are not hittin da endpoint')
   User.findOne({googleId: req.body.currentUser})
     .then( user => {
-      console.log('USERRRRRRRRR', user.mission);
+      console.log('Sending over the user mission from the backend: ', user.mission)
       res.json(user.mission);
     })
     .catch(err => {
@@ -213,7 +214,6 @@ app.put('/api/userData', (req, res) => {
 app.put('/api/userMission', (req, res) => {
   User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
     .then(user => {
-      console.log('what: ', user)
       res.json(user.apiRepr()).status(204);
     })
     .catch(err => {
