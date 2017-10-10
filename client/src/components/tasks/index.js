@@ -40,7 +40,7 @@ export class Tasks extends React.Component {
         taskName: this.state.taskInputValue,
         deadline: "two-three weeks",
         important: true,
-        urgent: false
+        urgent: true
       })
     );
     let form = document.getElementById("form");
@@ -51,14 +51,20 @@ export class Tasks extends React.Component {
     console.log("delete button event -->", event.currentTarget);
   }
 
+
   mapTasksToList() {
     if (this.props.tasks !== null) {
-      return this.props.tasks.map((taskObj, index) => {
+
+      const taskSort = this.props.tasks.sort((taskA, taskB) => {
+        return taskA.quadrantValue - taskB.quadrantValue
+      });
+
+      return taskSort.map((taskObj, index) => {
         return <li key={index}>{taskObj.taskName}</li>;
       });
     } else {
       return <li>no task</li>;
-    }
+    };
   }
 
   userDataFetch() {

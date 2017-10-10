@@ -180,41 +180,11 @@ describe('Life coach', () => {
         });
     });
 
-    it('should return all tasks', function() {
-      // return User
-      //   .findOne()
-      //   .then(user => {
-      //     testMission.currentUser._id = user._id;
-      //     console.log('Mission we are sending over: ', testMission);
-      //     return chai
-      //       .request(app)
-      //       .put('/api/userMission')
-      //       .send(testMission);
-      //   })
-      return User
-        .findOne()
-        .then(user => {
-          let resTask;
-          return chai
-            .request(app)
-            .get(`/api/userData/${user._id}`)
-            .then(res => {
-              resTask = res;
-              res.should.have.status(200);
-              res.should.be.json;
-              return Task.count();
-            })
-            .then(count => {
-              resTask.body.tasks.should.have.lengthOf(count);
-            });
-        });
-    });
-
     it('should return tasks with right fields', function() {
       let resTask;
       return chai
         .request(app)
-        .get('/api/userData')
+        .get('/api/userData/59d64ed9c996510584f2fc32')
         .then(res => {
           res.should.have.status(200);
           res.should.be.json;
@@ -292,7 +262,6 @@ describe('Life coach', () => {
         .findOne()
         .then(user => {
           testMission.currentUser._id = user._id;
-          console.log('Mission we are sending over: ', testMission);
           return chai
             .request(app)
             .put('/api/userMission')

@@ -1,5 +1,5 @@
 import React from 'react';
-import * as actions from '../../redux/actions'
+// import * as actions from '../../redux/actions'
 import {connect} from 'react-redux';
 
 // should have the userName and a logOut button

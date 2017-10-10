@@ -27,7 +27,7 @@ const taskReducer = (state=initialState, action) => {
     case actions.POST_TASK_SUCCESS: {
       return {
         ...state,
-        tasks: [...state.tasks, action.task]
+        tasks: [...state.tasks, action.taskData]
       };
     }
     case actions.UPDATE_TASK_SUCCESS: {
