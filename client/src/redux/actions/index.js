@@ -43,12 +43,12 @@ export const POST_TASK_REQUEST = 'POST_TASK_REQUEST';
 export const postTaskRequest = () => ({ type: POST_TASK_REQUEST });
 
 export const POST_TASK_SUCCESS = 'POST_TASK_SUCCESS';
-export const postTaskSuccess = task => ({ type: POST_TASK_SUCCESS, task });
+export const postTaskSuccess = taskData => ({ type: POST_TASK_SUCCESS, taskData });
 
 export const POST_TASK_ERROR = 'POST_TASK_ERROR';
 export const postTaskError = error => ({type: POST_TASK_ERROR, error});
 
-export const postTask = data => dispatch => {
+export const postTask = taskObj => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -56,7 +56,7 @@ export const postTask = data => dispatch => {
       // 'Access-Control-Allow-Origin': '*'
     },
     method: 'POST',
-    body: JSON.stringify(data)
+    body: JSON.stringify(taskObj)
   };
   dispatch(postTaskRequest());
   return fetch('http://localhost:8080/api/userTask', opts)
@@ -67,9 +67,11 @@ export const postTask = data => dispatch => {
     return res.json();
   })
   .then(taskData => {
+    console.log('returned task object ------->', taskData);
     return dispatch(postTaskSuccess(taskData));
   })
   .catch(err => {
+    console.error(err)
     dispatch(postTaskError(err));
   })
 };

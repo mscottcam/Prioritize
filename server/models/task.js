@@ -10,7 +10,8 @@ const TaskSchema = new Schema({
   taskName: {type: String, required: true},
   deadline: {type: String},
   important: {type: Boolean},
-  urgent: {type: Boolean}
+  urgent: {type: Boolean},
+  quadrantValue: {type: Number}
 });
 
 TaskSchema.methods.apiRepr = function() {
@@ -20,7 +21,8 @@ TaskSchema.methods.apiRepr = function() {
     userId: this.userId || 'No user id',
     deadline: this.deadline,
     important: this.important,
-    urgent: this.urgent
+    urgent: this.urgent, 
+    quadrantValue: this.quadrantValue
   };
 };
 
