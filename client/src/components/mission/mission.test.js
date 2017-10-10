@@ -15,6 +15,15 @@ import Mission from './index';
 describe('<Mission />', () => {
     it('Renders without crashing', () => {
         const initialState = {
+					missionReducer: {
+						currentUser: null, //name
+						userId: null,
+						currentMission: 'this is my missionReducer state',
+						roles:[],
+						goals: [],
+						projects: [],
+						tasks: []
+					},
 					authReducer: 
 						{
 							currentUser:{
