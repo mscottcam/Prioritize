@@ -7,12 +7,16 @@ export class Tasks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      taskInputValue: null,
-      firstLoginComplete: false
+      taskNameInput: null,
+      firstLoginComplete: false,
+      deadline: null,
+      important: false,
+      urgent: false
     };
   }
 
   componentDidUpdate() {
+    console.log('i ran too');
     if (this.state.firstLoginComplete === false) {
       this.props.dispatch(
         actions.fetchUserData({ currentUserId: this.props.currentUser })
@@ -25,22 +29,56 @@ export class Tasks extends React.Component {
     }
   }
 
-  onChange(event) {
+  onChangeTaskName(event) {
+    event.preventDefault();
     this.setState({
-      taskInputValue: event.target.value
+      taskNameInput: event.target.value
     });
-  }
+  };
+
+  onChangeDeadline(event) {
+    this.setState({
+      deadline: event.target.value
+    });
+  };
+
+  onChangeDropdown(event) {
+    if (event.target.value === 'important') {
+      this.setState({
+        important: true
+      });
+    };
+    if (event.target.value === 'urgent') {
+      this.setState({
+        urgent: true
+      });
+    };
+    if (event.target.value === 'both') {
+      this.setState({
+        important: true,
+        urgent: true
+      });
+    };
+    if (event.target.value === 'neither') {
+      this.setState({
+        important: false,
+        urgent: false
+      })
+    }
+  };
+
+
 
   submitTask(event) {
     event.preventDefault();
-    console.log("submitting task -->");
     this.props.dispatch(
       actions.postTask({
         userId: this.props.currentUser,
-        taskName: this.state.taskInputValue,
-        deadline: "two-three weeks",
-        important: true,
-        urgent: true
+        taskName: this.state.taskNameInput,
+        deadline: this.state.deadline,
+        important: this.state.important,
+        urgent: this.state.urgent,
+        value: 'neither'
       })
     );
     let form = document.getElementById("form");
@@ -54,17 +92,19 @@ export class Tasks extends React.Component {
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
-
       const taskSort = this.props.tasks.sort((taskA, taskB) => {
         return taskA.quadrantValue - taskB.quadrantValue
       });
 
       return taskSort.map((taskObj, index) => {
-        return <li key={index}>{taskObj.taskName}</li>;
+        return (
+          <li key={index}>
+            <span>{taskObj.taskName}</span>
+            <span>  -  {taskObj.deadline}</span>
+          </li>
+        )
       });
-    } else {
-      return <li>no task</li>;
-    };
+    }
   }
 
   userDataFetch() {
@@ -74,18 +114,37 @@ export class Tasks extends React.Component {
     );
   }
   render() {
+    //<button onClick={() => this.userDataFetch()}>Testing</button>
     return (
       <div>
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <input
-            type="text"
-            placeholder="Add a task!"
-            onChange={event => this.onChange(event)}
-          />
+          <label> Name of task:
+            <input
+              type="text"
+              placeholder="Add a task!"
+              onChange={event => this.onChangeTaskName(event)} 
+            />
+          </label> <br />
+          <label> Does it have a Deadline?
+            <input
+              type="text"
+              placeholder="Add a Deadline"
+              onChange={event => this.onChangeDeadline(event)} 
+            />
+          </label> <br />
+          <label>
+            Is this task Urgent or Important?
+            <select value={this.state.value} onChange={event => this.onChangeDropdown(event)} >
+              <option value="none">Neither</option>
+              <option value="urgent">Urgent</option>
+              <option value="important">Important</option>
+              <option value="both">Both</option>
+            </select>
+          </label><br />
           <button type="submit">Submit Task</button>
         </form>
-        <button onClick={() => this.userDataFetch()}>Testing</button>
-        <ul>{this.mapTasksToList()}</ul>
+        
+        <div><ul>{this.mapTasksToList()}</ul></div>
       </div>
     );
   }
