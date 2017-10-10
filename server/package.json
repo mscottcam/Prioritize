@@ -21,6 +21,6 @@
   },
   "scripts": {
     "start": "nodemon index.js",
-    "test": "nyc mocha"
+    "test": "mocha"
   }
 }

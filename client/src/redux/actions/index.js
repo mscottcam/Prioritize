@@ -252,8 +252,19 @@ export const authenticate = () => dispatch => {
       .then(currentUser => {
         return dispatch(authSuccess(currentUser)); 
       })
+<<<<<<< HEAD
     .catch(err => {
       dispatch(authError(err));
     })
   } 
 };
+=======
+      .catch(err => console.error(err))
+  }
+};
+
+
+
+
+
+>>>>>>> dev
