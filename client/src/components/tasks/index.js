@@ -13,6 +13,7 @@ export class Tasks extends React.Component {
   }
 
   componentDidUpdate() {
+    console.log("Props: ", this.props)
     if (this.state.firstLoginComplete === false) {
       this.props.dispatch(
         actions.fetchUserData({ currentUserId: this.props.currentUser })
@@ -20,7 +21,7 @@ export class Tasks extends React.Component {
       if (this.props.currentUser) {
         this.setState({
           firstLoginComplete: true
-        }); 
+        });
       }
     }
   }
@@ -33,7 +34,6 @@ export class Tasks extends React.Component {
 
   submitTask(event) {
     event.preventDefault();
-    console.log("submitting task -->");
     this.props.dispatch(
       actions.postTask({
         userId: this.props.currentUser,
@@ -47,32 +47,33 @@ export class Tasks extends React.Component {
     form.reset();
   }
 
-  deleteTask(event) {
-    console.log("delete button event -->", event.currentTarget);
+  deleteTask(task) {
+    this.props.dispatch(actions.deleteTask(task._id)).then(() => {
+      this.props.dispatch(
+        actions.fetchUserData({ currentUserId: this.props.currentUser })
+      );
+    });
   }
-
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
-
       const taskSort = this.props.tasks.sort((taskA, taskB) => {
-        return taskA.quadrantValue - taskB.quadrantValue
+        return taskA.quadrantValue - taskB.quadrantValue;
       });
 
       return taskSort.map((taskObj, index) => {
-        return <li key={index}>{taskObj.taskName}</li>;
+        return (
+          <li key={index}>
+            {taskObj.taskName}
+            <button onClick={() => this.deleteTask(taskObj)}>Delete</button>
+          </li>
+        );
       });
     } else {
       return <li>no task</li>;
-    };
+    }
   }
 
-  userDataFetch() {
-    console.log("clicked!");
-    this.props.dispatch(
-      actions.fetchUserData({ currentUserId: this.props.currentUser })
-    );
-  }
   render() {
     return (
       <div>
@@ -84,7 +85,6 @@ export class Tasks extends React.Component {
           />
           <button type="submit">Submit Task</button>
         </form>
-        <button onClick={() => this.userDataFetch()}>Testing</button>
         <ul>{this.mapTasksToList()}</ul>
       </div>
     );

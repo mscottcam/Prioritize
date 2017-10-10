@@ -40,6 +40,14 @@ const taskReducer = (state=initialState, action) => {
         tasks: [...state.tasks, taskToUpdate]
       }
     }
+    case actions.DELETE_TASK_SUCCESS: {
+      const newState = {...state}
+      const indexOfTaskToDelete = state.tasks.findIndex(task => {
+        return task._id === action.taskId
+      })
+      newState.tasks.splice(indexOfTaskToDelete, 1);
+      return newState;
+    }
     default: return state
   }
 }

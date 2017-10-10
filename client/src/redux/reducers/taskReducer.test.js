@@ -65,5 +65,12 @@ xdescribe('task reducer', () => {
     const newState = taskReducer(state, actions.updateTaskSuccess(updateTask));
     expect(newState.tasks.find(item => item.taskId ===updateTask.taskId)).toEqual(updateTask);
   });
-
+  it('should handle DELETE_TASK_SUCCESS', () => {
+    let state = userData;
+    let taskToDeleteId = 5678;
+    console.log('state before: ', state);
+    const newState = taskReducer(state, actions.deleteTaskSuccess(taskToDeleteId));
+    console.log('State after ', state);
+    expect(newState.tasks.length).toEqual((state.tasks.length))
+  });
 });

@@ -56,10 +56,10 @@ describe("async actions", () => {
   it("creates FETCH_MISSION_SUCCESS when fetching missions has been done", () => {
     nock("http://localhost:8080")
       .get("/api/mission/1234567890")
-      .reply(200, { mission: ["lots of text"] });
+      .reply(200, { mission: ["create a working application"] });
     const expectedActions = [
       { type: actions.FETCH_MISSION_REQUEST },
-      { type: actions.FETCH_MISSION_SUCCESS,  mission: ["lots of text"] } 
+      { type: actions.FETCH_MISSION_SUCCESS,  mission: ["create a working application"] } 
     ];
     const store = mockStore({ text: [] });
     return store.dispatch(actions.fetchMission({currentUserId: '1234567890'})).then(() => {
@@ -67,11 +67,10 @@ describe("async actions", () => {
     });
   });
 
-  // Fix this test
   it('creates POST_MISSION_SUCCESS when making new mission', () => {
         const missionToUpdate = {
         userId: 1234,
-        mission: 'lots of thoughts',
+        mission: 'create a working application',
         role: "dev",
       }
     nock('http://localhost:8080')

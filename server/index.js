@@ -178,8 +178,6 @@ app.get('/api/mission/:id', (req, res) => {
 });
 
 app.post('/api/userTask', (req, res) => {
-  // console.log('What is hitting here: ', req.body)
-  console.log('testing quad decider-------', quadrantDecider(req.body ))
   Task.create({
     userId: req.body.userId,
     taskName: req.body.taskName,
@@ -241,7 +239,7 @@ app.delete('/api/userTask/:id', (req, res) => {
   Task
     .findByIdAndRemove(req.params.id)
     .then(() => {
-      res.sendStatus(204);
+      res.status(204).end();
     })
     .catch(err => {
       console.error(err);

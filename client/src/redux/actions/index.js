@@ -15,13 +15,10 @@ export const fetchUserData = currentUserId => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
     },
     method: 'GET'
   };
-  // dispatch some action that: looks @ our authreducer.currentUser => send that id for the fetch/api/userData
   dispatch(fetchUserDataRequest());
-  // state.authReducer.XX
   return fetch(`http://localhost:8080/api/userData/${currentUserId.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
@@ -52,7 +49,6 @@ export const postTask = taskObj => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
     },
     method: 'POST',
     body: JSON.stringify(taskObj)
@@ -66,7 +62,6 @@ export const postTask = taskObj => dispatch => {
     return res.json();
   })
   .then(taskData => {
-    console.log('returned task object ------->', taskData);
     return dispatch(postTaskSuccess(taskData));
   })
   .catch(err => {
@@ -90,7 +85,6 @@ export const fetchMission = currentUserId => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
     },
     method: 'GET'
   };
@@ -124,7 +118,6 @@ export const postMission = newMission => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
     },
     method: 'PUT',
     body: JSON.stringify(newMission)
@@ -159,7 +152,6 @@ export const updateTask = data => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
     },
     method: 'PUT',
     body: JSON.stringify(data)
@@ -185,7 +177,7 @@ export const DELETE_TASK_REQUEST = 'DELETE_TASK_REQUEST';
 export const deleteTaskRequest = () => ({ type: DELETE_TASK_REQUEST });
 
 export const DELETE_TASK_SUCCESS = 'DELETE_TASK_SUCCESS';
-export const deleteTaskSuccess = taskId => ({ type: DELETE_TASK_SUCCESS });
+export const deleteTaskSuccess = taskId => ({ type: DELETE_TASK_SUCCESS, taskId});
 
 export const DELETE_TASK_ERROR = 'DELETE_TASK_ERROR';
 export const deleteTaskError = error => ({type: DELETE_TASK_ERROR, error});
@@ -198,18 +190,15 @@ export const deleteTask = taskId => dispatch => {
     },
     method: 'DELETE'
   };
-  // dispatch some action that: looks @ our authreducer.currentUser => send that id for the fetch/api/userData
   dispatch(deleteTaskRequest());
-  // state.authReducer.XX
-  return fetch(`http://localhost:8080/api/userTask/taskId`, opts)
+  return fetch(`http://localhost:8080/api/userTask/${taskId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
       }
-      return res.json();
     })
-    .then(userData => {
-      return dispatch(deleteTaskSuccess());
+    .then(() => {
+      return dispatch(deleteTaskSuccess(taskId));
     })
     .catch(err => {
       console.error(err)
@@ -241,7 +230,6 @@ export const authenticate = () => dispatch => {
       .then(res => {
         if (!res.ok) {
           if (res.status !== 401) {
-            // Unauthorized, clear the cookie and go to the login page
             Cookies.remove('accessToken');
             return;
           }
