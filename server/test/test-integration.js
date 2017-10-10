@@ -341,7 +341,6 @@ describe('Life coach', () => {
     // the goals being added that do not have a role declared, will be given the default role
     // });
   });
-<<<<<<< HEAD
 
   describe('DELETE requests', () => {
     it.only('should delete a task by id', function() {
@@ -363,6 +362,3 @@ describe('Life coach', () => {
     });
   });
 });
-=======
-});
->>>>>>> dev
