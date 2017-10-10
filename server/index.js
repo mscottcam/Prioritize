@@ -157,6 +157,7 @@ app.get('/api/userData/:id', (req, res) => {
     .populate('userId')
     .exec()
     .then(tasks => {
+      // tasks.sort((a, b) => a - b)
       res.json({
         tasks: tasks.map(task => task.apiRepr())
       });
@@ -177,13 +178,23 @@ app.get('/api/mission/:id', (req, res) => {
 });
 
 app.post('/api/userTask', (req, res) => {
-  console.log('What is hitting here: ', req.body);
+  console.log('What is hitting here: ', req.body)
+
+// let setQuadrant = taskObj => {
+//   if (taskObj.urgent === true && taskObj.important === true) {
+//     taskObj.quadrant = 1
+//   }
+// }
+
+
+
   Task.create({
     userId: req.body.userId,
     taskName: req.body.taskName,
     deadline: req.body.deadline,
     important: req.body.important,
     urgent: req.body.urgent
+    // quadValue: 
   })
     .then(task => res.status(201).json(task.apiRepr()))
     .catch(err => {
