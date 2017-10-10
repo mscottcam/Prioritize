@@ -12,26 +12,18 @@ export class Tasks extends React.Component {
     };
   }
 
-  // this is the react hack way - aka not what you should have to do because we have redux
   componentDidUpdate() {
     if (this.state.firstLoginComplete === false) {
-      console.log("In here");
       this.props.dispatch(
         actions.fetchUserData({ currentUserId: this.props.currentUser })
       );
-      // second if statement confirms that there is a currentUser. This logic is probably not necessary
       if (this.props.currentUser) {
         this.setState({
           firstLoginComplete: true
-        });
+        }); 
       }
     }
   }
-  // componentDidMount() {
-  //   // console.log('I guess props is working ', this.props.currentUser)
-  //   // this.props.dispatch(actions.fetchUserData({currentUserId: this.props.currentUser}))
-  //   this.props.dispatch(actions.fetchUserData());
-  // }
 
   onChange(event) {
     this.setState({

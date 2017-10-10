@@ -180,27 +180,11 @@ describe('Life coach', () => {
         });
     });
 
-    it('should return all tasks', function() {
-      let resTask;
-      return chai
-        .request(app)
-        .get('/api/userData')
-        .then(res => {
-          resTask = res;
-          res.should.have.status(200);
-          res.should.be.json;
-          return Task.count();
-        })
-        .then(count => {
-          resTask.body.tasks.should.have.lengthOf(count);
-        });
-    });
-
     it('should return tasks with right fields', function() {
       let resTask;
       return chai
         .request(app)
-        .get('/api/userData')
+        .get('/api/userData/59d64ed9c996510584f2fc32')
         .then(res => {
           res.should.have.status(200);
           res.should.be.json;
@@ -267,26 +251,28 @@ describe('Life coach', () => {
 
   describe('PUT requests', () => {
     it('should add mission to db', function() {
-      const newMission = {
-        mission: 'Enjoy life, be productive, build community'
+      const testMission = {
+        newMission: 'Enjoy life, be productive, build community',
+        currentUser: {
+          _id: 'userId'
+        }
       };
 
       return User
         .findOne()
         .then(user => {
-          newMission.userId = user._id;
+          testMission.currentUser._id = user._id;
           return chai
             .request(app)
             .put('/api/userMission')
-            .send(newMission);
+            .send(testMission);
         })
         .then(function(res) {
-          res.should.have.status(204);
           res.body.should.be.a('object');
-          return User.findById(newMission.userId);
+          return User.findById(testMission.currentUser._id);
         })
         .then(function(user) {
-          user.mission.should.equal(newMission.mission);
+          user.mission.should.equal(testMission.newMission);
         });
 
     });

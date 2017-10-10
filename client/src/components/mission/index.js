@@ -8,27 +8,21 @@ export class Mission extends React.Component {
     super(props);
     this.state = {
       changeMissionToggle: false,
-      newMissionInputValue: ""
+      newMissionInputValue: "",
+      firstLoginComplete: false
     };
   }
 
-  componentWillReceiveProps() {
-    // if (this.props.currentUser) {
-    //   // Create functionality so that on initial login, the user sees their mission - fetchMission actions / endpoint not working as expected
-    //   this.props.dispatch(
-    //     actions.fetchMission({ currentUser: this.props.currentUser.googleId })
-    //   );
-    
-    // }
-  }
-
-  componentDidMount() {
-    if (this.props.currentUser) {
-      // Create functionality so that on initial login, the user sees their mission - fetchMission actions / endpoint not working as expected
+  componentDidUpdate() {
+    if (this.state.firstLoginComplete === false) {
       this.props.dispatch(
-        actions.fetchMission({ currentUser: this.props.currentUser.googleId })
+        actions.fetchMission({ currentUserId: this.props.currentUser.googleId })
       );
-    
+      if (this.props.currentUser) {
+        this.setState({
+          firstLoginComplete: true
+        });
+      }
     }
   }
 
