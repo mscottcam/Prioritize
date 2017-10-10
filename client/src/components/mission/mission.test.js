@@ -2,10 +2,9 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+configure({ adapter: new Adapter() });
 import ReduxThunk from 'redux-thunk';
 import redux from 'redux';
-
-configure({ adapter: new Adapter() });
 
 import configureStore from 'redux-mock-store';
 const mockStore = configureStore([ReduxThunk]);

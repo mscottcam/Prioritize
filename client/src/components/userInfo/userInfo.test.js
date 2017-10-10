@@ -51,9 +51,14 @@ describe('<UserInfo />', () => {
 				}
 			mount(<UserInfo store={mockStore( initialState )} />);
     });
+		xit('Renders login anchor initially', () => {
 
-    xit('Renders the add button initially', () => {
-        const wrapper = shallow(<UserInfo />);
-        expect(wrapper.hasClass('submit-task')).toEqual(true);
-    });
+		});
+		xit('Renders logout if user is logged in', () => {
+
+		});
+		xit('Renders user\'s name if user is logged in', () => {
+
+		});
+
 });
