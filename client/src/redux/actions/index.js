@@ -81,14 +81,15 @@ export const fetchMissionSuccess = mission => ({ type: FETCH_MISSION_SUCCESS, mi
 export const FETCH_MISSION_ERROR = 'FETCH_MISSION_ERROR';
 export const fetchMissionError = error => ({type: FETCH_MISSION_ERROR, error});
 
-export const fetchMission = () => dispatch => {
+export const fetchMission = user => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
       // 'Access-Control-Allow-Origin': '*'
     },
-    method: 'GET'
+    method: 'GET', 
+    body: JSON.stringify(user)
   };
   dispatch(fetchMissionRequest());
   return fetch('http://localhost:8080/api/mission', opts)
@@ -98,8 +99,9 @@ export const fetchMission = () => dispatch => {
       }
       return res.json()
     })
-    .then(data => {
-      return dispatch(fetchMissionSuccess(data))
+    .then(mission => {
+      console.log('HERE IS THE MISSION! ---------->', mission)
+      return dispatch(fetchMissionSuccess(mission))
     })
     .catch(error => {
       return dispatch(fetchMissionError(error))
@@ -115,19 +117,18 @@ export const postMissionSuccess = mission => ({type: POST_MISSION_SUCCESS, missi
 export const POST_MISSION_ERROR = 'POST_MISSION_ERROR';
 export const postMissionError = () => ({type: POST_MISSION_ERROR});
 
-export const postMission = data => dispatch => {
+export const postMission = newMission => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
       // 'Access-Control-Allow-Origin': '*'
     },
-    method: 'POST',
-    body: JSON.stringify(data)
+    method: 'PUT',
+    body: JSON.stringify(newMission)
   };
-
   dispatch(postMissionRequest());
-  return fetch('http://localhost:8080/api/mission', opts)
+  return fetch('http://localhost:8080/api/userMission', opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -135,7 +136,7 @@ export const postMission = data => dispatch => {
       return res.json();
     })
     .then(data => {
-      return dispatch(postMissionSuccess(data));
+      return dispatch(postMissionSuccess(data.mission));
     })
     .catch(err => {
       dispatch(postMissionError(err));
@@ -211,6 +212,7 @@ export const authenticate = () => dispatch => {
         return res.json();
       })
       .then(currentUser => {
+        console.log("You are currently logged in as: ", currentUser)
         return dispatch(authSuccess(currentUser)); 
       })
       .catch(err => console.error(err))
