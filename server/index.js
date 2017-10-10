@@ -211,7 +211,6 @@ app.put('/api/userData', (req, res) => {
 });
 
 app.put('/api/userMission', (req, res) => {
-  console.log('Req body on serverside: ', req.body)
   User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
     .then(user => {
       res.json(user.apiRepr());
@@ -231,6 +230,18 @@ app.put('/api/userTask', (req, res) => {
   }}, {new: true})
     .then(task => {
       res.status(204).json(task.apiRepr());
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'something went wrong'});
+    });
+});
+
+app.delete('/api/userTask/:id', (req, res) => {
+  Task
+    .findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch(err => {
       console.error(err);

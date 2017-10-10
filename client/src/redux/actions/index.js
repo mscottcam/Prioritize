@@ -11,7 +11,6 @@ export const FETCH_USER_DATA_ERROR = 'FETCH_USER_DATA_ERROR';
 export const fetchUserDataError = error => ({type: FETCH_USER_DATA_ERROR, error});
 
 export const fetchUserData = currentUserId => dispatch => {
-  console.log('What is our id: ',currentUserId)
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -87,7 +86,6 @@ export const FETCH_MISSION_ERROR = 'FETCH_MISSION_ERROR';
 export const fetchMissionError = error => ({type: FETCH_MISSION_ERROR, error});
 
 export const fetchMission = currentUserId => dispatch => {
-  console.log('User id in fetchMission: ', currentUserId)
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -168,7 +166,7 @@ export const updateTask = data => dispatch => {
   };
 
   dispatch(updateTaskRequest());
-  return fetch('http://localhost:8080/api/tasks', opts)
+  return fetch('http://localhost:8080/api/userTask', opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -180,6 +178,42 @@ export const updateTask = data => dispatch => {
     })
     .catch(err => {
       dispatch(updateTaskError(err));
+    })
+};
+// --------------------------------------------------------------------------------
+export const DELETE_TASK_REQUEST = 'DELETE_TASK_REQUEST';
+export const deleteTaskRequest = () => ({ type: DELETE_TASK_REQUEST });
+
+export const DELETE_TASK_SUCCESS = 'DELETE_TASK_SUCCESS';
+export const deleteTaskSuccess = taskId => ({ type: DELETE_TASK_SUCCESS });
+
+export const DELETE_TASK_ERROR = 'DELETE_TASK_ERROR';
+export const deleteTaskError = error => ({type: DELETE_TASK_ERROR, error});
+
+export const deleteTask = taskId => dispatch => {
+  const opts = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: 'DELETE'
+  };
+  // dispatch some action that: looks @ our authreducer.currentUser => send that id for the fetch/api/userData
+  dispatch(deleteTaskRequest());
+  // state.authReducer.XX
+  return fetch(`http://localhost:8080/api/userTask/taskId`, opts)
+    .then(res => {
+      if (!res.ok) {
+        return Promise.reject(res.statusText);
+      }
+      return res.json();
+    })
+    .then(userData => {
+      return dispatch(deleteTaskSuccess());
+    })
+    .catch(err => {
+      console.error(err)
+      return dispatch(deleteTaskError(err));
     })
 };
 // --------------------------------------------------------------------------------
@@ -216,9 +250,10 @@ export const authenticate = () => dispatch => {
         return res.json();
       })
       .then(currentUser => {
-        console.log("You are currently logged in as: ", currentUser)
         return dispatch(authSuccess(currentUser)); 
-      });
+      })
+    .catch(err => {
+      dispatch(authError(err));
+    })
   } 
-    console.log('You are currently not logged in as a user.')
 };
