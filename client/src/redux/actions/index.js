@@ -10,7 +10,8 @@ export const fetchUserDataSuccess = userData => ({ type: FETCH_USER_DATA_SUCCESS
 export const FETCH_USER_DATA_ERROR = 'FETCH_USER_DATA_ERROR';
 export const fetchUserDataError = error => ({type: FETCH_USER_DATA_ERROR, error});
 
-export const fetchUserData = () => dispatch => {
+export const fetchUserData = currentUserId => dispatch => {
+  console.log('What is our id: ',currentUserId)
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -19,8 +20,10 @@ export const fetchUserData = () => dispatch => {
     },
     method: 'GET'
   };
+  // dispatch some action that: looks @ our authreducer.currentUser => send that id for the fetch/api/userData
   dispatch(fetchUserDataRequest());
-  return fetch('http://localhost:8080/api/userData', opts)
+  // state.authReducer.XX
+  return fetch(`http://localhost:8080/api/userData/${currentUserId.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -28,10 +31,10 @@ export const fetchUserData = () => dispatch => {
       return res.json();
     })
     .then(userData => {
-      // console.log('USER-DATA ACTION-->', userData)
       return dispatch(fetchUserDataSuccess(userData));
     })
     .catch(err => {
+      console.error(err)
       return dispatch(fetchUserDataError(err));
     })
 };
@@ -56,15 +59,15 @@ export const postTask = data => dispatch => {
     body: JSON.stringify(data)
   };
   dispatch(postTaskRequest());
-  return fetch('http://localhost:8080/api/tasks', opts)
+  return fetch('http://localhost:8080/api/userTask', opts)
   .then(res => {
     if(!res.ok) {
       return Promise.reject(res.statusText)
     }
     return res.json();
   })
-  .then(data => {
-    return dispatch(postTaskSuccess(data));
+  .then(taskData => {
+    return dispatch(postTaskSuccess(taskData));
   })
   .catch(err => {
     dispatch(postTaskError(err));
@@ -81,18 +84,18 @@ export const fetchMissionSuccess = mission => ({ type: FETCH_MISSION_SUCCESS, mi
 export const FETCH_MISSION_ERROR = 'FETCH_MISSION_ERROR';
 export const fetchMissionError = error => ({type: FETCH_MISSION_ERROR, error});
 
-export const fetchMission = user => dispatch => {
+export const fetchMission = currentUserId => dispatch => {
+  console.log('User id in fetchMission: ', currentUserId)
   const opts = {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
       // 'Access-Control-Allow-Origin': '*'
     },
-    method: 'GET', 
-    body: JSON.stringify(user)
+    method: 'GET'
   };
   dispatch(fetchMissionRequest());
-  return fetch('http://localhost:8080/api/mission', opts)
+  return fetch(`http://localhost:8080/api/mission/${currentUserId.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText)
@@ -100,8 +103,7 @@ export const fetchMission = user => dispatch => {
       return res.json()
     })
     .then(mission => {
-      console.log('HERE IS THE MISSION! ---------->', mission)
-      return dispatch(fetchMissionSuccess(mission))
+      return dispatch(fetchMissionSuccess(mission.mission))
     })
     .catch(error => {
       return dispatch(fetchMissionError(error))
