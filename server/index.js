@@ -148,11 +148,16 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-app.get('/api/userData', (req, res) => {
-  Task.find()
+app.get('/api/userData/:id', (req, res) => {
+  const idToCast = req.params.id;
+  const ObjectId = require('mongoose').Types.ObjectId;
+  const userMongoId = new ObjectId(idToCast);
+
+  Task.find({userId: userMongoId})
     .populate('userId')
     .exec()
     .then(tasks => {
+      // tasks.sort((a, b) => a - b)
       res.json({
         tasks: tasks.map(task => task.apiRepr())
       });
@@ -162,12 +167,10 @@ app.get('/api/userData', (req, res) => {
     });
 });
 
-app.get('/api/mission', (req, res) => {
-  console.log('we are not hittin da endpoint')
-  User.findOne({googleId: req.body.currentUser})
-    .then( user => {
-      console.log('Sending over the user mission from the backend: ', user.mission)
-      res.json(user.mission);
+app.get('/api/mission/:id', (req, res) => {
+  User.findOne({googleId: req.params.id})
+    .then(user => {
+      res.json({mission: user.mission});
     })
     .catch(err => {
       console.error(err);
@@ -175,12 +178,23 @@ app.get('/api/mission', (req, res) => {
 });
 
 app.post('/api/userTask', (req, res) => {
+  console.log('What is hitting here: ', req.body)
+
+// let setQuadrant = taskObj => {
+//   if (taskObj.urgent === true && taskObj.important === true) {
+//     taskObj.quadrant = 1
+//   }
+// }
+
+
+
   Task.create({
     userId: req.body.userId,
     taskName: req.body.taskName,
     deadline: req.body.deadline,
     important: req.body.important,
     urgent: req.body.urgent
+    // quadValue: 
   })
     .then(task => res.status(201).json(task.apiRepr()))
     .catch(err => {
@@ -202,10 +216,10 @@ app.put('/api/userData', (req, res) => {
 });
 
 app.put('/api/userMission', (req, res) => {
+  console.log('Req body on serverside: ', req.body)
   User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
     .then(user => {
-      // res.status(204).json(user.apiRepr());
-      res.json(user.apiRepr()).status(204);
+      res.json(user.apiRepr());
     })
     .catch(err => {
       console.error(err);

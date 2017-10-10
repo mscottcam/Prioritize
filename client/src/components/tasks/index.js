@@ -1,81 +1,92 @@
-import React from 'react';
-import * as actions from '../../redux/actions';
+import React from "react";
+import * as actions from "../../redux/actions";
 
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 
 export class Tasks extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      taskInputValue: null
+      taskInputValue: null,
+      firstLoginComplete: false
     };
-  };
+  }
 
-  componentWillMount() {
-    this.props.dispatch(actions.fetchUserData());
-  };
+  componentDidUpdate() {
+    if (this.state.firstLoginComplete === false) {
+      this.props.dispatch(
+        actions.fetchUserData({ currentUserId: this.props.currentUser })
+      );
+      if (this.props.currentUser) {
+        this.setState({
+          firstLoginComplete: true
+        }); 
+      }
+    }
+  }
 
   onChange(event) {
     this.setState({
       taskInputValue: event.target.value
     });
-  };
-  
+  }
+
   submitTask(event) {
     event.preventDefault();
-    console.log('submitting task -->')
-    this.props.dispatch(actions.postTask({
-      userId: this.props.currentUser._id,
-      userData: {
-        task: this.state.taskInputValue
-      }
-    }))
+    console.log("submitting task -->");
+    this.props.dispatch(
+      actions.postTask({
+        userId: this.props.currentUser,
+        taskName: this.state.taskInputValue,
+        deadline: "two-three weeks",
+        important: true,
+        urgent: false
+      })
+    );
     let form = document.getElementById("form");
     form.reset();
-  };
+  }
 
   deleteTask(event) {
-    console.log('delete button event -->', event.currentTarget)
+    console.log("delete button event -->", event.currentTarget);
   }
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
-      console.log('got here', this.props.tasks)
-      // Commented this out to test heroku deployment, but we will have to modify this map function
-      
-      return this.props.tasks.tasks.map(taskObj => {
-        return (
-            <li>{taskObj.taskName}</li>
-        )
+      return this.props.tasks.map((taskObj, index) => {
+        return <li key={index}>{taskObj.taskName}</li>;
       });
     } else {
-      return <li>no task</li>
+      return <li>no task</li>;
     }
-  };
-   
+  }
+
+  userDataFetch() {
+    console.log("clicked!");
+    this.props.dispatch(
+      actions.fetchUserData({ currentUserId: this.props.currentUser })
+    );
+  }
   render() {
-    // this.state.tasks.map(task => <li>{task}</li>)
-              // {this.mapTasksToList()}
     return (
       <div>
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <input 
-            type='text' 
-            placeholder="Add a task!" 
-            onChange={event => this.onChange(event)} 
+          <input
+            type="text"
+            placeholder="Add a task!"
+            onChange={event => this.onChange(event)}
           />
           <button type="submit">Submit Task</button>
         </form>
-        <ul>
-          {this.mapTasksToList()}
-        </ul>
-      </div>   
-    )
-  };
-};
+        <button onClick={() => this.userDataFetch()}>Testing</button>
+        <ul>{this.mapTasksToList()}</ul>
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = (state, props) => ({
-  currentUser: state.authReducer.currentUser,
-  tasks: state.taskReducer.userData
+  currentUser: state.authReducer.currentUser._id,
+  tasks: state.taskReducer.tasks
 });
 export default connect(mapStateToProps)(Tasks);
