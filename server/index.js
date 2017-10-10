@@ -216,10 +216,10 @@ app.put('/api/userData', (req, res) => {
 });
 
 app.put('/api/userMission', (req, res) => {
+  console.log('Req body on serverside: ', req.body)
   User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
     .then(user => {
-      // res.status(204).json(user.apiRepr());
-      res.json(user.apiRepr()).status(204);
+      res.json(user.apiRepr());
     })
     .catch(err => {
       console.error(err);
