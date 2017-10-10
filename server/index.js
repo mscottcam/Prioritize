@@ -11,6 +11,7 @@ const mongoose = require('mongoose');
 const { DATABASE, CLIENT_ID, CLIENT_SECRET} = require('./config');
 const { User } = require('./models/user');
 const { Task } = require('./models/task');
+const {quadrantDecider} = require('./lib/quadrant-decider.js');
 
 const app = express();
 app.use(morgan('common'));
@@ -157,7 +158,6 @@ app.get('/api/userData/:id', (req, res) => {
     .populate('userId')
     .exec()
     .then(tasks => {
-      // tasks.sort((a, b) => a - b)
       res.json({
         tasks: tasks.map(task => task.apiRepr())
       });
@@ -180,25 +180,20 @@ app.get('/api/mission', (req, res) => {
 });
 
 app.post('/api/userTask', (req, res) => {
-  console.log('What is hitting here: ', req.body)
-
-// let setQuadrant = taskObj => {
-//   if (taskObj.urgent === true && taskObj.important === true) {
-//     taskObj.quadrant = 1
-//   }
-// }
-
-
-
+  // console.log('What is hitting here: ', req.body)
+  console.log('testing quad decider-------', quadrantDecider(req.body ))
   Task.create({
     userId: req.body.userId,
     taskName: req.body.taskName,
     deadline: req.body.deadline,
     important: req.body.important,
-    urgent: req.body.urgent
-    // quadValue: 
+    urgent: req.body.urgent,
+    quadrantValue: quadrantDecider(req.body)
   })
-    .then(task => res.status(201).json(task.apiRepr()))
+    .then(task => {
+      console.log('server side task after creation', task)
+      res.status(201).json(task.apiRepr())
+    })
     .catch(err => {
       console.error(err);
       res.status(500).json({error: 'something went wrong'});
