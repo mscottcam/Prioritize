@@ -73,9 +73,11 @@ describe('<Mission />', () => {
 	})
 	it('Should show input field when user clicks on "change Mission" button', () => {
 		const component = mount(
-			<Mission currentUser={initialState.authReducer.currentUser} 
+			<Mission 
+			currentUser={initialState.authReducer.currentUser} 
 				mission='Do First Things First' 
 				store={mockStore( initialState )} />);
+		const updateMission = "Attend a black-tie event";
 		
 		expect(component.find('input')).toBeTruthy();
 		component.find('.submit-mission').simulate('submit');
