@@ -1,30 +1,40 @@
-import React from 'react';
+import React from "react";
 // import * as actions from '../../redux/actions'
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
+import "./userInfo.css";
 
 // should have the userName and a logOut button
 export class UserInfo extends React.Component {
   componentDidMount() {
     // this.props.dispatch(actions.authenticate())
-  };
+  }
 
-  render() {
-if (!this.props.currentUser) {
+        // </div>
+  renderListItems() {
+    if (!this.props.currentUser) {
       return (
-      <div>
-        <p> User should login here </p>
-        <a href={'/api/auth/google'}>Login with Google Friend</a>
-      </div>
-      )
+        <li className="user-info">
+          <a href={"/api/auth/google"}>Login with Google</a>
+        </li>
+      );
     } else {
       return (
-        <div>
-          <p> {this.props.currentUser.displayName} is logged in now</p>
-          <a href={'/api/auth/logout'}>LogOut</a>
-          
-        </div>
-      )
+          <div>
+          <li className="user-info">
+            {this.props.currentUser.displayName}
+          </li>
+          <li className="user-info">
+            <a href={"/api/auth/logout"}>LogOut</a>
+          </li>
+          </div>
+      );
     }
+  }
+
+  render() {
+    return (
+    <ul className="right">{this.renderListItems()}</ul>
+    )
   }
 }
 

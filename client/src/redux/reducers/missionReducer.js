@@ -3,7 +3,7 @@ import * as actions from '../actions';
 const initialState = {
   currentUser: null, //name
   userId: null,
-  currentMission: 'this is my missionReducer state',
+  currentMission: 'Do First Things First',
   roles:[],
   goals: [],
   projects: [],
