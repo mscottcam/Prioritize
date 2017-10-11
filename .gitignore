@@ -18,7 +18,7 @@ client/coverage
 .env.development.local
 .env.test.local
 .env.production.local
-server/config/.env
+/server/.env
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -28,5 +28,4 @@ package-lock.json
 client/package-lock.json
 server/package-lock.json
 
-# config
-server/config/secret.js
+.vscode/

@@ -20,14 +20,14 @@ const taskReducer = (state=initialState, action) => {
         // roles: action.userData.roles,
         // goals: action.userData.goals,
         // projects: action.userData.projects,
-        // tasks: action.userData.tasks
-        userData: action.userData
+        tasks: action.userData.tasks
+        // userData: action.userData
       }
     }
     case actions.POST_TASK_SUCCESS: {
       return {
         ...state,
-        tasks: [...state.tasks, action.task]
+        tasks: [...state.tasks, action.taskData]
       };
     }
     case actions.UPDATE_TASK_SUCCESS: {

@@ -1,80 +1,157 @@
-import React from 'react';
-import * as actions from '../../redux/actions';
+import React from "react";
+import * as actions from "../../redux/actions";
 
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 
 export class Tasks extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      taskInputValue: null
+      taskNameInput: null,
+      firstLoginComplete: false,
+      deadline: null,
+      important: false,
+      urgent: false
     };
-  };
+  }
 
-  componentWillMount() {
-    this.props.dispatch(actions.fetchUserData());
-  };
+  componentDidUpdate() {
+    console.log('i ran too');
+    if (this.state.firstLoginComplete === false) {
+      this.props.dispatch(
+        actions.fetchUserData({ currentUserId: this.props.currentUser })
+      );
+      if (this.props.currentUser) {
+        this.setState({
+          firstLoginComplete: true
+        }); 
+      }
+    }
+  }
 
-  onChange(event) {
+  onChangeTaskName(event) {
+    event.preventDefault();
     this.setState({
-      taskInputValue: event.target.value
+      taskNameInput: event.target.value
     });
   };
-  
-  submitTask(event) {
-    event.preventDefault();
-    console.log('submitting task -->')
-    this.props.dispatch(actions.postTask({
-      userId: this.props.currentUser._id,
-      userData: {
-        task: this.state.taskInputValue
-      }
-    }))
-    let form = document.getElementById("form");
-    form.reset();
+
+  onChangeDeadline(event) {
+    this.setState({
+      deadline: event.target.value
+    });
   };
 
-  deleteTask(event) {
-    console.log('delete button event -->', event.currentTarget)
+  onChangeDropdown(event) {
+    if (event.target.value === 'important') {
+      this.setState({
+        important: true
+      });
+    };
+    if (event.target.value === 'urgent') {
+      this.setState({
+        urgent: true
+      });
+    };
+    if (event.target.value === 'both') {
+      this.setState({
+        important: true,
+        urgent: true
+      });
+    };
+    if (event.target.value === 'neither') {
+      this.setState({
+        important: false,
+        urgent: false
+      })
+    }
+  };
+
+
+
+  submitTask(event) {
+    event.preventDefault();
+    this.props.dispatch(
+      actions.postTask({
+        userId: this.props.currentUser,
+        taskName: this.state.taskNameInput,
+        deadline: this.state.deadline,
+        important: this.state.important,
+        urgent: this.state.urgent,
+        value: 'neither'
+      })
+    );
+    let form = document.getElementById("form");
+    form.reset();
   }
+
+  deleteTask(event) {
+    console.log("delete button event -->", event.currentTarget);
+  }
+
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
-      console.log('got here', this.props.tasks.userdata)
-      return this.props.tasks.userData.map(taskObj => {
+      const taskSort = this.props.tasks.sort((taskA, taskB) => {
+        return taskA.quadrantValue - taskB.quadrantValue
+      });
+
+      return taskSort.map((taskObj, index) => {
         return (
-            <li>{taskObj._id}</li>
+          <li key={index}>
+            <span>{taskObj.taskName}</span>
+            <span>  -  {taskObj.deadline}</span>
+          </li>
         )
       });
-    } else {
-      return <li>no task</li>
     }
-  };
-   
+  }
+
+  userDataFetch() {
+    console.log("clicked!");
+    this.props.dispatch(
+      actions.fetchUserData({ currentUserId: this.props.currentUser })
+    );
+  }
   render() {
-    // this.state.tasks.map(task => <li>{task}</li>)
-              // {this.mapTasksToList()}
-    console.log('HERE ARE THE INCOMING TASKS --> ', this.props.tasks)
+    //<button onClick={() => this.userDataFetch()}>Testing</button>
     return (
       <div>
-        <ul>
-          {this.mapTasksToList()}
-        </ul>
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <input 
-            type='text' 
-            placeholder="Add a task!" 
-            onChange={event => this.onChange(event)} 
-          />
+          <label> Name of task:
+            <input
+              type="text"
+              placeholder="Add a task!"
+              onChange={event => this.onChangeTaskName(event)} 
+            />
+          </label> <br />
+          <label> Does it have a Deadline?
+            <input
+              type="text"
+              placeholder="Add a Deadline"
+              onChange={event => this.onChangeDeadline(event)} 
+            />
+          </label> <br />
+          <label>
+            Is this task Urgent or Important?
+            <select value={this.state.value} onChange={event => this.onChangeDropdown(event)} >
+              <option value="none">Neither</option>
+              <option value="urgent">Urgent</option>
+              <option value="important">Important</option>
+              <option value="both">Both</option>
+            </select>
+          </label><br />
           <button type="submit">Submit Task</button>
         </form>
-      </div>   
-    )
-  };
-};
+        
+        <div><ul>{this.mapTasksToList()}</ul></div>
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = (state, props) => ({
-  currentUser: state.authReducer.currentUser,
-  tasks: state.taskReducer.userData
+  currentUser: state.authReducer.currentUser._id,
+  tasks: state.taskReducer.tasks
 });
 export default connect(mapStateToProps)(Tasks);

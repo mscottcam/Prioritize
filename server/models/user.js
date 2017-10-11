@@ -3,22 +3,33 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const { UserData } = require('./user-data');
+const { Task } = require('./task');
 
-// User Schema.userData: references the _id for userDataSchema
 const UserSchema = new Schema({
   displayName: { type: String },
   googleId: { type: String, required: true },
   accessToken: { type: String, required: true },
-  userData: {type: mongoose.Schema.Types.ObjectId, ref: 'user-data' }
+  mission: {type: String},
+  roles: [
+    {
+      role: {type: String, default: 'no assigned role'},
+      goals: [
+        {
+          goal: {type: String, default: 'no assigned goal' },
+          tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'task'}]
+        }
+      ]
+    }
+  ]
 });
 
 UserSchema.methods.apiRepr = function() {
   return {
     _id: this._id,
     displayName: this.displayName,
+    mission: this.mission,
     googleId: this.googleId,
-    userData: this.userData || 'No tasks yet'
+    roles: this.roles
   };
 };
 
