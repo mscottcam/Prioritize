@@ -36,7 +36,8 @@ describe('<Tasks />', () => {
         }
       }
     }
-        shallow(<Tasks store={mockStore( initialState )}/>);
+        const component = shallow(<Tasks store={mockStore( initialState )}/>);
+        expect(typeof component).toBe('object');
   });
 
   // xit('Renders the add task form initially', () => {
