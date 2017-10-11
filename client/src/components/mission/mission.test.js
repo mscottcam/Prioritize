@@ -12,55 +12,84 @@ const mockStore = configureStore([ReduxThunk]);
 import Mission from './index';
 
 describe('<Mission />', () => {
-    it('Renders without crashing', () => {
-        const initialState = {
-					missionReducer: {
-						currentUser: null, //name
-						userId: null,
-						currentMission: 'this is my missionReducer state',
-						roles:[],
-						goals: [],
-						projects: [],
-						tasks: []
-					},
-					authReducer: 
-						{
-							currentUser:{
-							displayName: 'Evan Harris',
-							googleId: '113991032114835833364',
-							accessToken:
-									'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
-							mission: 'have a live working usable app soon!',
-							roles: [
-								{
-									role: 'Dad',
-									goals: [
-										{
-											goal: 'Make delicious breakfast',
-											tasks: [{
-												taskName: 'test task',
-												deadline: 'NOW',
-												important: true,
-												urgent: true
-											}, 
-											{
-												taskName: 'test task2',
-												deadline: 'NOW',
-												important: false,
-												urgent: true
-											}]
-										}
-									]	
-									}
-							]
-					}
-				}
+	const initialState = {
+		missionReducer: {
+			currentUser: null,
+			userId: null,
+			currentMission: 'Do First Things First'
+		},
+		authReducer: 
+			{
+				currentUser:{
+				// displayName: 'Evan Harris',
+				// googleId: '113991032114835833364',
+				// accessToken:
+				// 		'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
+				// mission: 'have a live working usable app soon!',
+				// roles: [
+				// 	{
+				// 		role: 'Dad',
+				// 		goals: [
+				// 			{
+				// 				goal: 'Make delicious breakfast',
+				// 				tasks: [{
+				// 					taskName: 'test task',
+				// 					deadline: 'NOW',
+				// 					important: true,
+				// 					urgent: true
+				// 				}, 
+				// 				{
+				// 					taskName: 'test task2',
+				// 					deadline: 'NOW',
+				// 					important: false,
+				// 					urgent: true
+				// 				}]
+				// 			}
+				// 		]	
+				// 		}
+				// ]
 			}
-        mount(<Mission store={mockStore( initialState )} />);
-    });
+		}
+	}
+	it('Renders without crashing', () => {
+			const component = mount(<Mission currentUser='' mission='Do First Things First' store={mockStore( initialState )} />);
+			expect(typeof component).toBe('object');
+			// expect string on DOM to equal prop.currentMission
+			console.log('Props ===>', component.props())
+			expect(component.find('.prioritize-mission').text()).toEqual('Current Mission: Do First Things First')
+			
+	});
+	xit('Should dispatch fetch call when user is logged in', () => {
+		// expect to dispatch fetch using the userID
+		// expect to display button that says change mission
+		// expect firstLoginComplete to Be true
 
-    xit('Renders the add button initially', () => {
-        const wrapper = shallow(<Mission store={mockStore( initialState )}  />);
-        expect(wrapper.hasClass('submit-task')).toEqual(true);
-    });
+	})
+	xit('Should render Mission when user is logged in', () => {
+
+		
+	})
+	it('Should show input field when user clicks on "change Mission" button', () => {
+		const component = mount(<Mission currentUser='' mission='Do First Things First' firstLoginComplete="true" store={mockStore( initialState )} />);
+		console.log('what gets rendered', component.html());
+		// component.find('.change-mission').simulate('click');
+		// console.log('Ben is hunting', component.find(input))
+		// expect(component.find(input)).toBe('truthy');
+		// expect to be able to review mission as user inputs new missino
+		// expect to have a submit new mission button 
+		// expect to call a Update Mission function called upon click of submit
+		
+	});
+	xit('should update mission with new mission on submission of new mission', () => {
+		const component = mount(<Mission currentUser='' mission='Do First Things First' store={mockStore( initialState )} />);
+		
+	})
+	xit('', () => {
+
+	})
+
+	xit('Renders the add button initially', () => {
+			const wrapper = shallow(<Mission store={mockStore( initialState )}  />);
+			expect(wrapper.hasClass('submit-task')).toEqual(true);
+	});
 });

@@ -7,7 +7,7 @@ export class Mission extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      changeMissionToggle: false,
+      updatingMission: false,
       newMissionInputValue: "",
       firstLoginComplete: false
     };
@@ -34,7 +34,7 @@ export class Mission extends React.Component {
 
   toggleMissionChange() {
     this.setState({
-      changeMissionToggle: true
+      updatingMission: true
     });
   }
 
@@ -53,15 +53,15 @@ export class Mission extends React.Component {
       })
     );
     this.setState({
-      changeMissionToggle: false
+      updatingMission: false
     });
   }
 
   render() {
-    if (this.state.changeMissionToggle === true) {
+    if (this.state.updatingMission === true) {
       return (
         <div className="change-mission-form">
-          <p>Current Mission: {this.props.mission}</p>
+          <p className="prioritize-mission">Current Mission: {this.props.mission}</p>
           <form id="form" onSubmit={event => this.submitMissionChange(event)}>
             <input
               type="text"
@@ -73,11 +73,11 @@ export class Mission extends React.Component {
         </div>
       );
     }
-    if (this.state.changeMissionToggle === false) {
+    if (this.state.updatingMission === false) {
       return (
         <div>
-          <p>{this.props.mission}</p>
-          <button onClick={() => this.toggleMissionChange()}>
+          <p className="current-mission">{this.props.mission}</p>
+          <button className="change-mission" onClick={() => this.toggleMissionChange()}>
             Change mission
           </button>
         </div>
@@ -88,6 +88,6 @@ export class Mission extends React.Component {
 
 const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser,
-  mission: state.missionReducer.currentMission  /*state.authReducer.currentUser.mission ||   */
+  mission: state.missionReducer.currentMission 
 });
 export default connect(mapStateToProps)(Mission);
