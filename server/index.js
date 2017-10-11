@@ -178,8 +178,6 @@ app.get('/api/mission/:id', (req, res) => {
 });
 
 app.post('/api/userTask', (req, res) => {
-  // console.log('What is hitting here: ', req.body)
-  console.log('testing quad decider-------', quadrantDecider(req.body ))
   Task.create({
     userId: req.body.userId,
     taskName: req.body.taskName,
@@ -211,7 +209,6 @@ app.put('/api/userData', (req, res) => {
 });
 
 app.put('/api/userMission', (req, res) => {
-  console.log('Req body on serverside: ', req.body)
   User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
     .then(user => {
       res.json(user.apiRepr());
@@ -231,6 +228,18 @@ app.put('/api/userTask', (req, res) => {
   }}, {new: true})
     .then(task => {
       res.status(204).json(task.apiRepr());
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'something went wrong'});
+    });
+});
+
+app.delete('/api/userTask/:id', (req, res) => {
+  Task
+    .findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.status(204).end();
     })
     .catch(err => {
       console.error(err);

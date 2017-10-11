@@ -47,7 +47,8 @@ const generateTaskData = () => {
     userId: '59d64ed9c996510584f2fc32',
     deadline: faker.lorem.word(),
     important: faker.random.boolean(),
-    urgent: faker.random.boolean()
+    urgent: faker.random.boolean(),
+    quadrantValue: faker.random.number()
   };
 };
 
@@ -192,7 +193,7 @@ describe('Life coach', () => {
           res.body.tasks.should.have.length.of.at.least(1);
           res.body.tasks.forEach(function(task) {
             task.should.be.a('object');
-            task.should.include.keys('_id','userId','taskName','urgent', 'important', 'deadline');
+            task.should.include.keys('_id','userId','taskName','urgent', 'important', 'deadline', 'quadrantValue');
           });
           resTask = res.body.tasks[0];
           return Task.findById(resTask._id);
@@ -203,6 +204,7 @@ describe('Life coach', () => {
           resTask.important.should.equal(task.important);
           resTask.urgent.should.equal(task.urgent);
           resTask.taskName.should.equal(task.taskName);
+          resTask.quadrantValue.should.equal(task.quadrantValue);
         });
     });
   });
@@ -338,5 +340,25 @@ describe('Life coach', () => {
     // caveat to take into consideration for this test:
     // the goals being added that do not have a role declared, will be given the default role
     // });
+  });
+
+  describe('DELETE requests', () => {
+    it.only('should delete a task by id', function() {
+      let resTask;
+      
+      return Task
+        .findOne()
+        .then(function(task) {
+          resTask = task;
+          return chai.request(app).delete(`/api/userTask/${resTask._id}`);
+        })
+        .then(function(res) {
+          res.should.have.status(204);
+          return Task.findById(resTask._id);
+        })
+        .then(function(task) {
+          should.not.exist(task);
+        });
+    });
   });
 });
