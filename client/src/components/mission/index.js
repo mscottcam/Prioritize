@@ -1,6 +1,6 @@
 import React from "react";
 import * as actions from "../../redux/actions";
-
+import './mission.css'
 import { connect } from "react-redux";
 
 export class Mission extends React.Component {
@@ -61,7 +61,7 @@ export class Mission extends React.Component {
     if (this.state.changeMissionToggle === true) {
       return (
         <div className="change-mission-form">
-          <p>Current Mission: {this.props.mission}</p>
+          <h2 className= "current-mission">Current Mission: {this.props.mission}</h2>
           <form id="form" onSubmit={event => this.submitMissionChange(event)}>
             <input
               type="text"
@@ -76,7 +76,7 @@ export class Mission extends React.Component {
     if (this.state.changeMissionToggle === false) {
       return (
         <div>
-          <p>{this.props.mission}</p>
+          <h2 className="current-mission">{this.props.mission}</h2>
           <button onClick={() => this.toggleMissionChange()}>
             Change mission
           </button>

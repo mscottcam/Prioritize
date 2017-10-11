@@ -19,7 +19,9 @@ export class App extends React.Component {
           <Header />
         </div>
         <p className="App-intro">
-          Prioritize is a productivity app designed to make your life easier. 
+          Prioritize is a productivity app designed to make your life easier.
+        </p>
+        <p className="App-intro"> 
           You enter your tasks and Prioritize will reorder your tasks and help you make the most of your time. 
         </p>
         <Mission />
