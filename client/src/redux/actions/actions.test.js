@@ -111,13 +111,13 @@ describe("async actions", () => {
     });
   })  
   
-  it.only('calls DELETE_TASK_SUCCESS when a task is deleted', () => {
+  it('calls DELETE_TASK_SUCCESS when a task is deleted', () => {
     nock('http://localhost:8080')
       .delete('/api/userTask/1234')
       .reply(204)
       const expectedActions = [
         { type: actions.DELETE_TASK_REQUEST },
-        { type: actions.DELETE_TASK_SUCCESS }
+        { type: actions.DELETE_TASK_SUCCESS, taskId: '1234'  }
       ];
       const store = mockStore({});
       return store.dispatch(actions.deleteTask('1234')).then(() => {

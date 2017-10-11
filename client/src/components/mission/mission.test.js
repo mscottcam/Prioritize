@@ -57,7 +57,7 @@ describe('<Mission />', () => {
 			expect(typeof component).toBe('object');
 			// expect string on DOM to equal prop.currentMission
 			// console.log('Props ===>', component.props())
-			expect(component.find('.prioritize-mission').text()).toEqual('Current Mission: Do First Things First')
+			expect(component.find('.current-mission').text()).toEqual('Current Mission: Do First Things First')
 			
 	});
 

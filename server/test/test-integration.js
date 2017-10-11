@@ -343,7 +343,7 @@ describe('Life coach', () => {
   });
 
   describe('DELETE requests', () => {
-    it.only('should delete a task by id', function() {
+    it('should delete a task by id', function() {
       let resTask;
       
       return Task
