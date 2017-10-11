@@ -12,6 +12,7 @@ const mockStore = configureStore([ReduxThunk]);
 import Mission from './index';
 
 describe('<Mission />', () => {
+
 	const initialState = {
 		missionReducer: {
 			currentUser: null,
@@ -21,8 +22,8 @@ describe('<Mission />', () => {
 		authReducer: 
 			{
 				currentUser:{
-				// displayName: 'Evan Harris',
-				// googleId: '113991032114835833364',
+				displayName: 'Evan Harris',
+				googleId: '113991032114835833364',
 				// accessToken:
 				// 		'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
 				// mission: 'have a live working usable app soon!',
@@ -55,10 +56,11 @@ describe('<Mission />', () => {
 			const component = mount(<Mission currentUser='' mission='Do First Things First' store={mockStore( initialState )} />);
 			expect(typeof component).toBe('object');
 			// expect string on DOM to equal prop.currentMission
-			console.log('Props ===>', component.props())
+			// console.log('Props ===>', component.props())
 			expect(component.find('.prioritize-mission').text()).toEqual('Current Mission: Do First Things First')
 			
 	});
+
 	xit('Should dispatch fetch call when user is logged in', () => {
 		// expect to dispatch fetch using the userID
 		// expect to display button that says change mission
@@ -70,12 +72,21 @@ describe('<Mission />', () => {
 		
 	})
 	it('Should show input field when user clicks on "change Mission" button', () => {
-		const component = mount(<Mission currentUser='' mission='Do First Things First' firstLoginComplete="true" store={mockStore( initialState )} />);
-		console.log('what gets rendered', component.html());
-		// component.find('.change-mission').simulate('click');
-		// console.log('Ben is hunting', component.find(input))
-		// expect(component.find(input)).toBe('truthy');
-		// expect to be able to review mission as user inputs new missino
+		const component = mount(
+			<Mission currentUser={initialState.authReducer.currentUser} 
+				mission='Do First Things First' 
+				store={mockStore( initialState )} />);
+		
+		expect(component.find('input')).toBeTruthy();
+		component.find('.submit-mission').simulate('submit');
+		expect(component.find('div').hasClass('change-mission-form')).toBeFalsy()
+		
+		// console.log('what gets rendered', component.html());
+		
+		expect(component.find('button').hasClass('change-mission')).toBeTruthy(); //==> failed
+		component.find('.change-mission').simulate('click');
+		expect(component.find('input')).toBeTruthy();
+
 		// expect to have a submit new mission button 
 		// expect to call a Update Mission function called upon click of submit
 		

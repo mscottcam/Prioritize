@@ -25,7 +25,7 @@ export class Mission extends React.Component {
       }
     }
   }
-
+  
   componentWillMount() {
     if (this.props.currentUser) {
       this.toggleMissionChange();
@@ -68,7 +68,7 @@ export class Mission extends React.Component {
               placeholder="New Mission Here"
               onChange={event => this.changeMissionInput(event)}
             />
-            <button type="submit">Submit New Mission</button>
+            <button className="submit-mission" type="submit">Submit New Mission</button>
           </form>
         </div>
       );
