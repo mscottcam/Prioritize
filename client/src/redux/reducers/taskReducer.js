@@ -32,7 +32,6 @@ const taskReducer = (state=initialState, action) => {
     }
     case actions.UPDATE_TASK_SUCCESS: {
       const findTask = (arr) => arr.taskId === action.task.taskId;
-      
       let taskToUpdate = state.tasks.find(findTask);
       taskToUpdate.task = action.task.task;
       return {
