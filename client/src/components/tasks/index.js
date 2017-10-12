@@ -95,10 +95,12 @@ export class Tasks extends React.Component {
 
       return taskSort.map((taskObj, index) => {
         return (
-          <li key={index}>
-            <span>{taskObj.taskName}</span>
-            <span>  -     {taskObj.deadline}</span>
-            <button onClick={() => this.deleteTask(taskObj)}>Delete</button>
+          <li className="current-tasks" key={index}>
+            <div>
+            <span className="task">{taskObj.taskName}</span>
+            <span className="task-note">   --    {taskObj.deadline}</span>
+            </div>
+            <button className="delete-task"onClick={() => this.deleteTask(taskObj)}>Delete</button>
           </li>
         );
       });
@@ -113,22 +115,22 @@ export class Tasks extends React.Component {
     return (
       <div className="task-form">
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <label className="label" > Name of task:
+          <label className="label" > Task :
             <input
               type="text"
               placeholder="Add a task!"
               onChange={event => this.onChangeTaskName(event)} 
             />
           </label> <br />
-          <label className="label" > Does it have a Deadline?
+          <label className="label" > Note
             <input
               type="text"
-              placeholder="Add a Deadline"
+              placeholder="Deadline"
               onChange={event => this.onChangeDeadline(event)} 
             />
           </label> <br />
           <label className="label" >
-            Is this task Urgent or Important?
+            Urgent or Important?
             <select onChange={event => this.onChangeDropdown(event)} >
               <option selected value="none">Neither</option>
               <option value="urgent">Urgent</option>
@@ -138,6 +140,7 @@ export class Tasks extends React.Component {
           </label><br />
           <button type="submit">Submit Task</button>
         </form>
+        
         
         <div><ul>{this.mapTasksToList()}</ul></div>
       </div>

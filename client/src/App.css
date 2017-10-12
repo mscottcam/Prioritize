@@ -51,6 +51,7 @@ table {
 
 
 * {
+	border-radius: 7px;
 	/*background-color: #66CCA7;*/
 	/*background-color: #12CC94*/
 }
@@ -82,7 +83,8 @@ table {
 }
 
 button {
-	background-color: #6088BB;
+	background-color:#9EF4E6 ;
+	border: none;
   border-radius: 8px;
   padding: 3px 10px;
   font-size: 1rem;
@@ -90,6 +92,7 @@ button {
 }
 
 button:hover {
+	background-color: #6088BB;
 	color: lightgrey;
 }
 
@@ -97,6 +100,11 @@ button:active {
   transform: translate(0px, 5px);
   -webkit-transform: translate(0px, 5px);
   box-shadow: 0px 1px 0px 0px;
+}
+
+input {
+	background-color: #66CCA7;
+	box-shadow: none;
 }
 
 @keyframes App-logo-spin {
