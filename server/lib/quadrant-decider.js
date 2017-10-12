@@ -13,6 +13,4 @@ const quadrantDecider = taskObj => {
   };
 };
 
-
-
 module.exports = {quadrantDecider};

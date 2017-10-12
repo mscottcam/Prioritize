@@ -30,7 +30,7 @@ export class Tasks extends React.Component {
   }
 
   onChangeTaskName(event) {
-    event.preventDefault();
+    // event.preventDefault();
     this.setState({
       taskNameInput: event.target.value
     });
@@ -43,6 +43,7 @@ export class Tasks extends React.Component {
   };
 
   onChangeDropdown(event) {
+    console.log(event.target.value)
     if (event.target.value === 'important') {
       this.setState({
         important: true
@@ -77,8 +78,7 @@ export class Tasks extends React.Component {
         taskName: this.state.taskNameInput,
         deadline: this.state.deadline,
         important: this.state.important,
-        urgent: this.state.urgent,
-        value: 'neither'
+        urgent: this.state.urgent
       })
     );
     let form = document.getElementById("form");
@@ -92,6 +92,7 @@ export class Tasks extends React.Component {
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
+      console.log('this is being called');
       const taskSort = this.props.tasks.sort((taskA, taskB) => {
         return taskA.quadrantValue - taskB.quadrantValue
       });
@@ -134,8 +135,8 @@ export class Tasks extends React.Component {
           </label> <br />
           <label>
             Is this task Urgent or Important?
-            <select value={this.state.value} onChange={event => this.onChangeDropdown(event)} >
-              <option value="none">Neither</option>
+            <select onChange={event => this.onChangeDropdown(event)} >
+              <option selected value="neither">Neither</option>
               <option value="urgent">Urgent</option>
               <option value="important">Important</option>
               <option value="both">Both</option>
