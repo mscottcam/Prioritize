@@ -1,5 +1,5 @@
 {
-  "name": "life-coach",
+  "name": "prioritize",
   "version": "0.1.0",
   "main": "index.js",
   "engines": {
@@ -33,5 +33,6 @@
     "test": "run-s test:server test:client",
     "test:client": "cd client && npm test",
     "test:server": "cd server && npm test"
-  }
+  },
+  "liscense": "MIT"
 }

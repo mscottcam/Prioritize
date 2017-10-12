@@ -72,6 +72,9 @@ describe("async actions", () => {
         userId: 1234,
         mission: 'create a working application',
         role: "dev",
+        currentUser: {
+          accesstoken: 'abc123'
+        }
       }
     nock('http://localhost:8080')
       .put('/api/userMission', missionToUpdate)

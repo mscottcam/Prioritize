@@ -1,6 +1,14 @@
 import fetch from 'isomorphic-fetch';
 import * as Cookies from 'js-cookie';
 
+let apiUrl;
+if (process.env.NODE_ENV === "production") {
+ apiUrl = 'https://prioritize-app.herokuapp.com';
+} 
+if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test" || process.env.NODE_ENV === "staging") {
+ apiUrl = 'http://localhost:8080';
+}
+
 export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
 export const fetchUserDataRequest = () => ({ type: FETCH_USER_DATA_REQUEST });
 
@@ -10,16 +18,17 @@ export const fetchUserDataSuccess = userData => ({ type: FETCH_USER_DATA_SUCCESS
 export const FETCH_USER_DATA_ERROR = 'FETCH_USER_DATA_ERROR';
 export const fetchUserDataError = error => ({type: FETCH_USER_DATA_ERROR, error});
 
-export const fetchUserData = currentUserId => dispatch => {
+export const fetchUserData = currentUser => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${currentUser.token}`
     },
     method: 'GET'
   };
   dispatch(fetchUserDataRequest());
-  return fetch(`http://localhost:8080/api/userData/${currentUserId.currentUserId}`, opts)
+  return fetch(`${apiUrl}/api/userData/${currentUser.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -48,13 +57,14 @@ export const postTask = taskObj => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${taskObj.userId.accessToken}`
     },
     method: 'POST',
     body: JSON.stringify(taskObj)
   };
   dispatch(postTaskRequest());
-  return fetch('http://localhost:8080/api/userTask', opts)
+  return fetch(`${apiUrl}/api/userTask`, opts)
   .then(res => {
     if(!res.ok) {
       return Promise.reject(res.statusText)
@@ -84,12 +94,13 @@ export const fetchMission = currentUserId => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${currentUserId.token}`
     },
     method: 'GET'
   };
   dispatch(fetchMissionRequest());
-  return fetch(`http://localhost:8080/api/mission/${currentUserId.currentUserId}`, opts)
+  return fetch(`${apiUrl}/api/mission/${currentUserId.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText)
@@ -117,13 +128,14 @@ export const postMission = newMission => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${newMission.currentUser.accessToken}`
     },
     method: 'PUT',
     body: JSON.stringify(newMission)
   };
   dispatch(postMissionRequest());
-  return fetch('http://localhost:8080/api/userMission', opts)
+  return fetch(`${apiUrl}/api/userMission`, opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -158,7 +170,7 @@ export const updateTask = data => dispatch => {
   };
 
   dispatch(updateTaskRequest());
-  return fetch('http://localhost:8080/api/userTask', opts)
+  return fetch(`${apiUrl}/api/userTask`, opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -182,16 +194,17 @@ export const deleteTaskSuccess = taskId => ({ type: DELETE_TASK_SUCCESS, taskId}
 export const DELETE_TASK_ERROR = 'DELETE_TASK_ERROR';
 export const deleteTaskError = error => ({type: DELETE_TASK_ERROR, error});
 
-export const deleteTask = taskId => dispatch => {
+export const deleteTask = (taskId, token) => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
     },
     method: 'DELETE'
   };
   dispatch(deleteTaskRequest());
-  return fetch(`http://localhost:8080/api/userTask/${taskId}`, opts)
+  return fetch(`${apiUrl}/api/userTask/${taskId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -238,7 +251,6 @@ export const authenticate = () => dispatch => {
         return res.json();
       })
       .then(currentUser => {
-        console.log('Lets send this one: ', currentUser);
         return dispatch(authSuccess(currentUser)); 
       })
     .catch(err => {

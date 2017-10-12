@@ -19,8 +19,11 @@ export class Tasks extends React.Component {
 
   componentWillMount() {
     this.props.dispatch(
-      actions.fetchUserData({currentUserId: this.props.currentUser})
-    )
+      actions.fetchUserData({
+        currentUserId: this.props.currentUser._id,
+        token: this.props.currentUser.accessToken
+      })
+    );
   }
 
   onChangeTaskName(event) {
@@ -28,41 +31,40 @@ export class Tasks extends React.Component {
     this.setState({
       taskNameInput: event.target.value
     });
-  };
+  }
 
   onChangeDeadline(event) {
     this.setState({
       deadline: event.target.value
     });
-  };
+  }
 
   onChangeDropdown(event) {
-    if (event.target.value === 'important') {
+    if (event.target.value === "important") {
       this.setState({
         important: true
       });
-    };
-    if (event.target.value === 'urgent') {
+    }
+    if (event.target.value === "urgent") {
       this.setState({
         urgent: true
       });
-    };
-    if (event.target.value === 'both') {
+    }
+    if (event.target.value === "both") {
       this.setState({
         important: true,
         urgent: true
       });
-    };
-    if (event.target.value === 'neither') {
+    }
+    if (event.target.value === "neither") {
       this.setState({
         important: false,
         urgent: false
-      })
+      });
     }
-  };
+  }
 
-
-
+  // Update user ID being sent over
   submitTask(event) {
     event.preventDefault();
     this.props.dispatch(
@@ -79,11 +81,15 @@ export class Tasks extends React.Component {
     return form.reset();
   }
 
+  // Update user ID being sent over
   deleteTask(task) {
-    this.props.dispatch(actions.deleteTask(task._id)).then(() => {
-      this.props.dispatch(
-        actions.fetchUserData({ currentUserId: this.props.currentUser })
-      );
+    this.props.dispatch(actions.deleteTask(task._id, this.props.currentUser.accessToken)).then(() => {
+    this.props.dispatch(
+      actions.fetchUserData({
+        currentUserId: this.props.currentUser._id,
+        token: this.props.currentUser.accessToken
+      })
+    );
     });
   }
 
@@ -107,10 +113,8 @@ export class Tasks extends React.Component {
       return <li>You have No Tasks Left!!! You're all Up to Date</li>;
     }
   }
-  
 
   render() {
-    //<button onClick={() => this.userDataFetch()}>Testing</button>
     return (
       <div className="task-form">
         <form id="form" onSubmit={event => this.submitTask(event)}>
@@ -118,7 +122,7 @@ export class Tasks extends React.Component {
             <input
               type="text"
               placeholder="Add a task!"
-              onChange={event => this.onChangeTaskName(event)} 
+              onChange={event => this.onChangeTaskName(event)}
             />
           </label> <br />
           <label className="label" > Note
@@ -136,11 +140,10 @@ export class Tasks extends React.Component {
               <option value="important">Important</option>
               <option value="both">Both</option>
             </select>
-          </label><br />
+          </label>
+          <br />
           <button type="submit">Submit Task</button>
         </form>
-        
-        
         <div className="task-list-div"><ul>{this.mapTasksToList()}</ul></div>
       </div>
     );
@@ -148,7 +151,7 @@ export class Tasks extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  currentUser: state.authReducer.currentUser._id,
+  currentUser: state.authReducer.currentUser,
   tasks: state.taskReducer.tasks
 });
 export default connect(mapStateToProps)(Tasks);

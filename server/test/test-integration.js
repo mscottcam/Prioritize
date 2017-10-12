@@ -134,17 +134,6 @@ describe('Life coach', () => {
   });
 
   describe('GET requests', () => {
-    it('should return all users', function() {
-      let res;
-      return chai
-        .request(app)
-        .get('/api/users')
-        .then(_res => {
-          res = _res;
-          res.should.have.status(200);
-        });
-    });
-    
     it('should return the current user', () => {
       let resUser;  
       return chai.request(app)
@@ -177,7 +166,6 @@ describe('Life coach', () => {
           resUser.mission.should.equal(user.mission);
           resUser.googleId.should.equal(user.googleId);
           resUser._id.should.equal(user._id.toString());
-          // resUser.roles.should.deep.equal(user.roles); <===== deconstruct this
         });
     });
 
@@ -186,6 +174,7 @@ describe('Life coach', () => {
       return chai
         .request(app)
         .get('/api/userData/59d64ed9c996510584f2fc32')
+        .set('Authorization', `Bearer ${testUser.accessToken}`)
         .then(res => {
           res.should.have.status(200);
           res.should.be.json;
@@ -221,6 +210,7 @@ describe('Life coach', () => {
       return chai
         .request(app)
         .post('/api/userTask')
+        .set('Authorization', `Bearer ${testUser.accessToken}`)
         .send(newTask)
         .then(function(res) {
           res.should.have.status(201);
@@ -267,6 +257,7 @@ describe('Life coach', () => {
           return chai
             .request(app)
             .put('/api/userMission')
+            .set('Authorization', `Bearer ${testUser.accessToken}`)
             .send(testMission);
         })
         .then(function(res) {
@@ -294,6 +285,7 @@ describe('Life coach', () => {
           return chai
             .request(app)
             .put('/api/userTask')
+            .set('Authorization', `Bearer ${testUser.accessToken}`)
             .send(taskUpdate);
         })
         .then(function(res) {
@@ -321,6 +313,7 @@ describe('Life coach', () => {
           return chai
             .request(app)
             .put('/api/userData')
+            .set('Authorization', `Bearer ${testUser.accessToken}`)
             .send(newRole);
         })
         .then(function(res) {
@@ -350,7 +343,10 @@ describe('Life coach', () => {
         .findOne()
         .then(function(task) {
           resTask = task;
-          return chai.request(app).delete(`/api/userTask/${resTask._id}`);
+          return chai
+            .request(app)
+            .delete(`/api/userTask/${resTask._id}`)
+            .set('Authorization', `Bearer ${testUser.accessToken}`);
         })
         .then(function(res) {
           res.should.have.status(204);
