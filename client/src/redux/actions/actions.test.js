@@ -10,7 +10,7 @@ import nock from "nock";
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-xdescribe("async actions", () => {
+describe("async actions", () => {
   afterEach(() => {
     nock.cleanAll();
   });

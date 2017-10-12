@@ -1,6 +1,13 @@
 import fetch from 'isomorphic-fetch';
 import * as Cookies from 'js-cookie';
-const apiUrl = 'https://mighty-wildwood-34896.herokuapp.com';
+
+let apiUrl;
+if (process.env.NODE_ENV === "production") {
+ apiUrl = 'https://mighty-wildwood-34896.herokuapp.com';
+} 
+if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test" || process.env.NODE_ENV === "staging") {
+ apiUrl = 'http://localhost:8080';
+}
 
 export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
 export const fetchUserDataRequest = () => ({ type: FETCH_USER_DATA_REQUEST });
@@ -21,7 +28,7 @@ export const fetchUserData = currentUser => dispatch => {
     method: 'GET'
   };
   dispatch(fetchUserDataRequest());
-  return fetch(`apiUrl/api/userData/${currentUser.currentUserId}`, opts)
+  return fetch(`${apiUrl}/api/userData/${currentUser.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -57,7 +64,7 @@ export const postTask = taskObj => dispatch => {
     body: JSON.stringify(taskObj)
   };
   dispatch(postTaskRequest());
-  return fetch('apiUrl/api/userTask', opts)
+  return fetch(`${apiUrl}/api/userTask`, opts)
   .then(res => {
     if(!res.ok) {
       return Promise.reject(res.statusText)
@@ -228,7 +235,7 @@ export const authError = message => ({
 export const authenticate = () => dispatch => {
   const accessToken = Cookies.get('accessToken');
   if (accessToken) {
-    fetch('/api/me', {
+    fetch(`${apiUrl}/api/me`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
