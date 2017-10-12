@@ -400,15 +400,15 @@ describe('3 tasks sorter', () => {
     expect(sortTasksArray(testTaskArray)[2].quadrantValue).toBe(4);
   });
 
+   it('should sort n tasks > 3', () => {
+
+  });
+
   it('return empty array on 0 length array', () => {
     expect(Array.isArray(sortTasksArray([]))).toBe(true);
   });
 
-  it('should sort n tasks > 3', () => {
-
-  });
-
-  it.only('one item array should return itself', () => {
+  it('one item array should return itself', () => {
     const testArray = [
       {
         _id: '59de2794aadb940388fae1a9',
