@@ -20,7 +20,7 @@ export const fetchUserData = currentUser => dispatch => {
     method: 'GET'
   };
   dispatch(fetchUserDataRequest());
-  return fetch(`http://localhost:8080/api/userData/${currentUser.currentUserId}`, opts)
+  return fetch(`/api/userData/${currentUser.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -56,7 +56,7 @@ export const postTask = taskObj => dispatch => {
     body: JSON.stringify(taskObj)
   };
   dispatch(postTaskRequest());
-  return fetch('http://localhost:8080/api/userTask', opts)
+  return fetch('/api/userTask', opts)
   .then(res => {
     if(!res.ok) {
       return Promise.reject(res.statusText)
@@ -92,7 +92,7 @@ export const fetchMission = currentUserId => dispatch => {
     method: 'GET'
   };
   dispatch(fetchMissionRequest());
-  return fetch(`http://localhost:8080/api/mission/${currentUserId.currentUserId}`, opts)
+  return fetch(`/api/mission/${currentUserId.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText)
@@ -127,7 +127,7 @@ export const postMission = newMission => dispatch => {
     body: JSON.stringify(newMission)
   };
   dispatch(postMissionRequest());
-  return fetch('http://localhost:8080/api/userMission', opts)
+  return fetch('/api/userMission', opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -162,7 +162,7 @@ export const updateTask = data => dispatch => {
   };
 
   dispatch(updateTaskRequest());
-  return fetch('http://localhost:8080/api/userTask', opts)
+  return fetch('/api/userTask', opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -196,7 +196,7 @@ export const deleteTask = (taskId, token) => dispatch => {
     method: 'DELETE'
   };
   dispatch(deleteTaskRequest());
-  return fetch(`http://localhost:8080/api/userTask/${taskId}`, opts)
+  return fetch(`/api/userTask/${taskId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
