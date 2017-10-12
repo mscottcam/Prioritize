@@ -9,11 +9,36 @@
 }
 
 .current-tasks {
-    width: 45rem;
-  margin: 5px;
+  width: 40rem;
   height: 1.5em;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin: 1rem;
+}
+
+.task-list-div {
+  display: flex;
+  justify-content: center;
+}
+
+.task-text {
+  border: thin solid black;
+  display: flex;
+  justify-content: flex-start;
+  width: 40rem;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+
+
+.task {
+  text-align: start;
+  padding: 0.2rem;
+}
+
+.delete-task {
+  margin: 0;
+  height: 1.5rem;
 }
 
 /*.current-tasks.task {
@@ -29,3 +54,4 @@ padding: 20px;
    display: inline-block;
   text-align: right;
 }*/
+

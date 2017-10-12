@@ -96,11 +96,10 @@ export class Tasks extends React.Component {
       return taskSort.map((taskObj, index) => {
         return (
           <li className="current-tasks" key={index}>
-            <div>
-            <span className="task">{taskObj.taskName}</span>
-            <span className="task-note">   --    {taskObj.deadline}</span>
-            </div>
-            <button className="delete-task"onClick={() => this.deleteTask(taskObj)}>Delete</button>
+              <div className="task-text">
+                <span className="task">{taskObj.taskName}    --    {taskObj.deadline}</span>
+              </div>
+              <button className="delete-task" onClick={() => this.deleteTask(taskObj)}>Delete</button>
           </li>
         );
       });
@@ -142,7 +141,7 @@ export class Tasks extends React.Component {
         </form>
         
         
-        <div><ul>{this.mapTasksToList()}</ul></div>
+        <div className="task-list-div"><ul>{this.mapTasksToList()}</ul></div>
       </div>
     );
   }
