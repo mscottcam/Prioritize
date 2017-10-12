@@ -10,16 +10,17 @@ export const fetchUserDataSuccess = userData => ({ type: FETCH_USER_DATA_SUCCESS
 export const FETCH_USER_DATA_ERROR = 'FETCH_USER_DATA_ERROR';
 export const fetchUserDataError = error => ({type: FETCH_USER_DATA_ERROR, error});
 
-export const fetchUserData = currentUserId => dispatch => {
+export const fetchUserData = currentUser => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${currentUser.token}`
     },
     method: 'GET'
   };
   dispatch(fetchUserDataRequest());
-  return fetch(`http://localhost:8080/api/userData/${currentUserId.currentUserId}`, opts)
+  return fetch(`http://localhost:8080/api/userData/${currentUser.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -48,7 +49,8 @@ export const postTask = taskObj => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${taskObj.userId.accessToken}`
     },
     method: 'POST',
     body: JSON.stringify(taskObj)
@@ -84,7 +86,8 @@ export const fetchMission = currentUserId => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${currentUserId.token}`
     },
     method: 'GET'
   };
@@ -117,7 +120,8 @@ export const postMission = newMission => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${newMission.currentUser.accessToken}`
     },
     method: 'PUT',
     body: JSON.stringify(newMission)
@@ -182,11 +186,12 @@ export const deleteTaskSuccess = taskId => ({ type: DELETE_TASK_SUCCESS, taskId}
 export const DELETE_TASK_ERROR = 'DELETE_TASK_ERROR';
 export const deleteTaskError = error => ({type: DELETE_TASK_ERROR, error});
 
-export const deleteTask = taskId => dispatch => {
+export const deleteTask = (taskId, token) => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
     },
     method: 'DELETE'
   };
@@ -238,7 +243,6 @@ export const authenticate = () => dispatch => {
         return res.json();
       })
       .then(currentUser => {
-        console.log('Lets send this one: ', currentUser);
         return dispatch(authSuccess(currentUser)); 
       })
     .catch(err => {

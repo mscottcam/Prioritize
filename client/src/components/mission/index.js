@@ -14,7 +14,7 @@ export class Mission extends React.Component {
 
   componentWillMount() {
     this.props.dispatch(
-      actions.fetchMission({ currentUserId: this.props.currentUser.googleId })
+      actions.fetchMission({ currentUserId: this.props.currentUser.googleId, token: this.props.currentUser.accessToken })
     );
     if (this.props.currentUser) {
       this.toggleMissionChange();
@@ -34,7 +34,6 @@ export class Mission extends React.Component {
   }
 
   submitMissionChange(event) {
-    console.log('Current User: ', this.props.currentUser);
     event.preventDefault();
     this.props.dispatch(
       actions.postMission({
