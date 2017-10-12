@@ -1,0 +1,27 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "editor.tabSize": 2,
+  "editor.quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
+  "editor.quickSuggestionsDelay": 99999999999999999999,
+  "editor.parameterHints": false,
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.acceptSuggestionOnEnter": "off",
+  "editor.snippetSuggestions": "none",
+  "editor.wordBasedSuggestions": false,
+  "editor.selectionHighlight": false,
+  "editor.occurrencesHighlight": false,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorStyle": "line",
+  "editor.codeLens": false,
+  "editor.dragAndDrop": false,
+  "editor.links": false,
+  "emmet.triggerExpansionOnTab": false,
+  "workbench.tips.enabled": false,
+
+
+
+}

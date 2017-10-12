@@ -77,8 +77,26 @@ table {
 
 .App-intro {
   font-size: large;
-
+	padding-top: 2rem;
 	
+}
+
+button {
+	background-color: #6088BB;
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-size: 1rem;
+  margin: 20px;
+}
+
+button:hover {
+	color: lightgrey;
+}
+
+button:active {
+  transform: translate(0px, 5px);
+  -webkit-transform: translate(0px, 5px);
+  box-shadow: 0px 1px 0px 0px;
 }
 
 @keyframes App-logo-spin {

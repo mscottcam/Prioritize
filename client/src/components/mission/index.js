@@ -57,6 +57,7 @@ export class Mission extends React.Component {
           </h2>
           <form id="form" onSubmit={event => this.submitMissionChange(event)}>
             <input
+              className="mission-input"
               type="text"
               placeholder="New Mission Here"
               onChange={event => this.changeMissionInput(event)}

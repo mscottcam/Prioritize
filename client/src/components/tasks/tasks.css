@@ -1,0 +1,9 @@
+.task-form {
+  margin: 1.5rem auto 1.5rem auto;
+  border: thin solid black;
+  width: 40rem;
+}
+
+.label > input, label > select {
+  margin: 0.5rem 0 0.5rem 1rem;
+}

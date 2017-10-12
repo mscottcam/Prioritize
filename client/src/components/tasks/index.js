@@ -3,6 +3,8 @@ import * as actions from "../../redux/actions";
 
 import { connect } from "react-redux";
 
+import './tasks.css'
+
 export class Tasks extends React.Component {
   constructor(props) {
     super(props);
@@ -10,7 +12,8 @@ export class Tasks extends React.Component {
       taskNameInput: null,
       deadline: null,
       important: false,
-      urgent: false
+      urgent: false, 
+      value: 'neither'
     };
   }
 
@@ -69,11 +72,11 @@ export class Tasks extends React.Component {
         deadline: this.state.deadline,
         important: this.state.important,
         urgent: this.state.urgent,
-        value: 'neither'
+        value: this.state.value
       })
     );
     let form = document.getElementById("form");
-    form.reset();
+    return form.reset();
   }
 
   deleteTask(task) {
@@ -108,26 +111,26 @@ export class Tasks extends React.Component {
   render() {
     //<button onClick={() => this.userDataFetch()}>Testing</button>
     return (
-      <div>
+      <div className="task-form">
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <label> Name of task:
+          <label className="label" > Name of task:
             <input
               type="text"
               placeholder="Add a task!"
               onChange={event => this.onChangeTaskName(event)} 
             />
           </label> <br />
-          <label> Does it have a Deadline?
+          <label className="label" > Does it have a Deadline?
             <input
               type="text"
               placeholder="Add a Deadline"
               onChange={event => this.onChangeDeadline(event)} 
             />
           </label> <br />
-          <label>
+          <label className="label" >
             Is this task Urgent or Important?
-            <select value={this.state.value} onChange={event => this.onChangeDropdown(event)} >
-              <option value="none">Neither</option>
+            <select onChange={event => this.onChangeDropdown(event)} >
+              <option selected value="none">Neither</option>
               <option value="urgent">Urgent</option>
               <option value="important">Important</option>
               <option value="both">Both</option>

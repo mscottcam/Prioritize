@@ -1,3 +1,15 @@
 .current-mission {
+  padding: 1.5rem 0 1.5rem 0;
   color: #9EF4E6;
+  font-size: 1.5rem;
+}
+
+.change-mission {
+  margin: 0 0 1.5rem 0;
+}
+
+.mission-input {
+  height: 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
 }
