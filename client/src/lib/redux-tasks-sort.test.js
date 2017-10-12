@@ -335,13 +335,12 @@ describe('3 tasks sorter', () => {
         quadrantValue: 1
       }
     ];
-    // console.log('task array', sortTasksArray(testTaskArray));
     expect(sortTasksArray(testTaskArray)[0].quadrantValue).toBe(2);
     expect(sortTasksArray(testTaskArray)[1].quadrantValue).toBe(1);
     expect(sortTasksArray(testTaskArray)[2].quadrantValue).toBe(4);
   });
 
-  it.only('should sort 2nd round of three tasks', () => {
+  it('should sort 2nd round of three tasks', () => {
     const testTaskArray = [
       {
         _id: '59de2794aadb940388fae1a9',
@@ -395,9 +394,14 @@ describe('3 tasks sorter', () => {
         quadrantValue: 1
       }
     ];
+    console.log('look here ----->', sortTasksArray(testTaskArray))
     expect(sortTasksArray(testTaskArray)[0].quadrantValue).toBe(1);
     expect(sortTasksArray(testTaskArray)[1].quadrantValue).toBe(2);
     expect(sortTasksArray(testTaskArray)[2].quadrantValue).toBe(4);
+  });
+
+  it.only('return empty array on 0 length array', () => {
+    expect(sortTasksArray([])).toBe([]);
   });
 
   it('should sort n tasks > 3', () => {
