@@ -23,7 +23,8 @@ export const fetchUserData = currentUser => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${currentUser.token}`
+      Authorization: `Bearer ${currentUser.token}`,
+      'Access-Control-Allow-Origin': '*'
     },
     method: 'GET'
   };
@@ -58,7 +59,8 @@ export const postTask = taskObj => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${taskObj.userId.accessToken}`
+      Authorization: `Bearer ${taskObj.userId.accessToken}`,
+      'Access-Control-Allow-Origin': '*'
     },
     method: 'POST',
     body: JSON.stringify(taskObj)
@@ -95,7 +97,8 @@ export const fetchMission = currentUserId => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${currentUserId.token}`
+      Authorization: `Bearer ${currentUserId.token}`,
+      'Access-Control-Allow-Origin': '*'
     },
     method: 'GET'
   };
@@ -129,7 +132,8 @@ export const postMission = newMission => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${newMission.currentUser.accessToken}`
+      'Authorization': `Bearer ${newMission.currentUser.accessToken}`,
+      'Access-Control-Allow-Origin': '*'
     },
     method: 'PUT',
     body: JSON.stringify(newMission)
@@ -163,7 +167,8 @@ export const updateTask = data => dispatch => {
     const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
     },
     method: 'PUT',
     body: JSON.stringify(data)
@@ -199,7 +204,8 @@ export const deleteTask = (taskId, token) => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      'Access-Control-Allow-Origin': '*'
     },
     method: 'DELETE'
   };
@@ -237,7 +243,8 @@ export const authenticate = () => dispatch => {
   if (accessToken) {
     fetch('/api/me', {
       headers: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Access-Control-Allow-Origin': '*'
       }
     })
       .then(res => {
