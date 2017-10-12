@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import * as Cookies from 'js-cookie';
+const apiUrl = 'https://mighty-wildwood-34896.herokuapp.com/';
 
 export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
 export const fetchUserDataRequest = () => ({ type: FETCH_USER_DATA_REQUEST });
@@ -20,7 +21,7 @@ export const fetchUserData = currentUser => dispatch => {
     method: 'GET'
   };
   dispatch(fetchUserDataRequest());
-  return fetch(`/api/userData/${currentUser.currentUserId}`, opts)
+  return fetch(`apiUrl/api/userData/${currentUser.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -56,7 +57,7 @@ export const postTask = taskObj => dispatch => {
     body: JSON.stringify(taskObj)
   };
   dispatch(postTaskRequest());
-  return fetch('/api/userTask', opts)
+  return fetch('apiUrl/api/userTask', opts)
   .then(res => {
     if(!res.ok) {
       return Promise.reject(res.statusText)
@@ -92,7 +93,7 @@ export const fetchMission = currentUserId => dispatch => {
     method: 'GET'
   };
   dispatch(fetchMissionRequest());
-  return fetch(`/api/mission/${currentUserId.currentUserId}`, opts)
+  return fetch(`${apiUrl}/api/mission/${currentUserId.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText)
@@ -127,7 +128,7 @@ export const postMission = newMission => dispatch => {
     body: JSON.stringify(newMission)
   };
   dispatch(postMissionRequest());
-  return fetch('/api/userMission', opts)
+  return fetch(`${apiUrl}/api/userMission`, opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -162,7 +163,7 @@ export const updateTask = data => dispatch => {
   };
 
   dispatch(updateTaskRequest());
-  return fetch('/api/userTask', opts)
+  return fetch(`${apiUrl}/api/userTask`, opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -196,7 +197,7 @@ export const deleteTask = (taskId, token) => dispatch => {
     method: 'DELETE'
   };
   dispatch(deleteTaskRequest());
-  return fetch(`/api/userTask/${taskId}`, opts)
+  return fetch(`${apiUrl}/api/userTask/${taskId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
