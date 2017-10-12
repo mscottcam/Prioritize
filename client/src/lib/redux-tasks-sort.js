@@ -17,6 +17,7 @@ const sortTasksArray = array => {
       ];
     };
     if (task1.quadrantValue > task2.quadrantValue) {
+      
       return [
         Object.assign({}, task2, {
           userId: Object.assign({}, task2.userId)
@@ -27,7 +28,7 @@ const sortTasksArray = array => {
       ];
     }
   };
-  if (!('length' in array)) {
+  if (array.length === 0) {
     return [];
   }
   if (array.length === 1) {
