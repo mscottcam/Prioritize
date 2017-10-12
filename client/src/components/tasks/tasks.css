@@ -29,9 +29,12 @@
   width: 40rem;
   margin: 0.5rem 0.5rem 0.5rem 0;
 }
-
+.label {
+  font-family: 'Fira Sans', sans-serif !important;
+}
 
 .task {
+  font-family: 'Fira Sans', sans-serif !important;
   text-align: start;
   padding: 0.2rem;
 }

@@ -3,7 +3,11 @@
   padding-bottom: 1rem;
 }
 
+.prioritize-name {
+  font-family: 'Bitter', serif;
+}
 .nav-wrapper {
   background-color: #6088BB;
   height: 150px;
 }
+

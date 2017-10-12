@@ -8,8 +8,7 @@ export class Mission extends React.Component {
     super(props);
     this.state = {
       updatingMission: false,
-      newMissionInputValue: "",
-      firstLoginComplete: false
+      newMissionInputValue: ""
     };
   }
 

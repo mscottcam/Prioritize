@@ -52,6 +52,7 @@ table {
 
 * {
 	border-radius: 7px;
+	/*font-family: 'Fira Sans', sans-serif ;*/
 	/*background-color: #66CCA7;*/
 	/*background-color: #12CC94*/
 }
@@ -59,7 +60,7 @@ table {
 	height: 800px;
 	background-color: #66CCA7;
   text-align: center;
-	font-family: 'Fira Sans', sans-serif;
+	font-family: 'Bitter', serif;
 }
 
 .App-logo {

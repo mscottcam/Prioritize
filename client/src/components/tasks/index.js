@@ -114,7 +114,7 @@ export class Tasks extends React.Component {
     return (
       <div className="task-form">
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <label className="label" > Task :
+          <label className="label" > Task 
             <input
               type="text"
               placeholder="Add a task!"
