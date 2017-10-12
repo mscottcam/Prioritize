@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import * as Cookies from 'js-cookie';
-const apiUrl = 'https://mighty-wildwood-34896.herokuapp.com/';
+const apiUrl = 'https://mighty-wildwood-34896.herokuapp.com';
 
 export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
 export const fetchUserDataRequest = () => ({ type: FETCH_USER_DATA_REQUEST });
