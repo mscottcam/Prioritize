@@ -8,10 +8,10 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const { DATABASE, CLIENT_ID, CLIENT_SECRET} = require('./config');
+const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('./config');
 const { User } = require('./models/user');
 const { Task } = require('./models/task');
-const {quadrantDecider} = require('./lib/quadrant-decider.js');
+const { quadrantDecider } = require('./lib/quadrant-decider.js');
 
 const app = express();
 app.use(morgan('common'));
@@ -56,6 +56,7 @@ passport.use(
       callbackURL: '/api/auth/google/callback'
     },
     (accessToken, refreshToken, profile, cb) => {
+      console.log('In passport use google strat: ', accessToken, profile)
       User.findOne({ googleId: profile.id }).then(user => {
         if (user) {
           user.accessToken = accessToken;
@@ -65,10 +66,9 @@ passport.use(
             displayName: profile.displayName,
             googleId: profile.id,
             accessToken
-          })
-            .catch(err => {
-              console.error(err);
-            });
+          }).catch(err => {
+            console.error(err);
+          });
         }
       });
       const user = {
@@ -154,7 +154,7 @@ app.get('/api/userData/:id', (req, res) => {
   const ObjectId = require('mongoose').Types.ObjectId;
   const userMongoId = new ObjectId(idToCast);
 
-  Task.find({userId: userMongoId})
+  Task.find({ userId: userMongoId })
     .populate('userId')
     .exec()
     .then(tasks => {
@@ -168,9 +168,9 @@ app.get('/api/userData/:id', (req, res) => {
 });
 
 app.get('/api/mission/:id', (req, res) => {
-  User.findOne({googleId: req.params.id})
+  User.findOne({ googleId: req.params.id })
     .then(user => {
-      res.json({mission: user.mission});
+      res.json({ mission: user.mission });
     })
     .catch(err => {
       console.error(err);
@@ -187,70 +187,84 @@ app.post('/api/userTask', (req, res) => {
     quadrantValue: quadrantDecider(req.body)
   })
     .then(task => {
-      console.log('server side task after creation', task)
-      res.status(201).json(task.apiRepr())
+      console.log('server side task after creation', task);
+      res.status(201).json(task.apiRepr());
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'something went wrong'});
+      res.status(500).json({ error: 'something went wrong' });
     });
 });
 
 app.put('/api/userData', (req, res) => {
-  User.findByIdAndUpdate(req.body._id, {$push: {roles: {role: req.body.role}}}, {new: true})
+  User.findByIdAndUpdate(
+    req.body._id,
+    { $push: { roles: { role: req.body.role } } },
+    { new: true }
+  )
     .exec()
     .then(user => {
       res.status(204).json(user.apiRepr());
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'something went wrong'});
+      res.status(500).json({ error: 'something went wrong' });
     });
 });
 
 app.put('/api/userMission', (req, res) => {
-  User.findByIdAndUpdate(req.body.currentUser._id, {$set: {mission: req.body.newMission}}, {new: true})
+  console.log('Req.body: ', req.body);
+  User.findByIdAndUpdate(
+    req.body.currentUser._id,
+    { $set: { mission: req.body.newMission } },
+    { new: true }
+  )
     .then(user => {
       res.json(user.apiRepr());
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'something went wrong'});
+      res.status(500).json({ error: 'something went wrong' });
     });
 });
 
 app.put('/api/userTask', (req, res) => {
-  Task.findByIdAndUpdate(req.body._id, {$set: {
-    taskName: req.body.taskName,
-    deadline: req.body.deadline,
-    important: req.body.important,
-    urgent: req.body.urgent
-  }}, {new: true})
+  Task.findByIdAndUpdate(
+    req.body._id,
+    {
+      $set: {
+        taskName: req.body.taskName,
+        deadline: req.body.deadline,
+        important: req.body.important,
+        urgent: req.body.urgent
+      }
+    },
+    { new: true }
+  )
     .then(task => {
       res.status(204).json(task.apiRepr());
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'something went wrong'});
+      res.status(500).json({ error: 'something went wrong' });
     });
 });
 
 app.delete('/api/userTask/:id', (req, res) => {
-  Task
-    .findByIdAndRemove(req.params.id)
+  Task.findByIdAndRemove(req.params.id)
     .then(() => {
       res.status(204).end();
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'something went wrong'});
+      res.status(500).json({ error: 'something went wrong' });
     });
 });
 
 let server;
 function runServer(port = 3001, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(database, {useMongoClient: true}, err => {
+    mongoose.connect(database, { useMongoClient: true }, err => {
       if (err) {
         return reject(err);
       }

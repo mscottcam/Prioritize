@@ -238,6 +238,7 @@ export const authenticate = () => dispatch => {
         return res.json();
       })
       .then(currentUser => {
+        console.log('Lets send this one: ', currentUser);
         return dispatch(authSuccess(currentUser)); 
       })
     .catch(err => {

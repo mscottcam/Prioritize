@@ -1,6 +1,6 @@
 import React from "react";
 import * as actions from "../../redux/actions";
-import './mission.css'
+import "./mission.css";
 import { connect } from "react-redux";
 
 export class Mission extends React.Component {
@@ -13,20 +13,10 @@ export class Mission extends React.Component {
     };
   }
 
-  componentDidUpdate() {
-    if (this.state.firstLoginComplete === false) {
-      this.props.dispatch(
-        actions.fetchMission({ currentUserId: this.props.currentUser.googleId })
-      );
-      if (this.props.currentUser) {
-        this.setState({
-          firstLoginComplete: true
-        });
-      }
-    }
-  }
-  
   componentWillMount() {
+    this.props.dispatch(
+      actions.fetchMission({ currentUserId: this.props.currentUser.googleId })
+    );
     if (this.props.currentUser) {
       this.toggleMissionChange();
     }
@@ -45,6 +35,7 @@ export class Mission extends React.Component {
   }
 
   submitMissionChange(event) {
+    console.log('Current User: ', this.props.currentUser);
     event.preventDefault();
     this.props.dispatch(
       actions.postMission({
@@ -61,14 +52,18 @@ export class Mission extends React.Component {
     if (this.state.updatingMission === true) {
       return (
         <div className="change-mission-form">
-          <h2 className= "current-mission">Current Mission: {this.props.mission}</h2>
+          <h2 className="current-mission">
+            Current Mission: {this.props.mission}
+          </h2>
           <form id="form" onSubmit={event => this.submitMissionChange(event)}>
             <input
               type="text"
               placeholder="New Mission Here"
               onChange={event => this.changeMissionInput(event)}
             />
-            <button className="submit-mission" type="submit">Submit New Mission</button>
+            <button className="submit-mission" type="submit">
+              Submit New Mission
+            </button>
           </form>
         </div>
       );
@@ -77,7 +72,10 @@ export class Mission extends React.Component {
       return (
         <div>
           <h2 className="current-mission">{this.props.mission}</h2>
-          <button className="change-mission" onClick={() => this.toggleMissionChange()}>
+          <button
+            className="change-mission"
+            onClick={() => this.toggleMissionChange()}
+          >
             Change mission
           </button>
         </div>
@@ -88,6 +86,6 @@ export class Mission extends React.Component {
 
 const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser,
-  mission: state.missionReducer.currentMission 
+  mission: state.missionReducer.currentMission
 });
 export default connect(mapStateToProps)(Mission);

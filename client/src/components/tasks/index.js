@@ -8,25 +8,16 @@ export class Tasks extends React.Component {
     super(props);
     this.state = {
       taskNameInput: null,
-      firstLoginComplete: false,
       deadline: null,
       important: false,
       urgent: false
     };
   }
 
-  componentDidUpdate() {
-    console.log('i ran too');
-    if (this.state.firstLoginComplete === false) {
-      this.props.dispatch(
-        actions.fetchUserData({ currentUserId: this.props.currentUser })
-      );
-      if (this.props.currentUser) {
-        this.setState({
-          firstLoginComplete: true
-        });
-      }
-    }
+  componentWillMount() {
+    this.props.dispatch(
+      actions.fetchUserData({currentUserId: this.props.currentUser})
+    )
   }
 
   onChangeTaskName(event) {
