@@ -2,11 +2,12 @@ import thunk from 'redux-thunk';
 import * as actions from '../actions'
 import missionReducer from './missionReducer'
 
-xdescribe('task reducer', () => {
+describe('Mission reducer', () => {
   it('should set state to initial state when no arguments', () => {
     const newState = missionReducer(undefined, { type: 'test' });
     expect(newState.currentUser).toEqual(null);
-    expect(newState.tasks).toEqual([]);
+    expect(newState.userId).toEqual(null);
+    expect(newState.currentMission).toEqual('Do First Things First');
   });
 
   it('should return current state on unknown action', () => {
