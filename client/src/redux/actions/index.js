@@ -3,7 +3,7 @@ import * as Cookies from 'js-cookie';
 
 let apiUrl;
 if (process.env.NODE_ENV === "production") {
- apiUrl = 'https://mighty-wildwood-34896.herokuapp.com';
+ apiUrl = 'https://prioritize-app.herokuapp.com/';
 } 
 if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test" || process.env.NODE_ENV === "staging") {
  apiUrl = 'http://localhost:8080';
