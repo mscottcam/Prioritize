@@ -31,7 +31,7 @@ const sortTasksArray = array => {
         });
       });
       const partiallySortedTasks = [...compareTaskOrder(array[0], array[1]), ...remainingTasks];
-      return [partiallySortedTasks[0], ...(partiallySortedTasks.slice(1))];
+      return [partiallySortedTasks[0], ...(sortTasksArray(partiallySortedTasks.slice(1)))];
     };
     return [...compareTaskOrder(array[0], array[1])];
     
