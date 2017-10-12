@@ -235,7 +235,7 @@ export const authError = message => ({
 export const authenticate = () => dispatch => {
   const accessToken = Cookies.get('accessToken');
   if (accessToken) {
-    fetch(`${apiUrl}/api/me`, {
+    fetch('/api/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
