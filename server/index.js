@@ -8,7 +8,7 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const { DATABASE, CLIENT_ID, CLIENT_SECRET } = require('./config');
+const { DATABASE, CLIENT_ID, CLIENT_SECRET, PORT } = require('./config');
 const { User } = require('./models/user');
 const { Task } = require('./models/task');
 const { quadrantDecider } = require('./lib/quadrant-decider.js');
@@ -259,7 +259,7 @@ app.delete('/api/userTask/:id',
   });
 
 let server;
-function runServer(port = 3001, database = secret.DATABASE) {
+function runServer(port = PORT, database = secret.DATABASE) {
   return new Promise((resolve, reject) => {
     mongoose.connect(database, { useMongoClient: true }, err => {
       if (err) {
