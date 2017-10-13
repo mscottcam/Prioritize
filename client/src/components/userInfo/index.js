@@ -23,7 +23,7 @@ export class UserInfo extends React.Component {
           <a href={"/api/auth/google"}>Login with Google</a>
         </li>
         <li className="user-info">
-          <button className="demo-login" onClick={() => this.demoLogin()}>Demo Login</button>
+          <button className="demo-login" onClick={() => this.demoLogin()}>Demo</button>
         </li>
         </div>
       );

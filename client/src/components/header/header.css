@@ -8,6 +8,9 @@
 }
 .nav-wrapper {
   background-color: #6088BB;
-  height: 150px;
+  height: 500px;
 }
 
+.nav {
+  height: 50rem;
+}
