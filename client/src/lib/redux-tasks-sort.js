@@ -1,9 +1,4 @@
-
-
-
-
-
-const sortTasksArray = (array, index, swapped = false) => {
+const sortTasksArray = (array, index = 0, swapped) => {
 
   const cloneTask = (task) => {
     return Object.assign({}, task, {
@@ -11,14 +6,14 @@ const sortTasksArray = (array, index, swapped = false) => {
     });
   };
 
-  const compareTaskOrder = (task1, task2) => {
+  const compareTaskOrder = (task1, task2, currentlySwapped) => {
     if (task1.quadrantValue <= task2.quadrantValue) {
       return {
         tasks: [
           cloneTask(task1), 
           cloneTask(task2)
         ],
-        swapped: false
+        swapped: currentlySwapped ? true : false
       };
     };
     if (task1.quadrantValue > task2.quadrantValue) { 
@@ -40,32 +35,38 @@ const sortTasksArray = (array, index, swapped = false) => {
   };
   if (array.length > 1) {
     if (array.length === 2) {
-      return compareTaskOrder(array[0], array[1]).tasks;
+      return compareTaskOrder(array[0], array[1], swapped).tasks;
     }
     if (array.length > 2) {
-      const remainingTasks = array.slice(2).map(task => {
-        return Object.assign({}, task, {
-          userId: Object.assign({}, task.userId)
-        });
-      });
-
+      if (swapped === false && index === 0) {
+        return array;
+      }
       if (swapped === true && index === 0) {
-        return sortTasksArray(array, 0)
+        return sortTasksArray(array, 0);
       };
-      if (index === 0) {
-        const comparedTasks = compareTaskOrder(array[0], array[1])
+      if (swapped === undefined && index === 0) {
+        const remainingTasks = array.slice(2).map(cloneTask);
+        const comparedTasks = compareTaskOrder(array[0], array[1], swapped);
         const partiallySortedTasks = [...comparedTasks.tasks, ...remainingTasks];
         return sortTasksArray(partiallySortedTasks, 1, comparedTasks.swapped);
       };
-      if (index > 0) {
-
+      if (index > 0) { 
+        const comparedTasks = compareTaskOrder(array[index], array[index + 1], swapped);
+        const beginningTasks = array.slice(0, index).map(cloneTask);
+        if (array.length >= index + 3) {
+          console.log('LOOK HERE ---->', comparedTasks.tasks)
+          const endingTasks = comparedTasks.tasks.slice(index + 2).map(cloneTask);
+          const assembledArray = [...beginningTasks, ...comparedTasks.tasks, ...endingTasks];
+          return sortTasksArray(assembledArray, index + 1, comparedTasks.swapped);
+        };
+        const assembledArray = [...beginningTasks, ...comparedTasks.tasks];
+        return sortTasksArray(assembledArray, 0, comparedTasks.swapped);
       };
 
-      const partiallySortedTasks = [...compareTaskOrder(array[0], array[1]), ...remainingTasks];
+      const partiallySortedTasks = [...compareTaskOrder(array[0], array[1], swapped).tasks, ...remainingTasks];
       return [partiallySortedTasks[0], ...(sortTasksArray(partiallySortedTasks.slice(1)))];
     };
   };
-  return sortTasksArray();
 };
 
 export default sortTasksArray;
