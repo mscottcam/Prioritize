@@ -119,7 +119,11 @@ export class Tasks extends React.Component {
     }
   }
   showTaskHeader() {
-    
+    if (this.props.tasks !== null) {
+      return (
+      <h1 className="task-header">My Tasks</h1>
+      )
+    }
   }
   render() {
     return (

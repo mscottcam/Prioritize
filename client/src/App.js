@@ -30,7 +30,7 @@ export class App extends React.Component {
             You enter your tasks and Prioritize will reorder your tasks and help
             you make the most of your time.
           </p>
-          <h2 className="welcome-message">Login to start prioritizing!</h2>
+          <h2 className="App-intro welcome-message">Login to start prioritizing!</h2>
         </div>
       );
     }

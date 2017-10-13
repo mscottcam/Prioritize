@@ -63,17 +63,11 @@ form select {
   padding-top: 1rem;
   padding-bottom: 0.4rem;
 }
-/*.current-tasks.task {
 
-
-
-}*/
-/*.current-tasks.task-note {
-padding: 20px;
+.task-header {
+  font-size: 1.7rem;
+  padding-top: 1rem;
+  width: 40rem;
+  margin-left: 0.8rem;
+  	font-family: 'Bitter', serif;
 }
-
-.current-tasks.delete-task {
-   display: inline-block;
-  text-align: right;
-}*/
-
