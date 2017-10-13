@@ -5,6 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 configure({ adapter: new Adapter() });
 import ReduxThunk from 'redux-thunk';
 import redux from 'redux';
+import {Provider} from 'react-redux'
 
 import configureStore from 'redux-mock-store';
 const mockStore = configureStore([ReduxThunk]);
@@ -12,31 +13,40 @@ const mockStore = configureStore([ReduxThunk]);
 import Tasks from './index';
 
 describe('<Tasks />', () => {
-  it('Renders without crashing', () => {
-    const initialState= {
-      taskReducer: [
-        {
-          userId: 12345,
-          taskName: 'make initial tests for react components',
-          deadline: 'today',
-          important: true,
-          urgent: true
-        },
-        {
-          userId: 12345,
-          taskName: 'make more tests for react components',
-          deadline: 'today',
-          important: true,
-          urgent: true
-        }
-      ],
-      authReducer: {
-        currentUser: {
-          _id: 12345
-        }
+  const initialState= {
+    taskReducer: {
+      currentUser: 'anonymous Ben',
+      userId: 12345,
+      tasks: [
+      {
+        userId: 12345,
+        taskName: 'make initial tests for react components',
+        deadline: 'today',
+        important: true,
+        urgent: true
+      },
+      {
+        userId: 12345,
+        taskName: 'make more tests for react components',
+        deadline: 'today',
+        important: true,
+        urgent: true
+      }
+    ],
+    authReducer: {
+      currentUser: {
+        				displayName: 'Evan Harris',
+				googleId: '113991032114835833364',
+  
       }
     }
-        const component = shallow(<Tasks store={mockStore( initialState )}/>);
+  }
+  }
+  it.only('Renders without crashing', () => {
+       const component = shallow(<Tasks store={mockStore( initialState )}/>);
+        // const component = (<Provider store={mockStore( initialState )}>
+          // <Tasks /> </Provider>)
+          console.log('Rendered ====>', component.html())
         expect(typeof component).toBe('object');
   });
 
@@ -50,9 +60,13 @@ describe('<Tasks />', () => {
   //   wrapper.simulate('click');
   //   expect(wrapper.state('editing')).toEqual(true);
 	// });
-	xit('Should fire the onAdd callback when the form is submitted', () => {
+	it.only('Should fire the onSubmit callback when the form is submitted', () => {
     const callback = jest.fn();
-    const wrapper = mount(<Tasks onAdd={callback} />);
+    // const wrapper = mount(<Tasks 
+    //   store={mockStore( initialState )}
+    //   onSubmit={callback} />);
+            const wrapper = (<Provider store={mockStore( initialState )}>
+          <Tasks /> </Provider>)
     const value = 'Foobar';
     wrapper.instance().setEditing(true);
     wrapper.find('input[type="text"]').node.value = value;

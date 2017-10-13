@@ -34,7 +34,6 @@ export class Mission extends React.Component {
   }
 
   submitMissionChange(event) {
-    console.log('Current User: ', this.props.currentUser);
     event.preventDefault();
     this.props.dispatch(
       actions.postMission({
