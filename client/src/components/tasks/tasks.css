@@ -20,7 +20,8 @@
 
 .task-list-div {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .task-text {
@@ -29,16 +30,18 @@
   justify-content: flex-start;
   width: 40rem;
   margin: 0.5rem 0.5rem 0.5rem 0;
-  /* height: auto; */
 }
 
 form input {
   font-size:1.3rem;
+  background-color: #9EF4E6; 
 }
 
 form select {
   font-size: 1.3rem;
+  background-color: #9EF4E6; 
 }
+
 .label {
   font-family: 'Fira Sans', sans-serif !important;
   font-size: 1.5rem;
@@ -55,13 +58,13 @@ form select {
   margin: 0;
   height: 1.5rem;
   padding-bottom: 1.7rem;
-
 }
 
 .dropdown {
   display: inline-block;
   padding: 1rem;
 }
+
 .task-label {
   display: inline-block;
   padding-top: 1rem;
@@ -71,7 +74,6 @@ form select {
 .task-header {
   font-size: 1.7rem;
   padding-top: 1rem;
-  width: 40rem;
   margin-left: 0.8rem;
-  	font-family: 'Bitter', serif;
+  font-family: 'Bitter', serif;
 }

@@ -27,7 +27,6 @@ export class Tasks extends React.Component {
   }
 
   onChangeTaskName(event) {
-    // event.preventDefault();
     this.setState({
       taskNameInput: event.target.value
     });
@@ -69,7 +68,6 @@ export class Tasks extends React.Component {
     }
   }
 
-  // Update user ID being sent over
   submitTask(event) {
     event.preventDefault();
     this.props.dispatch(
@@ -81,11 +79,17 @@ export class Tasks extends React.Component {
         urgent: this.state.urgent
       })
     );
+    this.setState({
+      taskNameInput: null,
+      deadline: null,
+      important: false,
+      urgent: false, 
+      value: 'neither'
+    })
     let form = document.getElementById("form");
     return form.reset();
   }
 
-  // Update user ID being sent over
   deleteTask(task) {
     this.props.dispatch(actions.deleteTask(task._id, this.props.currentUser.accessToken)).then(() => {
     this.props.dispatch(
@@ -113,6 +117,7 @@ export class Tasks extends React.Component {
       return <li>You have No Tasks Left!!! You're all Up to Date</li>;
     }
   }
+
   showTaskHeader() {
     if (this.props.tasks !== null) {
       return (
@@ -120,6 +125,7 @@ export class Tasks extends React.Component {
       )
     }
   }
+
   render() {
     return (
       <div className="task-form">
@@ -128,7 +134,7 @@ export class Tasks extends React.Component {
             <input
               type="text"
               placeholder="Add a task!"
-              onChange={event => this.onChangeTaskName(event)}
+              onChange={event => this.onChangeTaskName(event)} required
             />
           </label> <br />
           <label className="label" > Note
@@ -140,8 +146,8 @@ export class Tasks extends React.Component {
           </label> <br />
           <label className="label dropdown" >
             Urgent or Important?
-            <select onChange={event => this.onChangeDropdown(event)}>
-              <option selected > -- </option>
+            <select defaultValue="Choose" onChange={event => this.onChangeDropdown(event)}>
+              <option value="choose"> -- </option>
               <option value="neither">Neither</option>
               <option value="urgent">Urgent </option>
               <option value="important">Important</option>
@@ -151,8 +157,8 @@ export class Tasks extends React.Component {
           <br />
           <button type="submit">Submit Task</button>
         </form>
-        {this.showTaskHeader()}
-        <div className="task-list-div"><ul>{this.mapTasksToList()}</ul></div>
+       
+        <div className="task-list-div"> {this.showTaskHeader()}<ul>{this.mapTasksToList()}</ul></div>
       </div>
     );
   }

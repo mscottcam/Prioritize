@@ -39,7 +39,8 @@ export class Mission extends React.Component {
       })
     );
     this.setState({
-      updatingMission: false
+      updatingMission: false,
+      newMissionInputValue: ""
     });
   }
 

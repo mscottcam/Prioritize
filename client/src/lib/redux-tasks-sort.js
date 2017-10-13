@@ -1,5 +1,3 @@
-'use strict';
-
 const sortTasksArray = (array, index = 0, swapped) => {
 
   const cloneTask = (task) => {
@@ -53,7 +51,6 @@ const sortTasksArray = (array, index = 0, swapped) => {
         return sortTasksArray(partiallySortedTasks, 1, comparedTasks.swapped);
       };
       if (index > 0) { 
-        const theTwoYouSort = 2;
         const comparedTasks = compareTaskOrder(array[index], array[index + 1], swapped);
         const beginningTasks = array.slice(0, index).map(cloneTask);
         if (array.length > comparedTasks.tasks.length + beginningTasks.length) {
