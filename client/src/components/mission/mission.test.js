@@ -57,7 +57,7 @@ describe('<Mission />', () => {
 			expect(typeof component).toBe('object');
 			// expect string on DOM to equal prop.currentMission
 			// console.log('Props ===>', component.props())
-			expect(component.find('.current-mission').text()).toEqual('Current Mission: Do First Things First')
+			expect(component.find('.current-mission').text()).toEqual('Do First Things First')
 			
 	});
 
@@ -79,15 +79,15 @@ describe('<Mission />', () => {
 				store={mockStore( initialState )} />);
 		const updateMission = "Attend a black-tie event";
 		
-		expect(component.find('input')).toBeTruthy();
-		component.find('.submit-mission').simulate('submit');
-		expect(component.find('div').hasClass('change-mission-form')).toBeFalsy()
 		
 		// console.log('what gets rendered', component.html());
 		
 		expect(component.find('button').hasClass('change-mission')).toBeTruthy(); //==> failed
 		component.find('.change-mission').simulate('click');
 		expect(component.find('input')).toBeTruthy();
+		expect(component.find('input')).toBeTruthy();
+		component.find('.submit-mission').simulate('submit');
+		expect(component.find('div').hasClass('change-mission-form')).toBeFalsy()
 
 		// expect to have a submit new mission button 
 		// expect to call a Update Mission function called upon click of submit

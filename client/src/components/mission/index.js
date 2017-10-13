@@ -16,9 +16,6 @@ export class Mission extends React.Component {
     this.props.dispatch(
       actions.fetchMission({ currentUserId: this.props.currentUser.googleId, token: this.props.currentUser.accessToken })
     );
-    if (this.props.currentUser) {
-      this.toggleMissionChange();
-    }
   }
 
   toggleMissionChange() {

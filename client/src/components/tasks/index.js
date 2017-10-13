@@ -113,12 +113,14 @@ export class Tasks extends React.Component {
       return <li>You have No Tasks Left!!! You're all Up to Date</li>;
     }
   }
-
+  showTaskHeader() {
+    
+  }
   render() {
     return (
       <div className="task-form">
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <label className="label" > Task 
+          <label className="label task-label" > Task 
             <input
               type="text"
               placeholder="Add a task!"
@@ -132,7 +134,7 @@ export class Tasks extends React.Component {
               onChange={event => this.onChangeDeadline(event)} 
             />
           </label> <br />
-          <label className="label" >
+          <label className="label dropdown" >
             Urgent or Important?
             <select onChange={event => this.onChangeDropdown(event)} >
               <option selected value="none">Neither</option>
@@ -144,6 +146,7 @@ export class Tasks extends React.Component {
           <br />
           <button type="submit">Submit Task</button>
         </form>
+        {this.showTaskHeader()}
         <div className="task-list-div"><ul>{this.mapTasksToList()}</ul></div>
       </div>
     );
