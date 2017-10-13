@@ -342,7 +342,7 @@ describe('3 tasks sorter', () => {
     expect(sortTasksArray(testTaskArray)[2].quadrantValue).toBe(4);
   });
 
-  it.only('should sort n tasks > 3', () => {
+  xit('should sort n tasks > 3', () => {
     const testTaskArray = [
       {
         _id: '59de2794aadb940388fae1a9',
