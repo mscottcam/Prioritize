@@ -3,12 +3,12 @@ import * as actions from '../actions';
 const initialState = {
   currentUser: null, 
   userId: null,
-  currentMission: null,
-  roles:[],
-  goals: [],
-  projects: [],
+  // currentMission: null,
+  // roles:[],
+  // goals: [],
+  // projects: [],
   tasks: [],
-  userData: null
+  // userData: null
 };
 
 const taskReducer = (state=initialState, action) => {
