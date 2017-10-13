@@ -64,7 +64,7 @@ const sortTasksArray = (array, index = 0, swapped) => {
         const assembledArray = [...beginningTasks, ...comparedTasks.tasks];
         return sortTasksArray(assembledArray, 0, comparedTasks.swapped);
       };
-
+      const remainingTasks = array.slice(2).map(cloneTask);
       const partiallySortedTasks = [...compareTaskOrder(array[0], array[1], swapped).tasks, ...remainingTasks];
       return [partiallySortedTasks[0], ...(sortTasksArray(partiallySortedTasks.slice(1)))];
     };

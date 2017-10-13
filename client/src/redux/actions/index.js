@@ -54,6 +54,7 @@ export const POST_TASK_ERROR = 'POST_TASK_ERROR';
 export const postTaskError = error => ({type: POST_TASK_ERROR, error});
 
 export const postTask = taskObj => dispatch => {
+  console.log('taskObj ----->', taskObj)
   const opts = {
     headers: {
       Accept: 'application/json',
@@ -72,6 +73,7 @@ export const postTask = taskObj => dispatch => {
     return res.json();
   })
   .then(taskData => {
+    console.log('task data ----> ', taskData)
     return dispatch(postTaskSuccess(taskData));
   })
   .catch(err => {

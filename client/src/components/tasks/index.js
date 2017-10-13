@@ -42,16 +42,21 @@ export class Tasks extends React.Component {
   onChangeDropdown(event) {
     if (event.target.value === "important") {
       this.setState({
-        important: true
+        value: 'important',
+        important: true,
+        urgent: false
       });
     }
     if (event.target.value === "urgent") {
       this.setState({
-        urgent: true
+        value: 'urgent',
+        urgent: true,
+        important: false
       });
     }
     if (event.target.value === "both") {
       this.setState({
+        value: 'both',
         important: true,
         urgent: true
       });
@@ -95,11 +100,11 @@ export class Tasks extends React.Component {
   mapTasksToList() {
     if (this.props.tasks !== null) {
       console.log('this is being called');
-      const taskSort = this.props.tasks.sort((taskA, taskB) => {
-        return taskA.quadrantValue - taskB.quadrantValue;
-      });
+      // const taskSort = this.props.tasks.sort((taskA, taskB) => {
+      //   return taskA.quadrantValue - taskB.quadrantValue;
+      // });
 
-      return taskSort.map((taskObj, index) => {
+      return this.props.tasks.map((taskObj, index) => {
         return (
           <li className="current-tasks" key={index}>
               <div className="task-text">
@@ -137,7 +142,8 @@ export class Tasks extends React.Component {
           <label className="label dropdown" >
             Urgent or Important?
             <select onChange={event => this.onChangeDropdown(event)}>
-              <option selected value="neither">Neither</option>
+              <option selected > -- </option>
+              <option value="neither">Neither</option>
               <option value="urgent">Urgent </option>
               <option value="important">Important</option>
               <option value="both">Both</option>
