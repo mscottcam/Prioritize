@@ -1,30 +1,50 @@
-import React from 'react';
-// import * as actions from '../../redux/actions'
-import {connect} from 'react-redux';
+import React from "react";
+import * as actions from '../../redux/actions'
+import { connect } from "react-redux";
+import "./userInfo.css";
 
-// should have the userName and a logOut button
 export class UserInfo extends React.Component {
-  componentDidMount() {
-    // this.props.dispatch(actions.authenticate())
-  };
 
-  render() {
-if (!this.props.currentUser) {
-      return (
-      <div>
-        <p> User should login here </p>
-        <a href={'/api/auth/google'}>Login with Google Friend</a>
-      </div>
-      )
-    } else {
+  demoLogin() {
+    const demoUser = {
+      _id: '59dec6719333b52e7027c22e',
+      displayName: 'Demo User',
+      googleId: '107591686684636909349',
+      accessToken: 'ya29.GlviBKS1htgw_YE-Kv665WtHQun40FFSLJxAWHHa-JbNILnD5xNzmjT58RTzCweChbRSAWdZk2dhFQSElODnrsMPNQP3mkudc8MroFFKFHY_Ep6OdgxSFbjFscWM'
+    };
+    this.props.dispatch(actions.authSuccess(demoUser));
+  }
+
+  renderListItems() {
+    if (!this.props.currentUser) {
       return (
         <div>
-          <p> {this.props.currentUser.displayName} is logged in now</p>
-          <a href={'/api/auth/logout'}>LogOut</a>
-          
+        <li className="user-info">
+          <a href={"/api/auth/google"}>Login with Google</a>
+        </li>
+        <li className="user-info">
+          <button className="demo-login" onClick={() => this.demoLogin()}>Demo Login</button>
+        </li>
         </div>
-      )
+      );
+    } else {
+      return (
+          <div>
+          <li className="user-info">
+            {this.props.currentUser.displayName}
+          </li>
+          <li className="user-info">
+            <a href={"/api/auth/logout"}>LogOut</a>
+          </li>
+          </div>
+      );
     }
+  }
+
+  render() {
+    return (
+    <ul className="right">{this.renderListItems()}</ul>
+    )
   }
 }
 

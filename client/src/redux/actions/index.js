@@ -1,6 +1,14 @@
 import fetch from 'isomorphic-fetch';
 import * as Cookies from 'js-cookie';
 
+let apiUrl;
+if (process.env.NODE_ENV === "production") {
+ apiUrl = 'https://prioritize-app.herokuapp.com';
+} 
+if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test" || process.env.NODE_ENV === "staging") {
+ apiUrl = 'http://localhost:8080';
+}
+
 export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
 export const fetchUserDataRequest = () => ({ type: FETCH_USER_DATA_REQUEST });
 
@@ -10,20 +18,17 @@ export const fetchUserDataSuccess = userData => ({ type: FETCH_USER_DATA_SUCCESS
 export const FETCH_USER_DATA_ERROR = 'FETCH_USER_DATA_ERROR';
 export const fetchUserDataError = error => ({type: FETCH_USER_DATA_ERROR, error});
 
-export const fetchUserData = currentUserId => dispatch => {
-  console.log('What is our id: ',currentUserId)
+export const fetchUserData = currentUser => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${currentUser.token}`
     },
     method: 'GET'
   };
-  // dispatch some action that: looks @ our authreducer.currentUser => send that id for the fetch/api/userData
   dispatch(fetchUserDataRequest());
-  // state.authReducer.XX
-  return fetch(`http://localhost:8080/api/userData/${currentUserId.currentUserId}`, opts)
+  return fetch(`${apiUrl}/api/userData/${currentUser.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText);
@@ -52,14 +57,14 @@ export const postTask = taskObj => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${taskObj.userId.accessToken}`
     },
     method: 'POST',
     body: JSON.stringify(taskObj)
   };
   dispatch(postTaskRequest());
-  return fetch('http://localhost:8080/api/userTask', opts)
+  return fetch(`${apiUrl}/api/userTask`, opts)
   .then(res => {
     if(!res.ok) {
       return Promise.reject(res.statusText)
@@ -67,7 +72,6 @@ export const postTask = taskObj => dispatch => {
     return res.json();
   })
   .then(taskData => {
-    console.log('returned task object ------->', taskData);
     return dispatch(postTaskSuccess(taskData));
   })
   .catch(err => {
@@ -87,17 +91,16 @@ export const FETCH_MISSION_ERROR = 'FETCH_MISSION_ERROR';
 export const fetchMissionError = error => ({type: FETCH_MISSION_ERROR, error});
 
 export const fetchMission = currentUserId => dispatch => {
-  console.log('User id in fetchMission: ', currentUserId)
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${currentUserId.token}`
     },
     method: 'GET'
   };
   dispatch(fetchMissionRequest());
-  return fetch(`http://localhost:8080/api/mission/${currentUserId.currentUserId}`, opts)
+  return fetch(`${apiUrl}/api/mission/${currentUserId.currentUserId}`, opts)
     .then(res => {
       if (!res.ok) {
         return Promise.reject(res.statusText)
@@ -125,14 +128,14 @@ export const postMission = newMission => dispatch => {
   const opts = {
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${newMission.currentUser.accessToken}`
     },
     method: 'PUT',
     body: JSON.stringify(newMission)
   };
   dispatch(postMissionRequest());
-  return fetch('http://localhost:8080/api/userMission', opts)
+  return fetch(`${apiUrl}/api/userMission`, opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -161,14 +164,13 @@ export const updateTask = data => dispatch => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-      // 'Access-Control-Allow-Origin': '*'
     },
     method: 'PUT',
     body: JSON.stringify(data)
   };
 
   dispatch(updateTaskRequest());
-  return fetch('http://localhost:8080/api/tasks', opts)
+  return fetch(`${apiUrl}/api/userTask`, opts)
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
@@ -180,6 +182,40 @@ export const updateTask = data => dispatch => {
     })
     .catch(err => {
       dispatch(updateTaskError(err));
+    })
+};
+// --------------------------------------------------------------------------------
+export const DELETE_TASK_REQUEST = 'DELETE_TASK_REQUEST';
+export const deleteTaskRequest = () => ({ type: DELETE_TASK_REQUEST });
+
+export const DELETE_TASK_SUCCESS = 'DELETE_TASK_SUCCESS';
+export const deleteTaskSuccess = taskId => ({ type: DELETE_TASK_SUCCESS, taskId});
+
+export const DELETE_TASK_ERROR = 'DELETE_TASK_ERROR';
+export const deleteTaskError = error => ({type: DELETE_TASK_ERROR, error});
+
+export const deleteTask = (taskId, token) => dispatch => {
+  const opts = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    method: 'DELETE'
+  };
+  dispatch(deleteTaskRequest());
+  return fetch(`${apiUrl}/api/userTask/${taskId}`, opts)
+    .then(res => {
+      if (!res.ok) {
+        return Promise.reject(res.statusText);
+      }
+    })
+    .then(() => {
+      return dispatch(deleteTaskSuccess(taskId));
+    })
+    .catch(err => {
+      console.error(err)
+      return dispatch(deleteTaskError(err));
     })
 };
 // --------------------------------------------------------------------------------
@@ -207,7 +243,6 @@ export const authenticate = () => dispatch => {
       .then(res => {
         if (!res.ok) {
           if (res.status !== 401) {
-            // Unauthorized, clear the cookie and go to the login page
             Cookies.remove('accessToken');
             return;
           }
@@ -216,9 +251,10 @@ export const authenticate = () => dispatch => {
         return res.json();
       })
       .then(currentUser => {
-        console.log("You are currently logged in as: ", currentUser)
         return dispatch(authSuccess(currentUser)); 
-      });
+      })
+    .catch(err => {
+      dispatch(authError(err));
+    })
   } 
-    console.log('You are currently not logged in as a user.')
 };

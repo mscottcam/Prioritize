@@ -3,30 +3,27 @@ import * as actions from "../../redux/actions";
 
 import { connect } from "react-redux";
 
+import './tasks.css'
+
 export class Tasks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       taskNameInput: null,
-      firstLoginComplete: false,
       deadline: null,
       important: false,
-      urgent: false
+      urgent: false, 
+      value: 'neither'
     };
   }
 
-  componentDidUpdate() {
-    console.log('i ran too');
-    if (this.state.firstLoginComplete === false) {
-      this.props.dispatch(
-        actions.fetchUserData({ currentUserId: this.props.currentUser })
-      );
-      if (this.props.currentUser) {
-        this.setState({
-          firstLoginComplete: true
-        }); 
-      }
-    }
+  componentWillMount() {
+    this.props.dispatch(
+      actions.fetchUserData({
+        currentUserId: this.props.currentUser._id,
+        token: this.props.currentUser.accessToken
+      })
+    );
   }
 
   onChangeTaskName(event) {
@@ -34,42 +31,40 @@ export class Tasks extends React.Component {
     this.setState({
       taskNameInput: event.target.value
     });
-  };
+  }
 
   onChangeDeadline(event) {
     this.setState({
       deadline: event.target.value
     });
-  };
+  }
 
   onChangeDropdown(event) {
-    console.log(event.target.value)
-    if (event.target.value === 'important') {
+    if (event.target.value === "important") {
       this.setState({
         important: true
       });
-    };
-    if (event.target.value === 'urgent') {
+    }
+    if (event.target.value === "urgent") {
       this.setState({
         urgent: true
       });
-    };
-    if (event.target.value === 'both') {
+    }
+    if (event.target.value === "both") {
       this.setState({
         important: true,
         urgent: true
       });
-    };
-    if (event.target.value === 'neither') {
+    }
+    if (event.target.value === "neither") {
       this.setState({
         important: false,
         urgent: false
-      })
+      });
     }
-  };
+  }
 
-
-
+  // Update user ID being sent over
   submitTask(event) {
     event.preventDefault();
     this.props.dispatch(
@@ -82,77 +77,84 @@ export class Tasks extends React.Component {
       })
     );
     let form = document.getElementById("form");
-    form.reset();
+    return form.reset();
   }
 
-  deleteTask(event) {
-    console.log("delete button event -->", event.currentTarget);
+  // Update user ID being sent over
+  deleteTask(task) {
+    this.props.dispatch(actions.deleteTask(task._id, this.props.currentUser.accessToken)).then(() => {
+    this.props.dispatch(
+      actions.fetchUserData({
+        currentUserId: this.props.currentUser._id,
+        token: this.props.currentUser.accessToken
+      })
+    );
+    });
   }
-
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
       console.log('this is being called');
       const taskSort = this.props.tasks.sort((taskA, taskB) => {
-        return taskA.quadrantValue - taskB.quadrantValue
+        return taskA.quadrantValue - taskB.quadrantValue;
       });
 
       return taskSort.map((taskObj, index) => {
         return (
-          <li key={index}>
-            <span>{taskObj.taskName}</span>
-            <span>  -  {taskObj.deadline}</span>
+          <li className="current-tasks" key={index}>
+              <div className="task-text">
+                <span className="task">{taskObj.taskName}    --    {taskObj.deadline}</span>
+              </div>
+              <button className="delete-task" onClick={() => this.deleteTask(taskObj)}>Delete</button>
           </li>
-        )
+        );
       });
+    } else {
+      return <li>You have No Tasks Left!!! You're all Up to Date</li>;
     }
   }
-
-  userDataFetch() {
-    console.log("clicked!");
-    this.props.dispatch(
-      actions.fetchUserData({ currentUserId: this.props.currentUser })
-    );
+  showTaskHeader() {
+    
   }
   render() {
-    //<button onClick={() => this.userDataFetch()}>Testing</button>
     return (
-      <div>
+      <div className="task-form">
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <label> Name of task:
+          <label className="label task-label" > Task 
             <input
               type="text"
               placeholder="Add a task!"
-              onChange={event => this.onChangeTaskName(event)} 
+              onChange={event => this.onChangeTaskName(event)}
             />
           </label> <br />
-          <label> Does it have a Deadline?
+          <label className="label" > Note
             <input
               type="text"
-              placeholder="Add a Deadline"
+              placeholder="Deadline"
               onChange={event => this.onChangeDeadline(event)} 
             />
           </label> <br />
-          <label>
-            Is this task Urgent or Important?
-            <select onChange={event => this.onChangeDropdown(event)} >
+          <label className="label dropdown" >
+            Urgent or Important?
+            <select onChange={event => this.onChangeDropdown(event)}>
               <option selected value="neither">Neither</option>
-              <option value="urgent">Urgent</option>
+              <option value="urgent">Urgent </option>
               <option value="important">Important</option>
               <option value="both">Both</option>
             </select>
-          </label><br />
+          </label>
+          <br />
           <button type="submit">Submit Task</button>
         </form>
-        
-        <div><ul>{this.mapTasksToList()}</ul></div>
+        {this.showTaskHeader()}
+        <div className="task-list-div"><ul>{this.mapTasksToList()}</ul></div>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state, props) => ({
-  currentUser: state.authReducer.currentUser._id,
+  currentUser: state.authReducer.currentUser,
   tasks: state.taskReducer.tasks
 });
 export default connect(mapStateToProps)(Tasks);

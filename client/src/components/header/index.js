@@ -1,4 +1,6 @@
 import React from 'react';
+import './header.css';
+// import "materialize-css/dist/css/materialize.min.css";
 
 import UserInfo from '../userInfo'
 // header should have the name of our App
@@ -7,10 +9,10 @@ import UserInfo from '../userInfo'
 export default class Header extends React.Component {
   render(){
   return (
-     <div className="card">
-					<h1>Prioritize</h1>
-						<UserInfo /> 
-			</div>
+     <nav className="nav">
+					<h1 id="header"className="prioritize-name">Prioritize</h1>
+					<UserInfo/>
+			</nav> 
 		);
 	};
 }

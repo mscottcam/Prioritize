@@ -47,7 +47,8 @@ const generateTaskData = () => {
     userId: '59d64ed9c996510584f2fc32',
     deadline: faker.lorem.word(),
     important: faker.random.boolean(),
-    urgent: faker.random.boolean()
+    urgent: faker.random.boolean(),
+    quadrantValue: faker.random.number()
   };
 };
 
@@ -133,17 +134,6 @@ describe('Life coach', () => {
   });
 
   describe('GET requests', () => {
-    it('should return all users', function() {
-      let res;
-      return chai
-        .request(app)
-        .get('/api/users')
-        .then(_res => {
-          res = _res;
-          res.should.have.status(200);
-        });
-    });
-    
     it('should return the current user', () => {
       let resUser;  
       return chai.request(app)
@@ -176,7 +166,6 @@ describe('Life coach', () => {
           resUser.mission.should.equal(user.mission);
           resUser.googleId.should.equal(user.googleId);
           resUser._id.should.equal(user._id.toString());
-          // resUser.roles.should.deep.equal(user.roles); <===== deconstruct this
         });
     });
 
@@ -185,6 +174,7 @@ describe('Life coach', () => {
       return chai
         .request(app)
         .get('/api/userData/59d64ed9c996510584f2fc32')
+        .set('Authorization', `Bearer ${testUser.accessToken}`)
         .then(res => {
           res.should.have.status(200);
           res.should.be.json;
@@ -192,7 +182,7 @@ describe('Life coach', () => {
           res.body.tasks.should.have.length.of.at.least(1);
           res.body.tasks.forEach(function(task) {
             task.should.be.a('object');
-            task.should.include.keys('_id','userId','taskName','urgent', 'important', 'deadline');
+            task.should.include.keys('_id','userId','taskName','urgent', 'important', 'deadline', 'quadrantValue');
           });
           resTask = res.body.tasks[0];
           return Task.findById(resTask._id);
@@ -203,6 +193,7 @@ describe('Life coach', () => {
           resTask.important.should.equal(task.important);
           resTask.urgent.should.equal(task.urgent);
           resTask.taskName.should.equal(task.taskName);
+          resTask.quadrantValue.should.equal(task.quadrantValue);
         });
     });
   });
@@ -219,6 +210,7 @@ describe('Life coach', () => {
       return chai
         .request(app)
         .post('/api/userTask')
+        .set('Authorization', `Bearer ${testUser.accessToken}`)
         .send(newTask)
         .then(function(res) {
           res.should.have.status(201);
@@ -265,6 +257,7 @@ describe('Life coach', () => {
           return chai
             .request(app)
             .put('/api/userMission')
+            .set('Authorization', `Bearer ${testUser.accessToken}`)
             .send(testMission);
         })
         .then(function(res) {
@@ -292,6 +285,7 @@ describe('Life coach', () => {
           return chai
             .request(app)
             .put('/api/userTask')
+            .set('Authorization', `Bearer ${testUser.accessToken}`)
             .send(taskUpdate);
         })
         .then(function(res) {
@@ -319,6 +313,7 @@ describe('Life coach', () => {
           return chai
             .request(app)
             .put('/api/userData')
+            .set('Authorization', `Bearer ${testUser.accessToken}`)
             .send(newRole);
         })
         .then(function(res) {
@@ -338,5 +333,28 @@ describe('Life coach', () => {
     // caveat to take into consideration for this test:
     // the goals being added that do not have a role declared, will be given the default role
     // });
+  });
+
+  describe('DELETE requests', () => {
+    it('should delete a task by id', function() {
+      let resTask;
+      
+      return Task
+        .findOne()
+        .then(function(task) {
+          resTask = task;
+          return chai
+            .request(app)
+            .delete(`/api/userTask/${resTask._id}`)
+            .set('Authorization', `Bearer ${testUser.accessToken}`);
+        })
+        .then(function(res) {
+          res.should.have.status(204);
+          return Task.findById(resTask._id);
+        })
+        .then(function(task) {
+          should.not.exist(task);
+        });
+    });
   });
 });

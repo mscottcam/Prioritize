@@ -1,5 +1,5 @@
 import * as actions from '../actions';
-import sortTasksArray from '../../lib/redux-tasks-sort'
+// import sortTasksArray from '../../lib/redux-tasks-sort'
 
 const initialState = {
   currentUser: null, 
@@ -28,18 +28,33 @@ const taskReducer = (state=initialState, action) => {
     case actions.POST_TASK_SUCCESS: {
       return {
         ...state,
-        tasks: sortTasksArray([...state.tasks, action.taskData])
+        tasks: [...state.tasks, action.taskData]
       };
     }
+    // We will call sortTasksArray on the tasks once functionality is complete. 
+
+    // case actions.POST_TASK_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     tasks: sortTasksArray([...state.tasks, action.taskData])
+    //   };
+    // }
     case actions.UPDATE_TASK_SUCCESS: {
       const findTask = (arr) => arr.taskId === action.task.taskId;
-      
       let taskToUpdate = state.tasks.find(findTask);
       taskToUpdate.task = action.task.task;
       return {
         ...state,
         tasks: [...state.tasks, taskToUpdate]
       }
+    }
+    case actions.DELETE_TASK_SUCCESS: {
+      const newState = {...state}
+      const indexOfTaskToDelete = state.tasks.findIndex(task => {
+        return task._id === action.taskId
+      })
+      newState.tasks.splice(indexOfTaskToDelete, 1);
+      return newState;
     }
     default: return state
   }

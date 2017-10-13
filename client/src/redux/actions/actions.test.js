@@ -17,15 +17,14 @@ describe("async actions", () => {
 
   it("creates FETCH_USER_DATA_SUCCESS when fetching tasks has been done", () => {
     nock("http://localhost:8080")
-      .get("/api/userData")
+      .get("/api/userData/1234567890")
       .reply(200, { tasks: ["study hard"] });
     const expectedActions = [
       { type: actions.FETCH_USER_DATA_REQUEST },
-      // The below line: why does 'body: { tasks: ['study hard']}' fail?
       { type: actions.FETCH_USER_DATA_SUCCESS, userData: { tasks: ["study hard"] } }
     ];
     const store = mockStore({ text: [] });
-    return store.dispatch(actions.fetchUserData()).then(() => {
+    return store.dispatch(actions.fetchUserData({currentUserId: '1234567890'})).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -42,11 +41,11 @@ describe("async actions", () => {
         urgent: false
       }
     nock("http://localhost:8080")
-      .post("/api/tasks", postBody)
+      .post("/api/userTask", postBody)
       .reply(201, {ok: true, id: 1234});
     const expectedActions = [
       { type: actions.POST_TASK_REQUEST },
-      { type: actions.POST_TASK_SUCCESS, task: { ok: true, id: 1234 } }
+      { type: actions.POST_TASK_SUCCESS, taskData: { ok: true, id: 1234 } }
     ];
     const store = mockStore({ tasks: [] });
     return store.dispatch(actions.postTask(postBody)).then(() => {
@@ -56,33 +55,36 @@ describe("async actions", () => {
 
   it("creates FETCH_MISSION_SUCCESS when fetching missions has been done", () => {
     nock("http://localhost:8080")
-      .get("/api/mission")
-      .reply(200, { mission: ["lots of text"] });
+      .get("/api/mission/1234567890")
+      .reply(200, { mission: ["create a working application"] });
     const expectedActions = [
       { type: actions.FETCH_MISSION_REQUEST },
-      { type: actions.FETCH_MISSION_SUCCESS, mission: { mission: ["lots of text"] } }
+      { type: actions.FETCH_MISSION_SUCCESS,  mission: ["create a working application"] } 
     ];
     const store = mockStore({ text: [] });
-    return store.dispatch(actions.fetchMission()).then(() => {
+    return store.dispatch(actions.fetchMission({currentUserId: '1234567890'})).then(() => {
     expect(store.getActions()).toEqual(expectedActions);
     });
   });
 
   it('creates POST_MISSION_SUCCESS when making new mission', () => {
-        const userMission = {
+        const missionToUpdate = {
         userId: 1234,
-        mission: 'lots of thoughts',
+        mission: 'create a working application',
         role: "dev",
+        currentUser: {
+          accesstoken: 'abc123'
+        }
       }
     nock('http://localhost:8080')
-      .post('/api/mission', userMission)
-      .reply(201, {ok: true, id: 1234});
+      .put('/api/userMission', missionToUpdate)
+      .reply(201, {ok: true, id: 1234, userId: 1234, mission: 'work hard'});
       const expectedActions = [
         {type: actions.POST_MISSION_REQUEST},
-        {type: actions.POST_MISSION_SUCCESS, mission: { ok: true, id: 1234 }}
+        {type: actions.POST_MISSION_SUCCESS, mission: 'work hard' }
       ]
-      const store = mockStore({text:[] });
-      return store.dispatch(actions.postMission(userMission)).then(() => {
+      const store = mockStore({});
+      return store.dispatch(actions.postMission(missionToUpdate)).then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   })
@@ -100,7 +102,7 @@ describe("async actions", () => {
       urgent: false
     }
     nock('http://localhost:8080')
-      .put('/api/tasks', taskToUpdate)
+      .put('/api/userTask', taskToUpdate)
       .reply(201, {ok: true, id: 1234, taskId: 1234});
     const expectedActions = [
       {type: actions.UPDATE_TASK_REQUEST},
@@ -112,6 +114,20 @@ describe("async actions", () => {
     });
   })  
   
+  it('calls DELETE_TASK_SUCCESS when a task is deleted', () => {
+    nock('http://localhost:8080')
+      .delete('/api/userTask/1234')
+      .reply(204)
+      const expectedActions = [
+        { type: actions.DELETE_TASK_REQUEST },
+        { type: actions.DELETE_TASK_SUCCESS, taskId: '1234'  }
+      ];
+      const store = mockStore({});
+      return store.dispatch(actions.deleteTask('1234')).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+
   // it('authenticates user when Authenticate is called', () =>{
   //   nock('http://localhost:8080')
   //     .get('/api/me',
