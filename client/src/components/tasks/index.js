@@ -99,11 +99,6 @@ export class Tasks extends React.Component {
 
   mapTasksToList() {
     if (this.props.tasks !== null) {
-      console.log('this is being called');
-      // const taskSort = this.props.tasks.sort((taskA, taskB) => {
-      //   return taskA.quadrantValue - taskB.quadrantValue;
-      // });
-
       return this.props.tasks.map((taskObj, index) => {
         return (
           <li className="current-tasks" key={index}>

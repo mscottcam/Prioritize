@@ -10,11 +10,12 @@
 
 .current-tasks {
   width: 40rem;
-  height: 1.5em;
+  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 1rem;
+
 }
 
 .task-list-div {
@@ -28,6 +29,7 @@
   justify-content: flex-start;
   width: 40rem;
   margin: 0.5rem 0.5rem 0.5rem 0;
+  /* height: auto; */
 }
 
 form input {
@@ -46,12 +48,14 @@ form select {
   font-family: 'Fira Sans', sans-serif !important;
   text-align: start;
   padding: 0.2rem;
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .delete-task {
   margin: 0;
   height: 1.5rem;
+  padding-bottom: 1.7rem;
+
 }
 
 .dropdown {
