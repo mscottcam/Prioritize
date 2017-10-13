@@ -336,7 +336,6 @@ describe('3 tasks sorter', () => {
         quadrantValue: 1
       }
     ];
-    console.log('look here ----->', sortTasksArray(testTaskArray))
     expect(sortTasksArray(testTaskArray)[0].quadrantValue).toBe(1);
     expect(sortTasksArray(testTaskArray)[1].quadrantValue).toBe(2);
     expect(sortTasksArray(testTaskArray)[2].quadrantValue).toBe(4);
@@ -447,7 +446,6 @@ describe('3 tasks sorter', () => {
         quadrantValue: 1
       }
     ];
-    console.log('test log ----->', sortTasksArray(testTaskArray))
     expect(sortTasksArray(testTaskArray)[0].quadrantValue).toBe(1);
     expect(sortTasksArray(testTaskArray)[1].quadrantValue).toBe(1);
     expect(sortTasksArray(testTaskArray)[2].quadrantValue).toBe(2);

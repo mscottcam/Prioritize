@@ -23,7 +23,9 @@ const userData = {
   tasks: [
     {
       taskId: 5678,
-      task: 'do homework on monday'}
+      task: 'do homework on monday',
+      quadrantValue: 2
+    }
   ]
 };
 
@@ -52,7 +54,10 @@ describe('task reducer', () => {
     let state = userData;
     let newTask = {
       taskId: 3456,
-      task:'what the hell is this'};
+      task:'what the hell is this',
+      quadrantValue: 2,
+      userId: {}
+    };
     const newState = taskReducer(state, actions.postTaskSuccess(newTask));
     expect(newState.tasks).toContainEqual(newTask);
   });
@@ -60,7 +65,8 @@ describe('task reducer', () => {
     let state = userData;
     let updateTask = {
       taskId: 5678,
-      task: 'postpone homework'
+      task: 'postpone homework',
+      quadrantValue: 2
     }
     const newState = taskReducer(state, actions.updateTaskSuccess(updateTask));
     expect(newState.tasks.find(item => item.taskId ===updateTask.taskId)).toEqual(updateTask);
