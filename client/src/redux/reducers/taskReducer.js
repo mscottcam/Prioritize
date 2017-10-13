@@ -1,5 +1,5 @@
 import * as actions from '../actions';
-// import sortTasksArray from '../../lib/redux-tasks-sort'
+import sortTasksArray from '../../lib/redux-tasks-sort'
 
 const initialState = {
   currentUser: null, 
@@ -28,7 +28,7 @@ const taskReducer = (state=initialState, action) => {
     case actions.POST_TASK_SUCCESS: {
       return {
         ...state,
-        tasks: [...state.tasks, action.taskData]
+        tasks: sortTasksArray([...state.tasks, action.taskData])
       };
     }
     // We will call sortTasksArray on the tasks once functionality is complete. 

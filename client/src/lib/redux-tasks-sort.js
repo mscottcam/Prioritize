@@ -53,18 +53,18 @@ const sortTasksArray = (array, index = 0, swapped) => {
         return sortTasksArray(partiallySortedTasks, 1, comparedTasks.swapped);
       };
       if (index > 0) { 
+        const theTwoYouSort = 2;
         const comparedTasks = compareTaskOrder(array[index], array[index + 1], swapped);
         const beginningTasks = array.slice(0, index).map(cloneTask);
-        if (array.length >= index + 3) {
-          console.log('LOOK HERE ---->', comparedTasks.tasks)
-          const endingTasks = comparedTasks.tasks.slice(index + 2).map(cloneTask);
+        if (array.length > comparedTasks.tasks.length + beginningTasks.length) {
+          const endingTasks = array.slice(index + 2).map(cloneTask);
           const assembledArray = [...beginningTasks, ...comparedTasks.tasks, ...endingTasks];
           return sortTasksArray(assembledArray, index + 1, comparedTasks.swapped);
         };
         const assembledArray = [...beginningTasks, ...comparedTasks.tasks];
         return sortTasksArray(assembledArray, 0, comparedTasks.swapped);
       };
-
+      const remainingTasks = array.slice(2).map(cloneTask);
       const partiallySortedTasks = [...compareTaskOrder(array[0], array[1], swapped).tasks, ...remainingTasks];
       return [partiallySortedTasks[0], ...(sortTasksArray(partiallySortedTasks.slice(1)))];
     };
@@ -72,10 +72,3 @@ const sortTasksArray = (array, index = 0, swapped) => {
 };
 
 export default sortTasksArray;
-
-
-
-
-
-
-// if ((task1.quadrantValue === 3 && task2.quadrantValue === 2) || (task1.quadrantValue === 2 && task2.quadrantValue === 1) || (task1.quadrantValue === 3 && task2.quadrantValue === 1) )
