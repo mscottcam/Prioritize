@@ -411,13 +411,49 @@ describe('3 tasks sorter', () => {
         important: false,
         urgent: true,
         quadrantValue: 3
+      },
+      {
+        _id: '59de2b4faadb940388fab3',
+        taskName: 'adding yet another',
+        userId: {
+          _id: '59dcea3e38e506205b4dccf5',
+          displayName: 'M. Scott Cameron',
+          googleId: '116659764207939386314',
+          accessToken: 'ya29.GlzhBKUemNqsd9Bt_9N6_0fPmMXHn9e4md-tg-nR4c-5D3XzQ8Pr5qNGveRaPhk9gy_3I07LvVi07IIinv4G89em8gzqLcpf9R__8FYpYP8hPRaoiu8uLbMGxLcZbg',
+          __v: 0,
+          mission: 'Get this task component to work!',
+          roles: []
+        },
+        deadline: '',
+        important: false,
+        urgent: true,
+        quadrantValue: 2
+      },
+      {
+        _id: '59de2b4faadb940388fab3',
+        taskName: 'adding yet another',
+        userId: {
+          _id: '59dcea3e38e506205b4dccf5',
+          displayName: 'M. Scott Cameron',
+          googleId: '116659764207939386314',
+          accessToken: 'ya29.GlzhBKUemNqsd9Bt_9N6_0fPmMXHn9e4md-tg-nR4c-5D3XzQ8Pr5qNGveRaPhk9gy_3I07LvVi07IIinv4G89em8gzqLcpf9R__8FYpYP8hPRaoiu8uLbMGxLcZbg',
+          __v: 0,
+          mission: 'Get this task component to work!',
+          roles: []
+        },
+        deadline: '',
+        important: false,
+        urgent: true,
+        quadrantValue: 1
       }
     ];
     console.log('test log ----->', sortTasksArray(testTaskArray))
     expect(sortTasksArray(testTaskArray)[0].quadrantValue).toBe(1);
-    expect(sortTasksArray(testTaskArray)[1].quadrantValue).toBe(2);
-    expect(sortTasksArray(testTaskArray)[2].quadrantValue).toBe(3);
-    expect(sortTasksArray(testTaskArray)[3].quadrantValue).toBe(4);
+    expect(sortTasksArray(testTaskArray)[1].quadrantValue).toBe(1);
+    expect(sortTasksArray(testTaskArray)[2].quadrantValue).toBe(2);
+    expect(sortTasksArray(testTaskArray)[3].quadrantValue).toBe(2);
+    expect(sortTasksArray(testTaskArray)[4].quadrantValue).toBe(3);
+    expect(sortTasksArray(testTaskArray)[5].quadrantValue).toBe(4);
   });
 
   it('return empty array on 0 length array', () => {
