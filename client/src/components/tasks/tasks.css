@@ -1,7 +1,7 @@
 #form {
   margin: 0.5rem auto 0.1rem auto;
   border: thin solid black;
-  width: 40rem;
+  /* width: 40rem; */
 }
 
 .label > input, label > select {
@@ -9,7 +9,7 @@
 }
 
 .current-tasks {
-  width: 40rem;
+  /* width: 40rem; */
   height: auto;
   display: flex;
   justify-content: space-between;
@@ -28,7 +28,7 @@
   border: thin solid black;
   display: flex;
   justify-content: flex-start;
-  width: 40rem;
+  /* width: 40rem; */
   margin: 0.5rem 0.5rem 0.5rem 0;
 }
 
@@ -50,7 +50,7 @@ form select {
 .task {
   font-family: 'Fira Sans', sans-serif !important;
   text-align: start;
-  padding: 0.2rem;
+  padding: 0.4rem;
   font-size: 1.5rem;
 }
 
@@ -76,4 +76,16 @@ form select {
   padding-top: 1rem;
   margin-left: 0.8rem;
   font-family: 'Bitter', serif;
+}
+
+@media (min-width: 768px) {
+  #form {
+    width: 30rem;
+  }
+  .task-form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+  }
+
 }

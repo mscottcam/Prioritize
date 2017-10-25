@@ -1,5 +1,5 @@
 #header {
-  font-size: 4rem;
+  font-size: 3rem;
   padding-bottom: 1rem;
 }
 
@@ -13,4 +13,10 @@
 
 .nav {
   height: 50rem;
+}
+
+@media (min-width: 400px) {
+  #header {
+    font-size: 4rem;
+  }
 }
