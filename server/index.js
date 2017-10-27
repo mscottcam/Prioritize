@@ -178,7 +178,6 @@ app.post('/api/userTask',
       quadrantValue: quadrantDecider(req.body)
     })
       .then(task => {
-        console.log('server side task after creation', task);
         res.status(201).json(task.apiRepr());
       })
       .catch(err => {

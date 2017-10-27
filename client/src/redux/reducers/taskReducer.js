@@ -31,14 +31,6 @@ const taskReducer = (state=initialState, action) => {
         tasks: sortTasksArray([...state.tasks, action.taskData])
       };
     }
-    // We will call sortTasksArray on the tasks once functionality is complete. 
-
-    // case actions.POST_TASK_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     tasks: sortTasksArray([...state.tasks, action.taskData])
-    //   };
-    // }
     case actions.UPDATE_TASK_SUCCESS: {
       const findTask = (arr) => arr.taskId === action.task.taskId;
       let taskToUpdate = state.tasks.find(findTask);
