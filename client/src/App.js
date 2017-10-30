@@ -15,19 +15,19 @@ export class App extends React.Component {
   showMissionAndTasks() {
     if (this.props.currentUser) {
       return (
-        <div>
+        <div className="user-content">
           <Mission />
           <Tasks />
         </div>
       );
     } else {
       return (
-        <div>
+        <div className="intro">
           <p className="App-intro">
             Prioritize is a productivity app designed to make your life easier.
           </p>
           <p className="App-intro">
-            You enter your tasks and Prioritize will reorder your tasks and help
+            Enter your tasks and Prioritize will reorder them and help
             you make the most of your time.
           </p>
           <h2 className="App-intro welcome-message">Login to start prioritizing!</h2>

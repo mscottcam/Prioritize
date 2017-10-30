@@ -95,7 +95,7 @@ describe('Life coach', () => {
     true.should.be.true;
   });
 
-  describe('Google authentication', () => {
+  describe.only('Google authentication', () => {
     it('should redirect to google authentication', () => {
       chai
         .request(app)
@@ -124,6 +124,7 @@ describe('Life coach', () => {
       chai
         .request(app)
         .get('/api/auth/logout')
+        .set('Cookie', `accessToken=${testUser.accessToken}`)
         .redirects(0)
         .end((err, res) => {
           res.should.have.status(302);
@@ -141,6 +142,8 @@ describe('Life coach', () => {
         .set('Authorization', `Bearer ${testUser.accessToken}`)
         .send()
         .then(res => {
+          // console.log('Res headers: ', res.headers);
+          // console.log('Res header set cookie: ', res.headers['set-cookie']);
           let user = res.body;
           res.should.have.status(200);
           res.should.be.json;

@@ -1,33 +1,37 @@
-import * as actions from '../actions';
+import * as actions from "../actions";
 
 const initialState = {
-  currentUser: null, 
+  currentUser: null,
   userId: null,
-  currentMission: 'Do First Things First',
+  currentMission: "Do First Things First"
 };
 
-const missionReducer = (state=initialState, action) => {
-  switch (action.type) {
-    case actions.FETCH_MISSION_REQUEST:
-      return state
-    case actions.FETCH_MISSION_SUCCESS: 
-      return ({
-        ...state,
-        currentMission: action.mission
-      });
-    case actions.FETCH_MISSION_ERROR:
-      return state
-    case actions.POST_MISSION_REQUEST: 
-      return state
-    case actions.POST_MISSION_SUCCESS:
-      return ({
-        ...state, 
-        currentMission: action.mission
-      });  
-    case actions.POST_MISSION_ERROR:
-      return state
-    default: return state
-  };
+const missionReducer = (state = initialState, action) => {
+  if (action.type === actions.FETCH_MISSION_REQUEST) {
+    return state;
+  }
+  if (action.type === actions.FETCH_MISSION_SUCCESS) {
+    return {
+      ...state,
+      currentMission: action.mission
+    };
+  }
+  if (action.type === actions.FETCH_MISSION_ERROR) {
+    return state;
+  }
+  if (action.type === actions.POST_MISSION_REQUEST) {
+    return state;
+  }
+  if (action.type === actions.POST_MISSION_SUCCESS) {
+    return {
+      ...state,
+      currentMission: action.mission
+    };
+  }
+  if (action.type === actions.POST_MISSION_ERROR) {
+    return state;
+  }
+  return state;
 };
 
-export default missionReducer
+export default missionReducer;
