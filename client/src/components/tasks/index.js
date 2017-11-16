@@ -114,7 +114,7 @@ export class Tasks extends React.Component {
         );
       });
     } else {
-      return <li>You have No Tasks Left!!! You're all Up to Date</li>;
+      return <li>You have No Tasks Left!!!</li>;
     }
   }
 
