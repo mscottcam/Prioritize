@@ -19,31 +19,31 @@ export class UserInfo extends React.Component {
     if (!this.props.currentUser) {
       return (
         <div>
-        <li className="user-info">
-          <a href={"/api/auth/google"}>Login with Google</a>
-        </li>
-        <li className="user-info">
-          <button className="demo-login" onClick={() => this.demoLogin()}>Demo</button>
-        </li>
+          <li className="user-info">
+            <a href={"/api/auth/google"}>Login with Google</a>
+          </li>
+          <li className="user-info">
+            <button className="demo-login" onClick={() => this.demoLogin()}>Demo</button>
+          </li>
         </div>
       );
     } else {
       return (
-          <div>
+        <div>
           <li className="user-info">
             {this.props.currentUser.displayName}
           </li>
           <li className="user-info">
             <a href={"/api/auth/logout"}>LogOut</a>
           </li>
-          </div>
+        </div>
       );
     }
   }
 
   render() {
     return (
-    <ul className="right">{this.renderListItems()}</ul>
+      <ul className="right">{this.renderListItems()}</ul>
     )
   }
 }
@@ -51,4 +51,5 @@ export class UserInfo extends React.Component {
 const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser
 });
+
 export default connect(mapStateToProps)(UserInfo);

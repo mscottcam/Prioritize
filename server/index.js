@@ -135,7 +135,7 @@ app.get(
 );
 
 app.get('/api/userData/:id',
-  passport.authenticate('bearer', { session: false }), 
+  passport.authenticate('bearer', { session: false }),
   (req, res) => {
     const idToCast = req.params.id;
     const ObjectId = require('mongoose').Types.ObjectId;
@@ -152,10 +152,11 @@ app.get('/api/userData/:id',
       .catch(err => {
         console.error(err);
       });
-  });
+  }
+);
 
-app.get('/api/mission/:id',   
-  passport.authenticate('bearer', { session: false }), 
+app.get('/api/mission/:id',
+  passport.authenticate('bearer', { session: false }),
   (req, res) => {
     User.findOne({ googleId: req.params.id })
       .then(user => {
@@ -164,10 +165,11 @@ app.get('/api/mission/:id',
       .catch(err => {
         console.error(err);
       });
-  });
+  }
+);
 
-app.post('/api/userTask', 
-  passport.authenticate('bearer', { session: false }), 
+app.post('/api/userTask',
+  passport.authenticate('bearer', { session: false }),
   (req, res) => {
     Task.create({
       userId: req.body.userId,
@@ -184,10 +186,11 @@ app.post('/api/userTask',
         console.error(err);
         res.status(500).json({ error: 'something went wrong' });
       });
-  });
+  }
+);
 
-app.put('/api/userData', 
-  passport.authenticate('bearer', { session: false }), 
+app.put('/api/userData',
+  passport.authenticate('bearer', { session: false }),
   (req, res) => {
     User.findByIdAndUpdate(
       req.body._id,
@@ -202,10 +205,11 @@ app.put('/api/userData',
         console.error(err);
         res.status(500).json({ error: 'something went wrong' });
       });
-  });
+  }
+);
 
-app.put('/api/userMission', 
-  passport.authenticate('bearer', { session: false }), 
+app.put('/api/userMission',
+  passport.authenticate('bearer', { session: false }),
   (req, res) => {
     User.findByIdAndUpdate(
       req.body.currentUser._id,
@@ -219,10 +223,11 @@ app.put('/api/userMission',
         console.error(err);
         res.status(500).json({ error: 'something went wrong' });
       });
-  });
+  }
+);
 
-app.put('/api/userTask', 
-  passport.authenticate('bearer', { session: false }), 
+app.put('/api/userTask',
+  passport.authenticate('bearer', { session: false }),
   (req, res) => {
     Task.findByIdAndUpdate(
       req.body._id,
@@ -243,9 +248,10 @@ app.put('/api/userTask',
         console.error(err);
         res.status(500).json({ error: 'something went wrong' });
       });
-  });
+  }
+);
 
-app.delete('/api/userTask/:id', 
+app.delete('/api/userTask/:id',
   passport.authenticate('bearer', { session: false }),
   (req, res) => {
     Task.findByIdAndRemove(req.params.id)
@@ -256,7 +262,8 @@ app.delete('/api/userTask/:id',
         console.error(err);
         res.status(500).json({ error: 'something went wrong' });
       });
-  });
+  }
+);
 
 let server;
 function runServer(port = PORT, database = secret.DATABASE) {
@@ -288,6 +295,7 @@ function closeServer() {
     });
   });
 }
+
 if (require.main === module) {
   runServer().catch(err => {
     console.error('Problem starting server: ', err);

@@ -14,7 +14,10 @@ export class Mission extends React.Component {
 
   componentWillMount() {
     this.props.dispatch(
-      actions.fetchMission({ currentUserId: this.props.currentUser.googleId, token: this.props.currentUser.accessToken })
+      actions.fetchMission({
+        currentUserId: this.props.currentUser.googleId,
+        token: this.props.currentUser.accessToken
+      })
     );
   }
 
@@ -85,4 +88,5 @@ const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser,
   mission: state.missionReducer.currentMission
 });
+
 export default connect(mapStateToProps)(Mission);

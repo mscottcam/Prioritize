@@ -2,7 +2,7 @@ import * as actions from '../actions';
 import sortTasksArray from '../../lib/redux-tasks-sort'
 
 const initialState = {
-  currentUser: null, 
+  currentUser: null,
   userId: null,
   currentMission: null,
   roles:[],
@@ -17,12 +17,7 @@ const taskReducer = (state=initialState, action) => {
     case actions.FETCH_USER_DATA_SUCCESS: {
       return {
         ...state,
-        // currentUser: action.userData.currentUser,
-        // roles: action.userData.roles,
-        // goals: action.userData.goals,
-        // projects: action.userData.projects,
         tasks: action.userData.tasks
-        // userData: action.userData
       }
     }
     case actions.POST_TASK_SUCCESS: {

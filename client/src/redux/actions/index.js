@@ -4,9 +4,9 @@ import * as Cookies from 'js-cookie';
 let apiUrl;
 if (process.env.NODE_ENV === "production") {
  apiUrl = 'https://prioritize-app.herokuapp.com';
-} 
+}
 if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test" || process.env.NODE_ENV === "staging") {
- apiUrl = 'http://localhost:8080';
+  apiUrl = 'http://localhost:8080';
 }
 
 export const FETCH_USER_DATA_REQUEST = 'FETCH_USER_DATA_REQUEST';
@@ -139,7 +139,7 @@ export const postMission = newMission => dispatch => {
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
-      } 
+      }
       return res.json();
     })
     .then(data => {
@@ -160,7 +160,7 @@ export const UPDATE_TASK_ERROR = 'UPDATE_TASK_ERROR';
 export const updateTaskError = () => ({type: UPDATE_TASK_ERROR});
 
 export const updateTask = data => dispatch => {
-    const opts = {
+  const opts = {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ export const updateTask = data => dispatch => {
     .then(res => {
       if(!res.ok) {
         return Promise.reject(res.statusText)
-      } 
+      }
       return res.json();
     })
     .then(data => {
@@ -251,10 +251,10 @@ export const authenticate = () => dispatch => {
         return res.json();
       })
       .then(currentUser => {
-        return dispatch(authSuccess(currentUser)); 
+        return dispatch(authSuccess(currentUser));
       })
     .catch(err => {
       dispatch(authError(err));
     })
-  } 
+  }
 };

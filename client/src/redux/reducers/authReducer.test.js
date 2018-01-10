@@ -7,7 +7,7 @@ const initialState = {
   errorMessage: ''
 }
 
-describe ('authReducer', () => {
+describe('authReducer', () => {
   it('should set state to initial state when no arguments', ()=>{
     let newState = authReducer(undefined, {type: 'test'});
     expect(newState.currentUser).toEqual('');
@@ -21,7 +21,7 @@ describe ('authReducer', () => {
   it('should set Current User when AuthSuccess', () => {
     let state = initialState;
     let currentUser ='Lewi Gilamichael';
-    let newState = authReducer(state, actions.authSuccess(currentUser)); 
+    let newState = authReducer(state, actions.authSuccess(currentUser));
     expect(newState.currentUser).toEqual(currentUser);
   });
   it('should set ErrorMessage when AuthError', () => {
@@ -30,4 +30,4 @@ describe ('authReducer', () => {
     let newState= authReducer(state, actions.authError(message))
     expect(newState.errorMessage).toEqual(message);
   })
-})
+});

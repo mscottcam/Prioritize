@@ -30,7 +30,7 @@ const testUser = {
       goals: [
         {
           goal: 'Make delicious breakfast',
-          tasks: this.tasks 
+          tasks: this.tasks
         }
       ]
     }
@@ -54,7 +54,6 @@ const generateTaskData = () => {
 
 const seedTaskData = () => {
   const seedData = [];
-
   for (let i =0; i <= 5; i++ ) {
     seedData.push(generateTaskData());
   }
@@ -95,7 +94,7 @@ describe('Life coach', () => {
     true.should.be.true;
   });
 
-  describe.only('Google authentication', () => {
+  describe('Google authentication', () => {
     it('should redirect to google authentication', () => {
       chai
         .request(app)
@@ -136,14 +135,12 @@ describe('Life coach', () => {
 
   describe('GET requests', () => {
     it('should return the current user', () => {
-      let resUser;  
+      let resUser;
       return chai.request(app)
         .get('/api/me')
         .set('Authorization', `Bearer ${testUser.accessToken}`)
         .send()
         .then(res => {
-          // console.log('Res headers: ', res.headers);
-          // console.log('Res header set cookie: ', res.headers['set-cookie']);
           let user = res.body;
           res.should.have.status(200);
           res.should.be.json;
@@ -158,7 +155,6 @@ describe('Life coach', () => {
               goal.should.be.a('object');
               goal.should.include.keys('goal', 'tasks');
               goal.tasks.should.be.a('array');
-              //test for the ref to tasks
             });
           });
           resUser = user;
@@ -235,12 +231,9 @@ describe('Life coach', () => {
           task.taskName.should.equal(newTask.taskName);
           task.deadline.should.equal(newTask.deadline);
           task.important.should.equal(newTask.important);
-          task.urgent.should.equal(newTask.urgent); 
+          task.urgent.should.equal(newTask.urgent);
         });
     });
-    // it('it should add reference to task in tasks array in userdb', function(){
-
-    // });
   });
 
 
@@ -304,7 +297,7 @@ describe('Life coach', () => {
         });
     });
 
-    it('should add new role if new role in req.body', function (){
+    it('should add new role if new role in req.body', function() {
       const newRole = {
         role: 'Developer'
       };
@@ -331,17 +324,12 @@ describe('Life coach', () => {
           roleMatch.role.should.equal(newRole.role);
         });
     });
-    // it.only('should add new goal if new goal in req.body', function() {
-    //   runServer(3001, secret.DATABASE).then(() => closeServer()).then(() => console.log('lol'));
-    // caveat to take into consideration for this test:
-    // the goals being added that do not have a role declared, will be given the default role
-    // });
   });
 
   describe('DELETE requests', () => {
     it('should delete a task by id', function() {
       let resTask;
-      
+
       return Task
         .findOne()
         .then(function(task) {

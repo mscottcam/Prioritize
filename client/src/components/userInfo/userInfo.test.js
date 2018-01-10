@@ -14,13 +14,13 @@ import UserInfo from './index';
 describe('<UserInfo />', () => {
 	it('Renders without crashing', () => {
 			const initialState = {
-				authReducer: 
+				authReducer:
 					{
 						currentUser:{
 						displayName: 'Evan Harris',
 						googleId: '113991032114835833364',
 						accessToken:
-								'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
+							'ya29.GlvVBK1WhImxQgRZGD9yanjRErwHcEmY6aQy2IFvzLli7WHPGW4Fv4iy2y1DwagsW9Qb8FEOJm_CfclLUAbRzocyina4RvRLrx5_92c-6A7A2_pXZZyg7ItY2e8Z',
 						mission: 'have a live working usable app soon!',
 						roles: [
 							{
@@ -34,7 +34,7 @@ describe('<UserInfo />', () => {
 											deadline: 'NOW',
 											important: true,
 											urgent: true
-											}, 
+											},
 											{
 												taskName: 'test task2',
 												deadline: 'NOW',
@@ -42,9 +42,9 @@ describe('<UserInfo />', () => {
 												urgent: true
 											}
 										]
-										}
-								]	
-								}
+									}
+								]
+							}
 						]
 						}
 					}

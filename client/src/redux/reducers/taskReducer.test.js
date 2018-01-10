@@ -4,7 +4,7 @@ import taskReducer from './taskReducer'
 import missionReducer from './missionReducer'
 
 const initialState = {
-  currentUser: null, 
+  currentUser: null,
   userId: null,
   currentMission: null,
   roles:[],
@@ -30,6 +30,7 @@ const userData = {
 };
 
 describe('task reducer', () => {
+
   it('should set state to initial state when no arguments', () => {
     const newState = taskReducer(undefined, {type: 'test'});
     expect(newState.currentUser).toEqual(null);
@@ -41,6 +42,7 @@ describe('task reducer', () => {
     const newState = taskReducer(state, 'ehsy yfljg');
     expect(newState).toEqual(state);
   })
+
   it('should handle FETCH_USER_DATA_SUCCESS action', () => {
     let state = initialState;
     const newState = taskReducer(state, actions.fetchUserDataSuccess(userData));
@@ -50,6 +52,7 @@ describe('task reducer', () => {
     // expect(newState.projects).toEqual(userData.projects);
     expect(newState.tasks).toEqual(userData.tasks);
   });
+
   it('should handle POST_TASK_SUCCESS', () => {
     let state = userData;
     let newTask = {
@@ -61,6 +64,7 @@ describe('task reducer', () => {
     const newState = taskReducer(state, actions.postTaskSuccess(newTask));
     expect(newState.tasks).toContainEqual(newTask);
   });
+
   it('should handle UPDATE_TASK_SUCCESS', () => {
     let state = userData;
     let updateTask = {
@@ -71,6 +75,7 @@ describe('task reducer', () => {
     const newState = taskReducer(state, actions.updateTaskSuccess(updateTask));
     expect(newState.tasks.find(item => item.taskId ===updateTask.taskId)).toEqual(updateTask);
   });
+
   it('should handle DELETE_TASK_SUCCESS', () => {
     let state = userData;
     let taskToDeleteId = 5678;

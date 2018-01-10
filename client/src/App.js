@@ -50,4 +50,5 @@ export class App extends React.Component {
 const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser
 });
+
 export default connect(mapStateToProps)(App);

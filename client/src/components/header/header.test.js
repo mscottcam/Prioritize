@@ -11,11 +11,4 @@ describe('<Header />', () => {
   it('Renders without crashing', () => {
         shallow(<Header />);
 	});
-  xit('renders UserInfo component', ()=> {
-
-  });
-	xit('', () => {
-
-	});
-
 });

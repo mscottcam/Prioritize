@@ -3,7 +3,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const {quadrantDecider} = require('../lib/quadrant-decider');
+const { quadrantDecider } = require('../lib/quadrant-decider');
 
 describe('quadrant decider', () => {
   it('should return quadrant 1 if urgent and important are true', () => {

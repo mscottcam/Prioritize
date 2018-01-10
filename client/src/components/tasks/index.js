@@ -12,7 +12,7 @@ export class Tasks extends React.Component {
       taskNameInput: null,
       deadline: null,
       important: false,
-      urgent: false, 
+      urgent: false,
       value: 'neither'
     };
   }
@@ -83,7 +83,7 @@ export class Tasks extends React.Component {
       taskNameInput: null,
       deadline: null,
       important: false,
-      urgent: false, 
+      urgent: false,
       value: 'neither'
     })
     let form = document.getElementById("form");
@@ -106,10 +106,15 @@ export class Tasks extends React.Component {
       return this.props.tasks.map((taskObj, index) => {
         return (
           <li className="current-tasks" key={index}>
-              <div className="task-text">
-                <span className="task">{taskObj.taskName}    --    {taskObj.deadline}</span>
-              </div>
-              <button className="delete-task" onClick={() => this.deleteTask(taskObj)}>Delete</button>
+            <div className="task-text">
+              <span className="task">{taskObj.taskName}    --    {taskObj.deadline}</span>
+            </div>
+            <button
+              className="delete-task"
+              onClick={() => this.deleteTask(taskObj)}
+            >
+              Delete
+            </button>
           </li>
         );
       });
@@ -121,7 +126,7 @@ export class Tasks extends React.Component {
   showTaskHeader() {
     if (this.props.tasks !== null) {
       return (
-      <h1 className="task-header">My Tasks</h1>
+        <h1 className="task-header">My Tasks</h1>
       )
     }
   }
@@ -130,7 +135,7 @@ export class Tasks extends React.Component {
     return (
       <div className="task-form">
         <form id="form" onSubmit={event => this.submitTask(event)}>
-          <label className="label task-label" > Task 
+          <label className="label task-label" > Task
             <input
               type="text"
               placeholder="Add a task!"
@@ -141,7 +146,7 @@ export class Tasks extends React.Component {
             <input
               type="text"
               placeholder="Deadline"
-              onChange={event => this.onChangeDeadline(event)} 
+              onChange={event => this.onChangeDeadline(event)}
             />
           </label> <br />
           <label className="label dropdown" >
@@ -157,7 +162,6 @@ export class Tasks extends React.Component {
           <br />
           <button type="submit">Submit Task</button>
         </form>
-       
         <div className="task-list-div"> {this.showTaskHeader()}<ul>{this.mapTasksToList()}</ul></div>
       </div>
     );
@@ -168,4 +172,5 @@ const mapStateToProps = (state, props) => ({
   currentUser: state.authReducer.currentUser,
   tasks: state.taskReducer.tasks
 });
+
 export default connect(mapStateToProps)(Tasks);

@@ -31,15 +31,15 @@ describe("async actions", () => {
 
   it("creates POST_TASK_SUCCESS when posting new task", () => {
     const postBody = {
-        userId: 1234,
-        role: "dev",
-        goal: "get a job",
-        project: "testing research",
-        task: "learn nock post",
-        deadline: "",
-        important: true,
-        urgent: false
-      }
+      userId: 1234,
+      role: "dev",
+      goal: "get a job",
+      project: "testing research",
+      task: "learn nock post",
+      deadline: "",
+      important: true,
+      urgent: false
+    }
     nock("http://localhost:8080")
       .post("/api/userTask", postBody)
       .reply(201, {ok: true, id: 1234});
@@ -48,9 +48,10 @@ describe("async actions", () => {
       { type: actions.POST_TASK_SUCCESS, taskData: { ok: true, id: 1234 } }
     ];
     const store = mockStore({ tasks: [] });
-    return store.dispatch(actions.postTask(postBody)).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    return store.dispatch(actions.postTask(postBody))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
   });
 
   it("creates FETCH_MISSION_SUCCESS when fetching missions has been done", () => {
@@ -59,23 +60,24 @@ describe("async actions", () => {
       .reply(200, { mission: ["create a working application"] });
     const expectedActions = [
       { type: actions.FETCH_MISSION_REQUEST },
-      { type: actions.FETCH_MISSION_SUCCESS,  mission: ["create a working application"] } 
+      { type: actions.FETCH_MISSION_SUCCESS,  mission: ["create a working application"] }
     ];
     const store = mockStore({ text: [] });
-    return store.dispatch(actions.fetchMission({currentUserId: '1234567890'})).then(() => {
-    expect(store.getActions()).toEqual(expectedActions);
-    });
+    return store.dispatch(actions.fetchMission({currentUserId: '1234567890'}))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
   });
 
   it('creates POST_MISSION_SUCCESS when making new mission', () => {
-        const missionToUpdate = {
-        userId: 1234,
-        mission: 'create a working application',
-        role: "dev",
-        currentUser: {
-          accesstoken: 'abc123'
-        }
+    const missionToUpdate = {
+      userId: 1234,
+      mission: 'create a working application',
+      role: "dev",
+      currentUser: {
+        accesstoken: 'abc123'
       }
+    }
     nock('http://localhost:8080')
       .put('/api/userMission', missionToUpdate)
       .reply(201, {ok: true, id: 1234, userId: 1234, mission: 'work hard'});
@@ -84,14 +86,15 @@ describe("async actions", () => {
         {type: actions.POST_MISSION_SUCCESS, mission: 'work hard' }
       ]
       const store = mockStore({});
-      return store.dispatch(actions.postMission(missionToUpdate)).then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      });
+      return store.dispatch(actions.postMission(missionToUpdate))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
   })
 
   it('calls UPDATE_TASK_SUCCESS when updating a task', () => {
     const taskToUpdate = {
-      taskId: 1234, 
+      taskId: 1234,
       userId: 1234,
       role: "dev",
       goal: "get a job",
@@ -112,8 +115,8 @@ describe("async actions", () => {
     return store.dispatch(actions.updateTask(taskToUpdate)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
-  })  
-  
+  })
+
   it('calls DELETE_TASK_SUCCESS when a task is deleted', () => {
     nock('http://localhost:8080')
       .delete('/api/userTask/1234')
@@ -131,7 +134,7 @@ describe("async actions", () => {
   // it('authenticates user when Authenticate is called', () =>{
   //   nock('http://localhost:8080')
   //     .get('/api/me',
-  //     // {currentUser: 'Lewi Gilamichael'} 
+  //     // {currentUser: 'Lewi Gilamichael'}
   //     )
   //   const expectedActions = [
   //     { type: actions.AUTH_SUCCESS, currentUser: { currentUser: 'Lewi Gilamichael'} },
@@ -142,5 +145,5 @@ describe("async actions", () => {
   //     expect(store.getActions()).toEqual(expectedActions);
   //   })
   // })
-  
+
 });
